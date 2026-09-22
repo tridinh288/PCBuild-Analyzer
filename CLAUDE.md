@@ -73,8 +73,9 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
 
 - Phase: 8 — Docker & Deployment on branch `phase/8-deployment`
 - Last completed step: production image (Alpine, 262 MB) verified locally against a fresh MySQL; trusted proxies fixed; `render.yaml` Blueprint; `docs/DEPLOYMENT.md`
-- Waiting on: the user creates the Render Blueprint (branch `phase/8-deployment`) and Cloudinary account, then the live deployment is checked
-- Next step: verify the live site (incl. browser check and a real Cloudinary upload), fix issues on this branch, then PR and merge; Phase 9 — Finalization
+- Live: API https://pcbuild-api-2mwk.onrender.com, web https://pcbuild-web.onrender.com (Render branch `phase/8-deployment`; switch to `main` after merge)
+- Verified live: API, CORS, data, admin login rejects the old dev password, real client IP behind Cloudflare (D-038). Pending: browser check and a real Cloudinary upload by the user
+- Next step: PR and merge, switch Render services to `main`; Phase 9 — Finalization
 - Production image check: `docker build -t pcbuild-api:prod backend` then run it with production env vars (see `docs/DEPLOYMENT.md`)
 - Pre-commit gate: lint + build + tests must pass before `git commit` (never chain a commit after a failing step)
 - Frontend commands: `npm run dev`, `npm test`, `npx oxlint`, `npm run build` (in `frontend/`)
