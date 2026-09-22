@@ -52,6 +52,14 @@ class SpecSchema
     }
 
     /**
+     * @return array<string, array<string, string>> Enum name => (code => label).
+     */
+    public function enums(): array
+    {
+        return $this->config['enums'];
+    }
+
+    /**
      * @return array<string, string> Code => label.
      */
     public function enum(string $name): array

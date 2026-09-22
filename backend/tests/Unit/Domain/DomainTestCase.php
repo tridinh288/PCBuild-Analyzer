@@ -2,10 +2,15 @@
 
 namespace Tests\Unit\Domain;
 
+use App\Domain\Compatibility\CompatibilityEngine;
+use App\Domain\Compatibility\Contracts\CompatibilityRule;
+use App\Domain\Compatibility\Results\CompatibilityResult;
 use App\Domain\Configuration\BuildConfiguration;
 use App\Domain\Configuration\SlotRules;
 use App\Domain\Hardware\Components\HardwareComponent;
+use App\Domain\Hardware\EnumLabels;
 use App\Domain\Hardware\HardwareFactory;
+use App\Enums\CompatibilityStatus;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -37,6 +42,26 @@ abstract class DomainTestCase extends TestCase
     protected static function hardwareConfig(): array
     {
         return require __DIR__.'/../../../config/hardware.php';
+    }
+
+    protected function labels(): EnumLabels
+    {
+        return new EnumLabels(self::hardwareConfig()['enums']);
+    }
+
+    /**
+     * Runs one rule through the engine (so "skipped" is covered too) and checks its status.
+     */
+    protected function assertRuleStatus(
+        CompatibilityStatus $expected,
+        CompatibilityRule $rule,
+        BuildConfiguration $config,
+    ): CompatibilityResult {
+        $result = (new CompatibilityEngine([$rule]))->check($config)->results[0];
+
+        $this->assertSame($expected, $result->status, "{$rule->key()}: {$result->message}");
+
+        return $result;
     }
 
     protected function slotRules(): SlotRules

@@ -283,3 +283,10 @@ Decision: Same as D-026 (`.gitignore` first; one branch per phase; commit per lo
 Why: The PR page gives reviewers a readable summary of each phase; Vietnamese matches the audience of the project owner.
 Alternatives: Local `git merge --no-ff` without a PR (D-026).
 Consequences: Commit history is unchanged (merge commits as before). PRs double as phase summaries.
+
+## D-035: Presence rules are skipped for Builder candidates
+Status: Accepted (Phase 3)
+Decision: Rules that report a missing part (DisplayOutputRule: CPU without iGPU and no GPU; CpuCoolingRule: CPU without boxed cooler and no cooler) implement the `PresenceRule` marker interface. They run in the full configuration check, but `CompatibilityEngine::checkCandidate()` ignores them. Rules also expose `key()` and `title()` so the engine can report skipped rules.
+Why: Parts can be chosen in any order (D-002). Evaluating CPU candidates before a GPU is chosen would otherwise mark every CPU without integrated graphics as incompatible, although adding a GPU fixes it. Missing parts are already shown as missing slots and in the summary banner.
+Alternatives: Treat them like conflict rules (misleading red candidates); downgrade them to warnings only for candidates (two meanings for one rule).
+Consequences: A candidate's status reflects conflicts with selected parts only. The full analysis of the configuration still reports the missing GPU or cooler.
