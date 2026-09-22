@@ -95,9 +95,16 @@ class BuilderApiTest extends TestCase
 
     public function test_analyze_accepts_an_empty_selection(): void
     {
-        $this->postJson('/api/builder/analyze', ['selected' => (object) []])
+        $response = $this->postJson('/api/builder/analyze', ['selected' => (object) []])
             ->assertOk()
             ->assertJsonPath('data.price.total', 0);
+
+        // Map-like fields stay JSON objects when empty, so the frontend sees one type.
+        $this->assertStringContainsString('"by_category":{}', $response->getContent());
+        $this->assertStringContainsString('"breakdown":{}', $response->getContent());
+        $this->assertStringContainsString('"details":{}', $response->getContent());
+        // Vietnamese is sent as UTF-8, not \u escapes.
+        $this->assertStringContainsString('Chưa đủ linh kiện để kiểm tra.', $response->getContent());
     }
 
     public function test_invalid_input_is_rejected_with_422(): void

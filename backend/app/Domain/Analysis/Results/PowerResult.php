@@ -26,7 +26,7 @@ final readonly class PowerResult
             'estimated_watts' => $this->estimatedWatts,
             'recommended_psu_watts' => $this->recommendedPsuWatts,
             'selected_psu_watts' => $this->selectedPsuWatts,
-            'breakdown' => $this->breakdown,
+            'breakdown' => (object) $this->breakdown,
         ];
     }
 }

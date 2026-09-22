@@ -14,6 +14,9 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
  */
 final class ApiResponse
 {
+    // Vietnamese text as UTF-8 instead of \uXXXX escapes: readable and smaller.
+    private const JSON_FLAGS = JSON_UNESCAPED_UNICODE;
+
     /**
      * @param  array<string, mixed>  $meta
      */
@@ -33,7 +36,7 @@ final class ApiResponse
             $body['meta'] = $meta;
         }
 
-        return response()->json($body, $status);
+        return response()->json($body, $status, [], self::JSON_FLAGS);
     }
 
     public static function created(mixed $data): JsonResponse
@@ -50,7 +53,7 @@ final class ApiResponse
             'success' => false,
             'message' => $message,
             'errors' => (object) $errors,
-        ], $status);
+        ], $status, [], self::JSON_FLAGS);
     }
 
     /**
