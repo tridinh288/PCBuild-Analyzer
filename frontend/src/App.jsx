@@ -4,6 +4,8 @@ import RequireAdmin from './components/admin/RequireAdmin'
 import { AuthProvider } from './context/AuthProvider'
 import AdminLayout from './layouts/AdminLayout'
 import MainLayout from './layouts/MainLayout'
+import AdminBuilds from './pages/admin/AdminBuilds'
+import BuildForm from './pages/admin/BuildForm'
 import Categories from './pages/admin/Categories'
 import Dashboard from './pages/admin/Dashboard'
 import Login from './pages/admin/Login'
@@ -47,6 +49,9 @@ const router = createBrowserRouter([
           { path: 'products', element: <Products /> },
           { path: 'products/new', element: <ProductForm /> },
           { path: 'products/:id', element: <ProductForm /> },
+          { path: 'builds', element: <AdminBuilds /> },
+          { path: 'builds/new', element: <BuildForm /> },
+          { path: 'builds/:id', element: <BuildForm /> },
         ],
       },
     ],
