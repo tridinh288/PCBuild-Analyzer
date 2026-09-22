@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useApi } from '../../hooks/useApi'
 import { useDebouncedValue } from '../../hooks/useDebouncedValue'
 import { api } from '../../services/api'
@@ -25,11 +25,20 @@ export default function ComponentPicker({ category, categoryName, selected, onSe
   }), 300)
   const options = useApi((signal) => api.builderOptions(JSON.parse(requestKey), signal), requestKey)
 
-  // Close with Escape.
+  const [filtersOpen, setFiltersOpen] = useState(false)
+  const closeButton = useRef(null)
+
+  // Modal behaviour: focus inside, close with Escape, and no scrolling of the page behind.
   useEffect(() => {
+    closeButton.current?.focus()
     const onKey = (event) => event.key === 'Escape' && onClose()
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
     window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', onKey)
+    }
   }, [onClose])
 
   return (
@@ -38,13 +47,18 @@ export default function ComponentPicker({ category, categoryName, selected, onSe
       <div className="flex h-full w-full max-w-4xl flex-col bg-slate-50 shadow-xl" onClick={(event) => event.stopPropagation()}>
         <div className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3">
           <h2 id="picker-title" className="text-lg font-semibold">Chọn {categoryName}</h2>
-          <button type="button" onClick={onClose} className="rounded-md p-2 text-slate-500 hover:bg-slate-100" aria-label="Đóng">✕</button>
+          <button ref={closeButton} type="button" onClick={onClose} className="rounded-md p-2 text-slate-500 hover:bg-slate-100" aria-label="Đóng">✕</button>
         </div>
 
-        <div className="grid flex-1 gap-4 overflow-hidden md:grid-cols-3">
-          <div className="overflow-y-auto border-b border-slate-200 bg-white p-4 md:border-b-0 md:border-r">
+        {/* Mobile: one scrolling column with collapsible filters. Desktop: two independently scrolling panes. */}
+        <div className="flex-1 overflow-y-auto md:grid md:grid-cols-3 md:overflow-hidden">
+          <div className="border-b border-slate-200 bg-white p-4 md:overflow-y-auto md:border-b-0 md:border-r">
             <Checkbox label="Chỉ hiện linh kiện tương thích" checked={compatibleOnly} onChange={setCompatibleOnly} />
-            <div className="mt-4">
+            <button type="button" onClick={() => setFiltersOpen((open) => !open)} aria-expanded={filtersOpen}
+              className="mt-3 w-full rounded-lg px-3 py-2 text-sm font-medium ring-1 ring-slate-200 md:hidden">
+              {filtersOpen ? 'Ẩn bộ lọc' : 'Hiện bộ lọc'}
+            </button>
+            <div className={`mt-4 ${filtersOpen ? '' : 'hidden'} md:block`}>
               {definitions.data && (
                 <FilterPanel definitions={definitions.data} values={values}
                   onChange={(name, value) => setValues((previous) => ({ ...previous, [name]: value }))}
@@ -53,7 +67,7 @@ export default function ComponentPicker({ category, categoryName, selected, onSe
             </div>
           </div>
 
-          <div className="overflow-y-auto p-4 md:col-span-2">
+          <div className="p-4 md:col-span-2 md:overflow-y-auto">
             {options.error && <ErrorState error={options.error} onRetry={options.reload} />}
             {!options.error && !options.data && <LoadingState />}
             {options.data?.length === 0 && <EmptyState title="Không có linh kiện phù hợp">Thử bỏ bớt bộ lọc.</EmptyState>}
