@@ -1,4 +1,4 @@
-# PCBuild Analyzer
+﻿# PCBuild Analyzer
 
 Student portfolio project (Junior/Intern Fullstack). Public PC build analysis app:
 browse templates, customize them, build from scratch, check compatibility, estimate power,
@@ -10,7 +10,7 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
   Do NOT load it all at once. At the start of each phase, read the sections relevant to that phase
   (section numbers are listed per phase in "Development Method", section 39).
   Re-check the spec whenever unsure about scope or a requirement.
-- Decisions log: `DECISIONS.md` — read it at the start of every session and stay consistent with it.
+- Decisions log: `DECISIONS.md` â€” read it at the start of every session and stay consistent with it.
 - Current progress: "Current status" at the bottom of this file.
 
 ## Stack
@@ -52,7 +52,7 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
   make sure no secrets are staged (.env, API keys, CLOUDINARY_URL, DB passwords, tokens).
 - Push right after each commit: `git push -u origin <branch>`.
 - Merge into `main` only after my approval, through a GitHub pull request with a merge commit
-  (`gh pr create` → `gh pr merge --merge`), equivalent to `git merge --no-ff`.
+  (`gh pr create` â†’ `gh pr merge --merge`), equivalent to `git merge --no-ff`.
 - Pull request titles and descriptions are written in Vietnamese (commit messages stay English).
 - Never force push, never rewrite pushed history, never commit build output.
 - If a push fails (remote or auth), stop and report. Do not work around it.
@@ -71,9 +71,9 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
 
 ## Current status
 
-- Phase: 4 — API (complete, waiting for approval) on branch `phase/4-api`, PR open
-- Last completed step: public API (catalog, builds, analysis, builder, compare), Vietnamese errors, rate limiting, CORS, examples in `docs/API.md`; 221 tests pass
-- Next step: after approval, merge the PR; Phase 5 — React (Vite + Tailwind in `frontend/`, remove `frontend/.gitkeep` first)
-- Engine map: `app/Domain` (pure), `app/Services` (DB orchestration); implementation notes in `docs/ARCHITECTURE.md` § 3
-- TiDB: credentials in `backend/.env.tidb` (gitignored), database `pcbuild` — never `sys`
+- Phase: 4 â€” API (complete, waiting for approval) on branch `phase/4-api`, PR open
+- Last completed step: public API (catalog, builds, analysis, builder, compare), Vietnamese errors, rate limiting, CORS, examples in `docs/API.md`; 220 tests pass
+- Next step: after approval, merge the PR; Phase 5 â€” React (Vite + Tailwind in `frontend/`, remove `frontend/.gitkeep` first)
+- Engine map: `app/Domain` (pure), `app/Services` (DB orchestration); implementation notes in `docs/ARCHITECTURE.md` Â§ 3
+- TiDB: credentials in `backend/.env.tidb` (gitignored), database `pcbuild` â€” never `sys`
 - Note: the full test suite takes about 1 minute because the Windows bind mount is slow
