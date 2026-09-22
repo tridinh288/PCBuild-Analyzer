@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Domain\Analysis\PowerCalculator;
 use App\Domain\Compatibility\CompatibilityEngine;
 use App\Domain\Compatibility\Rules\CpuMotherboardSocketRule;
 use App\Domain\Compatibility\Rules\MotherboardCaseFormFactorRule;
@@ -40,6 +41,8 @@ class AnalysisServiceProvider extends ServiceProvider
         $this->app->singleton(SlotRules::class, fn (Application $app) => new SlotRules($app->make(SpecSchema::class)->slots()));
 
         $this->app->singleton(EnumLabels::class, fn (Application $app) => new EnumLabels($app->make(SpecSchema::class)->enums()));
+
+        $this->app->singleton(PowerCalculator::class, fn (Application $app) => new PowerCalculator($app->make(SpecSchema::class)->power()));
 
         // Rules are resolved by the container, so their own dependencies are auto-wired.
         $this->app->singleton(CompatibilityEngine::class, fn (Application $app) => new CompatibilityEngine(
