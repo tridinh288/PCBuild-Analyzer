@@ -12,7 +12,11 @@ class BuildRepositoryTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected bool $seed = true;
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed();
+    }
 
     private function repository(): BuildRepositoryInterface
     {
