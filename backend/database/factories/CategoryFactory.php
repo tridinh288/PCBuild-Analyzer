@@ -15,7 +15,9 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
-        $slug = fake()->unique()->slug(2);
+        // Fixed length: the slug column is VARCHAR(32), and fake()->slug() sometimes exceeded it,
+        // which made tests fail at random.
+        $slug = 'test-'.fake()->unique()->lexify('??????????');
 
         return [
             'slug' => $slug,
