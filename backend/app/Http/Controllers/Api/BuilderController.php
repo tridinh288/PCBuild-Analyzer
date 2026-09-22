@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BuilderAnalyzeRequest;
 use App\Http\Requests\BuilderOptionsRequest;
 use App\Http\Resources\BuilderOptionResource;
+use App\Http\Resources\ProductResource;
 use App\Services\BuilderService;
 use App\Support\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
@@ -39,7 +40,13 @@ class BuilderController extends Controller
     {
         $result = $this->builder->analyze($request->validated('selected'), $request->profile());
 
-        return ApiResponse::success($result['analysis']->toArray(), [
+        $items = array_map(fn (array $item) => [
+            'category' => $item['category'],
+            'quantity' => $item['quantity'],
+            'product' => new ProductResource($item['product']),
+        ], $result['items']);
+
+        return ApiResponse::success([...$result['analysis']->toArray(), 'items' => $items], [
             'profile' => $result['analysis']->performance->profile->value,
             'missing' => $result['missing'],
         ]);

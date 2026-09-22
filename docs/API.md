@@ -317,7 +317,11 @@ accepts the same filters as the catalog.
     "performance": { "profile": "gaming", "score": …, "missing_parts": ["ram", "storage"],
                      "notes": ["Điểm cấu hình ước tính …", "Cấu hình chưa hoàn chỉnh; phần còn thiếu được tính 0 điểm."] },
     "missing_slots": ["ram", "storage", "psu", "case"],
-    "is_complete": false
+    "is_complete": false,
+    "items": [
+      { "category": "cpu", "quantity": 1, "product": { "id": 3, "name": "AMD Ryzen 7 7700", "price": 7490000, … } },
+      { "category": "motherboard", "quantity": 1, "product": { "id": 10, "name": "Gigabyte B650M GAMING X AX", … } }
+    ]
   },
   "meta": { "profile": "gaming", "missing": [{ "category": "gpu", "id": 999999 }] }
 }
