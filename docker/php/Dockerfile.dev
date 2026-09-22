@@ -3,7 +3,10 @@
 FROM php:8.3-cli
 
 COPY --from=mlocati/php-extension-installer:2 /usr/bin/install-php-extensions /usr/local/bin/
-RUN install-php-extensions pdo_mysql bcmath intl zip
+# pcov: code coverage for the test report (php artisan test --coverage).
+RUN install-php-extensions pdo_mysql bcmath intl zip pcov
+
+COPY docker-php-dev.ini /usr/local/etc/php/conf.d/zz-dev.ini
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
