@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\AnalysisController;
+use App\Http\Controllers\Api\BuildController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ComponentController;
 use App\Support\Http\ApiResponse;
@@ -22,6 +24,10 @@ Route::get('/categories/{category:slug}/filters', [CategoryController::class, 'f
 
 Route::get('/components', [ComponentController::class, 'index'])->name('components.index');
 Route::get('/components/{slug}', [ComponentController::class, 'show'])->name('components.show');
+
+Route::get('/builds', [BuildController::class, 'index'])->name('builds.index');
+Route::get('/builds/{slug}', [BuildController::class, 'show'])->name('builds.show');
+Route::get('/builds/{slug}/analysis', [AnalysisController::class, 'show'])->name('builds.analysis');
 
 Route::prefix('admin')->name('admin.')->group(function () {
     // POST /admin/login (Phase 6)
