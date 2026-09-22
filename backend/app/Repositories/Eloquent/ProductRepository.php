@@ -32,6 +32,20 @@ class ProductRepository implements ProductRepositoryInterface
         return $this->query($category, $filters, $sort)->get();
     }
 
+    public function brands(string $category): array
+    {
+        return Product::query()->active()->whereRelation('category', 'slug', $category)
+            ->distinct()->orderBy('brand')->pluck('brand')->all();
+    }
+
+    public function priceRange(string $category): array
+    {
+        $range = Product::query()->active()->whereRelation('category', 'slug', $category)
+            ->selectRaw('MIN(price) AS min_price, MAX(price) AS max_price')->first();
+
+        return ['min' => (int) $range->min_price, 'max' => (int) $range->max_price];
+    }
+
     public function paginate(array $filters = [], ?string $sort = null, int $perPage = 12): LengthAwarePaginator
     {
         $category = $filters['category'] ?? null;
