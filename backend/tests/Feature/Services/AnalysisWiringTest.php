@@ -3,6 +3,7 @@
 namespace Tests\Feature\Services;
 
 use App\Domain\Analysis\PerformanceAnalyzer;
+use App\Domain\Analysis\PriceAnalyzer;
 use App\Domain\Compatibility\CompatibilityEngine;
 use App\Enums\BuildPurpose;
 use App\Enums\CompatibilityStatus;
@@ -44,6 +45,24 @@ class AnalysisWiringTest extends TestCase
 
             $this->assertSame($purpose, $result->profile);
             $this->assertGreaterThan(0, $result->score);
+        }
+    }
+
+    /**
+     * D-032: the SQL total (list, sort, price filter) and the engine total (detail, analysis)
+     * are computed in two places and must never disagree.
+     */
+    public function test_sql_total_price_matches_the_price_analyzer_for_every_template(): void
+    {
+        $factory = $this->app->make(BuildConfigurationFactory::class);
+        $analyzer = $this->app->make(PriceAnalyzer::class);
+
+        foreach (Build::query()->withTotalPrice()->get() as $build) {
+            $this->assertSame(
+                $analyzer->analyze($factory->fromBuild($build))->total,
+                (int) $build->total_price,
+                $build->slug,
+            );
         }
     }
 
