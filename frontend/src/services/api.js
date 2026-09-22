@@ -1,0 +1,76 @@
+import axios from 'axios'
+import { trackRequest } from './serverStatus'
+
+/**
+ * The only place that knows URLs and the API envelope ({ success, data, meta }).
+ * Pages call these functions and receive { data, meta }, or catch an ApiError.
+ */
+const http = axios.create({
+  baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:8000/api',
+  headers: { Accept: 'application/json' },
+  // A sleeping free-tier server can take about a minute to answer the first request.
+  timeout: 90_000,
+})
+
+export class ApiError extends Error {
+  constructor(message, status = 0, errors = {}) {
+    super(message)
+    this.name = 'ApiError'
+    this.status = status
+    this.errors = errors
+  }
+}
+
+http.interceptors.request.use((config) => {
+  config.metadata = { done: trackRequest() }
+  return config
+})
+
+http.interceptors.response.use(
+  (response) => {
+    response.config.metadata?.done()
+    return response
+  },
+  (error) => {
+    error.config?.metadata?.done()
+
+    if (axios.isCancel(error)) {
+      return Promise.reject(error)
+    }
+
+    const body = error.response?.data
+    const message = body?.message
+      ?? (error.code === 'ECONNABORTED'
+        ? 'Máy chủ phản hồi quá lâu, vui lòng thử lại.'
+        : 'Không kết nối được máy chủ. Vui lòng kiểm tra mạng và thử lại.')
+
+    return Promise.reject(new ApiError(message, error.response?.status ?? 0, body?.errors ?? {}))
+  },
+)
+
+async function get(url, params, signal) {
+  const { data } = await http.get(url, { params, signal })
+  return { data: data.data, meta: data.meta ?? {} }
+}
+
+async function post(url, body, signal) {
+  const { data } = await http.post(url, body, { signal })
+  return { data: data.data, meta: data.meta ?? {} }
+}
+
+export const api = {
+  categories: (signal) => get('/categories', undefined, signal),
+  categoryFilters: (slug, signal) => get(`/categories/${slug}/filters`, undefined, signal),
+
+  components: (params, signal) => get('/components', params, signal),
+  component: (slug, signal) => get(`/components/${slug}`, undefined, signal),
+
+  builds: (params, signal) => get('/builds', params, signal),
+  build: (slug, signal) => get(`/builds/${slug}`, undefined, signal),
+  buildAnalysis: (slug, profile, signal) => get(`/builds/${slug}/analysis`, profile ? { profile } : undefined, signal),
+
+  builderOptions: (body, signal) => post('/builder/options', body, signal),
+  builderAnalyze: (body, signal) => post('/builder/analyze', body, signal),
+
+  compare: (body, signal) => post('/compare', body, signal),
+}

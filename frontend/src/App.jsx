@@ -1,8 +1,26 @@
+import { createBrowserRouter } from 'react-router'
+import { RouterProvider } from 'react-router/dom'
+import MainLayout from './layouts/MainLayout'
+import NotFound from './pages/NotFound'
+import Placeholder from './pages/Placeholder'
+
+const router = createBrowserRouter([
+  {
+    element: <MainLayout />,
+    children: [
+      { path: '/', element: <Placeholder title="Trang chủ" /> },
+      { path: '/builds', element: <Placeholder title="Cấu hình mẫu" /> },
+      { path: '/builds/:slug', element: <Placeholder title="Chi tiết cấu hình" /> },
+      { path: '/builder', element: <Placeholder title="Tự build" /> },
+      { path: '/components', element: <Placeholder title="Linh kiện" /> },
+      { path: '/components/:slug', element: <Placeholder title="Chi tiết linh kiện" /> },
+      { path: '/compare', element: <Placeholder title="So sánh" /> },
+      { path: '/analysis', element: <Placeholder title="Phân tích" /> },
+      { path: '*', element: <NotFound /> },
+    ],
+  },
+])
+
 export default function App() {
-  return (
-    <main className="mx-auto max-w-6xl px-4 py-16">
-      <h1 className="text-3xl font-bold text-brand-700">PCBuild Analyzer</h1>
-      <p className="mt-2 text-slate-600">Tìm – So sánh – Phân tích cấu hình PC.</p>
-    </main>
-  )
+  return <RouterProvider router={router} />
 }
