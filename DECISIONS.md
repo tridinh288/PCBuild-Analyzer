@@ -219,9 +219,8 @@ Consequences: README documents two start commands. No `frontend` service in `doc
 ## Process
 
 ## D-026: Git workflow
-Status: Accepted
+Status: Superseded by D-034
 Decision: `.gitignore` first; one branch per phase; commit per logical step with Conventional Commits; push after each commit; merge to `main` only after approval; no force push; stop on push failure.
-Update (Phase 2): merges go through a GitHub pull request (merge commit); PR titles and descriptions are in Vietnamese, commits stay in English.
 Why: Readable history for reviewers; safe automation.
 Consequences: Tests and secret checks run before every commit.
 
@@ -277,3 +276,10 @@ Decision: Keep the plain Eloquent JSON queries (`where('specs->key', ...)`, `whe
 Why: All 9 checks passed on TiDB v8.5.3 (Starter) with the same results as MySQL 8.4; no TiDB-specific code needed.
 Alternatives: Explicit `CAST(JSON_EXTRACT(...))` queries (not needed); application-only FK checks (not needed, FKs are enforced).
 Consequences: Re-run the check after schema or repository query changes. `DB_DATABASE` must never be `sys` (the TiDB Connect default).
+
+## D-034: Git workflow with pull requests in Vietnamese
+Status: Accepted (Phase 2)
+Decision: Same as D-026 (`.gitignore` first; one branch per phase; commit per logical step with Conventional Commits in English; push after each commit; no force push; stop on push failure), but each phase is merged into `main` through a GitHub pull request with a merge commit (`gh pr create`, `gh pr merge --merge`) after approval. PR titles and descriptions are written in Vietnamese.
+Why: The PR page gives reviewers a readable summary of each phase; Vietnamese matches the audience of the project owner.
+Alternatives: Local `git merge --no-ff` without a PR (D-026).
+Consequences: Commit history is unchanged (merge commits as before). PRs double as phase summaries.
