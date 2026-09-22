@@ -283,3 +283,17 @@ Decision: Same as D-026 (`.gitignore` first; one branch per phase; commit per lo
 Why: The PR page gives reviewers a readable summary of each phase; Vietnamese matches the audience of the project owner.
 Alternatives: Local `git merge --no-ff` without a PR (D-026).
 Consequences: Commit history is unchanged (merge commits as before). PRs double as phase summaries.
+
+## D-035: Presence rules are skipped for Builder candidates
+Status: Accepted (Phase 3)
+Decision: Rules that report a missing part (DisplayOutputRule: CPU without iGPU and no GPU; CpuCoolingRule: CPU without boxed cooler and no cooler) implement the `PresenceRule` marker interface. They run in the full configuration check, but `CompatibilityEngine::checkCandidate()` ignores them. Rules also expose `key()` and `title()` so the engine can report skipped rules.
+Why: Parts can be chosen in any order (D-002). Evaluating CPU candidates before a GPU is chosen would otherwise mark every CPU without integrated graphics as incompatible, although adding a GPU fixes it. Missing parts are already shown as missing slots and in the summary banner.
+Alternatives: Treat them like conflict rules (misleading red candidates); downgrade them to warnings only for candidates (two meanings for one rule).
+Consequences: A candidate's status reflects conflicts with selected parts only. The full analysis of the configuration still reports the missing GPU or cooler.
+
+## D-036: Keep React + Vite (Next.js reconsidered)
+Status: Accepted (Phase 3)
+Decision: The frontend stays React + Vite + React Router in JavaScript, deployed as a Render static site. Next.js is not used.
+Why: The main page (Builder) is fully client-side interactive, so SSR adds little; SEO does not matter for this portfolio app. Next.js with SSR on Render needs a second Node web service that also sleeps on the free tier (two cold starts instead of one); a static export removes most of its benefits. Plain React shows hooks, reducer and routing fundamentals more clearly in an interview.
+Alternatives: Next.js App Router with SSR (extra service, cold start); Next.js static export (little gain); hosting the frontend on Vercel (one more platform).
+Consequences: No change to the plan or to Phases 2–3. Revisit only if target job posts require Next.js; the API is framework-agnostic, so a later migration touches the frontend only.

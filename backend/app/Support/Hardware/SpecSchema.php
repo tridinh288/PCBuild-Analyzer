@@ -52,6 +52,14 @@ class SpecSchema
     }
 
     /**
+     * @return array<string, array<string, string>> Enum name => (code => label).
+     */
+    public function enums(): array
+    {
+        return $this->config['enums'];
+    }
+
+    /**
      * @return array<string, string> Code => label.
      */
     public function enum(string $name): array
@@ -81,6 +89,39 @@ class SpecSchema
         }
 
         return $rules;
+    }
+
+    /**
+     * Filterable specs of a category, keyed by query parameter name.
+     * min / max filters use `<param>_min` / `<param>_max`.
+     *
+     * @return array<string, array{key: string, filter: string, type: string, enum: ?string}>
+     */
+    public function filters(string $category): array
+    {
+        $filters = [];
+
+        foreach ($this->specs($category) as $key => $definition) {
+            if (! isset($definition['filter'])) {
+                continue;
+            }
+
+            $param = $definition['filter_param'] ?? $key;
+            $param = match ($definition['filter']) {
+                'min' => "{$param}_min",
+                'max' => "{$param}_max",
+                default => $param,
+            };
+
+            $filters[$param] = [
+                'key' => $key,
+                'filter' => $definition['filter'],
+                'type' => $definition['type'],
+                'enum' => $definition['enum'] ?? null,
+            ];
+        }
+
+        return $filters;
     }
 
     /**

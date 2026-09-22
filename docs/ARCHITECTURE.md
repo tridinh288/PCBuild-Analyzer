@@ -203,6 +203,28 @@ See D-030.
 - `AnalysisServiceProvider`: registers the list of compatibility rules and strategies; passes
   config values (power constants, scoring weights, slot rules) into domain constructors.
 
+### Implementation notes (Phase 3)
+
+Differences from the plan above, found while implementing:
+
+| Item | What was built | Why |
+|---|---|---|
+| `Rules/Rule` (abstract) | Base class for rules: default `appliesTo()` (all involved slots filled), result helpers, `blames()` (slots to highlight) | Removes repeated result-building code from 13 rules |
+| `CompatibilityRule::key()` / `title()` | Added to the interface | The engine must report skipped rules with a key and title |
+| `Contracts/PresenceRule` | Marker for DisplayOutputRule and CpuCoolingRule; excluded from candidate checks | D-035 |
+| `Hardware/EnumLabels` | Code → label lookup for rule messages ('matx' → 'Micro-ATX') | Domain cannot read config; the provider passes the enums in |
+| `CompatibilityResult::categories` | Slots to highlight, e.g. only `psu` for the wattage rule | A PSU problem should not paint the CPU slot red |
+| `Strategies/WeightedStrategy` | Shared weighted sum (integer arithmetic) + `adjustments()` hook + minimum-RAM helper | D-031 without duplicating the scoring loop |
+| `BuilderService::analyze()` | Resolves a selection and runs `BuildAnalyzer`, returns `missing` | Keeps the builder controller a one-liner |
+| `BuilderOption` | Candidate product + status + issues + `selected` flag | Typed result instead of nested arrays |
+| `PowerCalculator` | Motherboard and fans constants are counted for any non-empty build | Every PC has them; simple to explain |
+
+**Rule vs Specification boundary (D-014, confirmed):** the Rule decides whether it applies, extracts
+values from the configuration (e.g. counts M.2 drives), chooses the severity and writes the message.
+The Specification only answers one yes/no question about a value (`ValueInSet`, `FitsWithin`,
+`AtLeast`). Combinators are used where they read naturally: the PSU warning band is
+`AtLeast(estimate)->and(AtLeast(recommended)->not())`.
+
 ---
 
 ## 4. Design patterns — where and where not
