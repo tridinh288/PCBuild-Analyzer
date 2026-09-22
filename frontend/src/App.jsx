@@ -7,6 +7,8 @@ import MainLayout from './layouts/MainLayout'
 import Categories from './pages/admin/Categories'
 import Dashboard from './pages/admin/Dashboard'
 import Login from './pages/admin/Login'
+import ProductForm from './pages/admin/ProductForm'
+import Products from './pages/admin/Products'
 import Analysis from './pages/Analysis'
 import BuildDetail from './pages/BuildDetail'
 import Builder from './pages/Builder'
@@ -42,6 +44,9 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <Dashboard /> },
           { path: 'categories', element: <Categories /> },
+          { path: 'products', element: <Products /> },
+          { path: 'products/new', element: <ProductForm /> },
+          { path: 'products/:id', element: <ProductForm /> },
         ],
       },
     ],
