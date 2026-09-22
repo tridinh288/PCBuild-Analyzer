@@ -114,6 +114,18 @@ class ProductAdminTest extends AdminTestCase
             ->assertJsonPath('data.is_active', false);
     }
 
+    public function test_show_returns_raw_specs_for_editing(): void
+    {
+        $product = Product::where('slug', 'noctua-nh-d15')->first();
+
+        $this->actingAsAdmin()->getJson("/api/admin/products/{$product->id}")
+            ->assertOk()
+            ->assertJsonPath('data.raw_specs.height_mm', 165)
+            ->assertJsonPath('data.used_in_builds', 1);
+
+        $this->getJson('/api/admin/products/999999')->assertNotFound();
+    }
+
     public function test_product_used_by_a_template_cannot_be_deleted(): void
     {
         $product = Product::where('slug', 'nzxt-h5-flow')->first();

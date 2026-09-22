@@ -78,6 +78,13 @@ class BuildApiTest extends TestCase
         $this->assertLessThan($programming, $gaming);
     }
 
+    public function test_analysis_of_unknown_build_returns_404(): void
+    {
+        $this->getJson('/api/builds/does-not-exist/analysis')
+            ->assertNotFound()
+            ->assertJsonPath('message', 'Không tìm thấy cấu hình.');
+    }
+
     public function test_analysis_rejects_unknown_profile(): void
     {
         $this->getJson('/api/builds/gaming-1080p-am5/analysis?profile=mining')

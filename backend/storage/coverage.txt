@@ -1,0 +1,232 @@
+
+
+[1;37;40mCode Coverage Report:        [0m
+[1;37;40m  2026-09-22 14:09:43        [0m
+[1;37;40m                             [0m
+[1;37;40m Summary:                    [0m
+[30;43m  Classes: 82.88% (92/111)   [0m
+[30;42m  Methods: 94.05% (411/437)  [0m
+[30;42m  Lines:   97.65% (1540/1577)[0m
+
+App\Console\Commands\VerifyDatabaseCommand
+  [30;43mMethods:  57.14% ( 4/ 7)[0m   [30;43mLines:  89.86% ( 62/ 69)[0m
+App\Domain\Analysis\BuildAnalyzer
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% ( 15/ 15)[0m
+App\Domain\Analysis\ComparisonAnalyzer
+  [30;42mMethods: 100.00% ( 4/ 4)[0m   [30;42mLines: 100.00% ( 48/ 48)[0m
+App\Domain\Analysis\PerformanceAnalyzer
+  [37;41mMethods:  50.00% ( 1/ 2)[0m   [30;43mLines:  87.50% (  7/  8)[0m
+App\Domain\Analysis\PowerCalculator
+  [30;42mMethods: 100.00% ( 5/ 5)[0m   [30;42mLines: 100.00% ( 31/ 31)[0m
+App\Domain\Analysis\PriceAnalyzer
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mLines: 100.00% ( 12/ 12)[0m
+App\Domain\Analysis\Results\BuildAnalysis
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mLines: 100.00% ( 10/ 10)[0m
+App\Domain\Analysis\Results\ComparisonResult
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% (  6/  6)[0m
+App\Domain\Analysis\Results\PerformanceResult
+  [30;42mMethods: 100.00% ( 4/ 4)[0m   [30;42mLines: 100.00% ( 14/ 14)[0m
+App\Domain\Analysis\Results\PowerResult
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% (  7/  7)[0m
+App\Domain\Analysis\Results\PriceResult
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% (  2/  2)[0m
+App\Domain\Analysis\Strategies\GamingStrategy
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% ( 13/ 13)[0m
+App\Domain\Analysis\Strategies\GeneralUseStrategy
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mLines: 100.00% (  1/  1)[0m
+App\Domain\Analysis\Strategies\ProgrammingStrategy
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% (  2/  2)[0m
+App\Domain\Analysis\Strategies\WeightedStrategy
+  [30;42mMethods: 100.00% ( 5/ 5)[0m   [30;42mLines: 100.00% ( 19/ 19)[0m
+App\Domain\Analysis\Strategies\WorkstationStrategy
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% (  2/  2)[0m
+App\Domain\Analysis\SubScoreCalculator
+  [30;43mMethods:  85.71% ( 6/ 7)[0m   [30;42mLines:  97.22% ( 35/ 36)[0m
+App\Domain\Compatibility\CompatibilityEngine
+  [30;42mMethods: 100.00% ( 5/ 5)[0m   [30;42mLines: 100.00% ( 13/ 13)[0m
+App\Domain\Compatibility\Results\CompatibilityReport
+  [30;42mMethods: 100.00% ( 9/ 9)[0m   [30;42mLines: 100.00% ( 23/ 23)[0m
+App\Domain\Compatibility\Results\CompatibilityResult
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mLines: 100.00% (  9/  9)[0m
+App\Domain\Compatibility\Rules\CoolerCaseHeightRule
+  [30;42mMethods: 100.00% ( 4/ 4)[0m   [30;42mLines: 100.00% ( 12/ 12)[0m
+App\Domain\Compatibility\Rules\CoolerCpuSocketRule
+  [30;42mMethods: 100.00% ( 5/ 5)[0m   [30;42mLines: 100.00% ( 15/ 15)[0m
+App\Domain\Compatibility\Rules\CoolerCpuTdpRule
+  [30;42mMethods: 100.00% ( 5/ 5)[0m   [30;42mLines: 100.00% ( 10/ 10)[0m
+App\Domain\Compatibility\Rules\CpuCoolingRule
+  [30;42mMethods: 100.00% ( 6/ 6)[0m   [30;42mLines: 100.00% ( 12/ 12)[0m
+App\Domain\Compatibility\Rules\CpuMotherboardSocketRule
+  [30;42mMethods: 100.00% ( 5/ 5)[0m   [30;42mLines: 100.00% ( 14/ 14)[0m
+App\Domain\Compatibility\Rules\DisplayOutputRule
+  [30;42mMethods: 100.00% ( 6/ 6)[0m   [30;42mLines: 100.00% ( 12/ 12)[0m
+App\Domain\Compatibility\Rules\GpuCaseClearanceRule
+  [30;42mMethods: 100.00% ( 4/ 4)[0m   [30;42mLines: 100.00% (  9/  9)[0m
+App\Domain\Compatibility\Rules\MotherboardCaseFormFactorRule
+  [30;42mMethods: 100.00% ( 5/ 5)[0m   [30;42mLines: 100.00% ( 15/ 15)[0m
+App\Domain\Compatibility\Rules\MotherboardRamCapacityRule
+  [30;42mMethods: 100.00% ( 4/ 4)[0m   [30;42mLines: 100.00% ( 22/ 22)[0m
+App\Domain\Compatibility\Rules\MotherboardRamTypeRule
+  [30;42mMethods: 100.00% ( 5/ 5)[0m   [30;42mLines: 100.00% ( 14/ 14)[0m
+App\Domain\Compatibility\Rules\MotherboardStorageSlotsRule
+  [30;42mMethods: 100.00% ( 5/ 5)[0m   [30;42mLines: 100.00% ( 20/ 20)[0m
+App\Domain\Compatibility\Rules\PsuCaseFormFactorRule
+  [30;42mMethods: 100.00% ( 5/ 5)[0m   [30;42mLines: 100.00% ( 15/ 15)[0m
+App\Domain\Compatibility\Rules\PsuWattageRule
+  [30;42mMethods: 100.00% ( 7/ 7)[0m   [30;42mLines: 100.00% ( 20/ 20)[0m
+App\Domain\Compatibility\Rules\Rule
+  [30;42mMethods: 100.00% ( 6/ 6)[0m   [30;42mLines: 100.00% (  9/  9)[0m
+App\Domain\Compatibility\Specifications\AndSpecification
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% (  2/  2)[0m
+App\Domain\Compatibility\Specifications\AtLeast
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% (  2/  2)[0m
+App\Domain\Compatibility\Specifications\FitsWithin
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% (  2/  2)[0m
+App\Domain\Compatibility\Specifications\NotSpecification
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% (  2/  2)[0m
+App\Domain\Compatibility\Specifications\OrSpecification
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% (  2/  2)[0m
+App\Domain\Compatibility\Specifications\Specification
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mLines: 100.00% (  3/  3)[0m
+App\Domain\Compatibility\Specifications\ValueInSet
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% (  2/  2)[0m
+App\Domain\Configuration\BuildConfiguration
+  [30;42mMethods:  95.24% (20/21)[0m   [30;42mLines:  97.62% ( 41/ 42)[0m
+App\Domain\Configuration\ConfigurationItem
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mLines: 100.00% (  3/  3)[0m
+App\Domain\Configuration\SlotRules
+  [30;42mMethods: 100.00% ( 9/ 9)[0m   [30;42mLines: 100.00% ( 21/ 21)[0m
+App\Domain\Hardware\Components\Cooler
+  [30;42mMethods: 100.00% ( 8/ 8)[0m   [30;42mLines: 100.00% (  8/  8)[0m
+App\Domain\Hardware\Components\Cpu
+  [30;43mMethods:  75.00% ( 6/ 8)[0m   [30;43mLines:  75.00% (  6/  8)[0m
+App\Domain\Hardware\Components\Gpu
+  [30;43mMethods:  80.00% ( 4/ 5)[0m   [30;43mLines:  80.00% (  4/  5)[0m
+App\Domain\Hardware\Components\HardwareComponent
+  [30;42mMethods:  91.67% (11/12)[0m   [30;42mLines:  91.67% ( 11/ 12)[0m
+App\Domain\Hardware\Components\Motherboard
+  [30;42mMethods: 100.00% ( 8/ 8)[0m   [30;42mLines: 100.00% (  8/  8)[0m
+App\Domain\Hardware\Components\PcCase
+  [30;42mMethods: 100.00% ( 7/ 7)[0m   [30;42mLines: 100.00% (  7/  7)[0m
+App\Domain\Hardware\Components\Psu
+  [30;43mMethods:  75.00% ( 3/ 4)[0m   [30;43mLines:  75.00% (  3/  4)[0m
+App\Domain\Hardware\Components\Ram
+  [30;43mMethods:  85.71% ( 6/ 7)[0m   [30;43mLines:  85.71% (  6/  7)[0m
+App\Domain\Hardware\Components\Storage
+  [30;42mMethods: 100.00% ( 6/ 6)[0m   [30;42mLines: 100.00% (  6/  6)[0m
+App\Domain\Hardware\EnumLabels
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mLines: 100.00% (  3/  3)[0m
+App\Domain\Hardware\HardwareFactory
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% ( 11/ 11)[0m
+App\Enums\BuildPurpose
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mLines: 100.00% (  6/  6)[0m
+App\Enums\CompatibilityStatus
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% (  7/  7)[0m
+App\Http\Controllers\Admin\AuthController
+  [30;42mMethods: 100.00% ( 4/ 4)[0m   [30;42mLines: 100.00% ( 15/ 15)[0m
+App\Http\Controllers\Admin\BuildController
+  [30;42mMethods: 100.00% ( 8/ 8)[0m   [30;42mLines: 100.00% ( 22/ 22)[0m
+App\Http\Controllers\Admin\BuildImageController
+  [30;43mMethods:  66.67% ( 2/ 3)[0m   [30;43mLines:  66.67% (  2/  3)[0m
+App\Http\Controllers\Admin\CategoryController
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mLines: 100.00% (  8/  8)[0m
+App\Http\Controllers\Admin\ProductController
+  [30;43mMethods:  83.33% ( 5/ 6)[0m   [30;42mLines:  93.33% ( 14/ 15)[0m
+App\Http\Controllers\Admin\ProductImageController
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mLines: 100.00% (  3/  3)[0m
+App\Http\Controllers\Api\AnalysisController
+  [37;41mMethods:   0.00% ( 0/ 1)[0m   [30;43mLines:  80.00% (  4/  5)[0m
+App\Http\Controllers\Api\BuildController
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mLines: 100.00% ( 10/ 10)[0m
+App\Http\Controllers\Api\BuilderController
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mLines: 100.00% ( 23/ 23)[0m
+App\Http\Controllers\Api\CategoryController
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% (  2/  2)[0m
+App\Http\Controllers\Api\CompareController
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mLines: 100.00% (  6/  6)[0m
+App\Http\Controllers\Api\ComponentController
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mLines: 100.00% ( 10/ 10)[0m
+App\Http\Middleware\RejectMalformedJson
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mLines: 100.00% (  5/  5)[0m
+App\Http\Requests\Admin\BuildItemsRequest
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% ( 22/ 22)[0m
+App\Http\Requests\Admin\BuildRequest
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mLines: 100.00% (  8/  8)[0m
+App\Http\Requests\Admin\CategoryUpdateRequest
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mLines: 100.00% (  5/  5)[0m
+App\Http\Requests\Admin\ImageRequest
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mLines: 100.00% (  9/  9)[0m
+App\Http\Requests\Admin\LoginRequest
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mLines: 100.00% (  4/  4)[0m
+App\Http\Requests\Admin\ProductRequest
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mLines: 100.00% ( 25/ 25)[0m
+App\Http\Requests\AnalysisRequest
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% (  4/  4)[0m
+App\Http\Requests\BuildIndexRequest
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% ( 11/ 11)[0m
+App\Http\Requests\BuilderAnalyzeRequest
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% (  5/  5)[0m
+App\Http\Requests\BuilderOptionsRequest
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mLines: 100.00% ( 13/ 13)[0m
+App\Http\Requests\CompareRequest
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% ( 10/ 10)[0m
+App\Http\Requests\ComponentIndexRequest
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mLines: 100.00% ( 19/ 19)[0m
+App\Http\Resources\AdminProductResource
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mLines: 100.00% (  8/  8)[0m
+App\Http\Resources\BuildResource
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mLines: 100.00% ( 17/ 17)[0m
+App\Http\Resources\BuilderOptionResource
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mLines: 100.00% (  6/  6)[0m
+App\Http\Resources\CategoryResource
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mLines: 100.00% ( 16/ 16)[0m
+App\Http\Resources\Concerns\HasImageUrls
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mLines: 100.00% (  4/  4)[0m
+App\Http\Resources\ProductResource
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mLines: 100.00% ( 15/ 15)[0m
+App\Models\Build
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mLines: 100.00% ( 12/ 12)[0m
+App\Models\BuildItem
+  [30;43mMethods:  66.67% ( 2/ 3)[0m   [30;43mLines:  80.00% (  4/  5)[0m
+App\Models\Category
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% (  4/  4)[0m
+App\Models\Product
+  [30;42mMethods: 100.00% ( 4/ 4)[0m   [30;42mLines: 100.00% (  8/  8)[0m
+App\Models\User
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mLines: 100.00% (  3/  3)[0m
+App\Providers\AnalysisServiceProvider
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mLines: 100.00% ( 20/ 20)[0m
+App\Providers\AppServiceProvider
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mLines: 100.00% ( 12/ 12)[0m
+App\Repositories\Eloquent\BuildRepository
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mLines: 100.00% ( 30/ 30)[0m
+App\Repositories\Eloquent\ProductRepository
+  [30;42mMethods:  91.67% (11/12)[0m   [30;42mLines:  98.21% ( 55/ 56)[0m
+App\Rules\ValidSelection
+  [30;43mMethods:  66.67% ( 2/ 3)[0m   [30;42mLines:  96.30% ( 26/ 27)[0m
+App\Services\BuildConfigurationFactory
+  [30;42mMethods: 100.00% ( 6/ 6)[0m   [30;42mLines: 100.00% ( 38/ 38)[0m
+App\Services\BuildService
+  [30;43mMethods:  55.56% ( 5/ 9)[0m   [30;43mLines:  77.14% ( 27/ 35)[0m
+App\Services\BuilderOption
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mLines: 100.00% (  1/  1)[0m
+App\Services\BuilderService
+  [30;42mMethods: 100.00% ( 4/ 4)[0m   [30;42mLines: 100.00% ( 30/ 30)[0m
+App\Services\CatalogFilterService
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mLines: 100.00% ( 28/ 28)[0m
+App\Services\ComparisonService
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mLines: 100.00% ( 22/ 22)[0m
+App\Services\ProductService
+  [30;43mMethods:  87.50% ( 7/ 8)[0m   [30;42mLines:  97.30% ( 36/ 37)[0m
+App\Services\ResolvedSelection
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mLines: 100.00% (  1/  1)[0m
+App\Support\Hardware\SpecFormatter
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mLines: 100.00% ( 23/ 23)[0m
+App\Support\Hardware\SpecSchema
+  [30;42mMethods:  94.44% (17/18)[0m   [30;42mLines:  98.75% ( 79/ 80)[0m
+App\Support\Http\ApiResponse
+  [30;42mMethods: 100.00% ( 4/ 4)[0m   [30;42mLines: 100.00% ( 20/ 20)[0m
+App\Support\Images\CloudinaryImageStorage
+  [30;43mMethods:  77.78% ( 7/ 9)[0m   [30;43mLines:  86.84% ( 33/ 38)[0m
+App\Support\Images\FakeImageStorage
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mLines: 100.00% (  7/  7)[0m

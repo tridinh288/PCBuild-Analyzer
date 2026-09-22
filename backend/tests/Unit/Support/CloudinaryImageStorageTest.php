@@ -4,6 +4,7 @@ namespace Tests\Unit\Support;
 
 use App\Support\Images\CloudinaryImageStorage;
 use App\Support\Images\ImageStorageException;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
@@ -70,6 +71,25 @@ class CloudinaryImageStorageTest extends TestCase
         } catch (ImageStorageException $e) {
             $this->assertStringContainsString('CLOUDINARY_URL', $e->getMessage());
         }
+
+        Http::assertNothingSent();
+    }
+
+    public function test_network_error_during_upload_becomes_a_user_facing_error(): void
+    {
+        Http::fake(fn () => throw new ConnectionException('timed out'));
+
+        $this->expectException(ImageStorageException::class);
+        $this->expectExceptionMessage('Không kết nối được dịch vụ ảnh');
+
+        $this->storage()->upload(UploadedFile::fake()->createWithContent('a.png', 'bytes'), 'pcbuild/products');
+    }
+
+    public function test_delete_without_configuration_does_nothing(): void
+    {
+        Http::fake();
+
+        $this->storage(null)->delete('pcbuild/products/old');
 
         Http::assertNothingSent();
     }
