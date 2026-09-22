@@ -1,6 +1,11 @@
 import { createBrowserRouter } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
+import RequireAdmin from './components/admin/RequireAdmin'
+import { AuthProvider } from './context/AuthProvider'
+import AdminLayout from './layouts/AdminLayout'
 import MainLayout from './layouts/MainLayout'
+import Dashboard from './pages/admin/Dashboard'
+import Login from './pages/admin/Login'
 import Analysis from './pages/Analysis'
 import BuildDetail from './pages/BuildDetail'
 import Builder from './pages/Builder'
@@ -26,8 +31,25 @@ const router = createBrowserRouter([
       { path: '*', element: <NotFound /> },
     ],
   },
+  { path: '/admin/login', element: <Login /> },
+  {
+    path: '/admin',
+    element: <RequireAdmin />,
+    children: [
+      {
+        element: <AdminLayout />,
+        children: [
+          { index: true, element: <Dashboard /> },
+        ],
+      },
+    ],
+  },
 ])
 
 export default function App() {
-  return <RouterProvider router={router} />
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  )
 }

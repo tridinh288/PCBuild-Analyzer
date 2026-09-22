@@ -1,5 +1,5 @@
 import { Link } from 'react-router'
-import { useAuth } from '../../context/AuthContext'
+import { useAuth } from '../../hooks/useAuth'
 
 const SECTIONS = [
   { to: '/admin/products', title: 'Linh kiện', text: 'Thêm, sửa, ngừng bán linh kiện; thông số theo từng loại; hình ảnh.' },

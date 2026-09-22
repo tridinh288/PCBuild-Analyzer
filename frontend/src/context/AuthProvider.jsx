@@ -1,8 +1,7 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, useSyncExternalStore } from 'react'
+import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react'
+import { AuthContext } from './authContext'
 import { adminApi } from '../services/api'
 import { clearToken, getToken, setToken, subscribe } from '../services/authStore'
-
-const AuthContext = createContext(null)
 
 /**
  * Admin session for the admin area only; public pages never need it (D-001).
@@ -44,10 +43,3 @@ export function AuthProvider({ children }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
-export function useAuth() {
-  const context = useContext(AuthContext)
-  if (!context) {
-    throw new Error('useAuth must be used inside <AuthProvider>')
-  }
-  return context
-}

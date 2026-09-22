@@ -1,6 +1,6 @@
 import { Link, NavLink, Outlet, useNavigate } from 'react-router'
 import ServerWakingBanner from '../components/ServerWakingBanner'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../hooks/useAuth'
 
 const NAV = [
   { to: '/admin/products', label: 'Linh kiện' },
