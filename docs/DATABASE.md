@@ -152,7 +152,7 @@ Used for the build list (sort and price range filter). The detail page and analy
 ```php
 return [
     'enums'      => [ /* code => Vietnamese/English label, shared by categories */ ],
-    'categories' => [ /* slug => [label, specs => [key => definition]] */ ],
+    'categories' => [ /* slug => [name, sort_order (seed defaults), specs => [key => definition]] */ ],
     'slots'      => [ /* slug => builder slot rules */ ],
     'power'      => [ /* power estimate constants */ ],
     'scoring'    => [ /* sub-score tables, weights, strategy adjustments */ ],

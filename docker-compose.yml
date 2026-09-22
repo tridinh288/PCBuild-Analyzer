@@ -1,0 +1,38 @@
+# Local development: Laravel API + MySQL. The React app runs on the host (D-025).
+# Credentials below are local-only defaults; override them in a root .env file if needed.
+name: pcbuild
+
+services:
+  app:
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./backend:/var/www/html
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: pcbuild
+      MYSQL_USER: pcbuild
+      MYSQL_PASSWORD: ${DB_PASSWORD:-pcbuild_local}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_local}
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "${DB_FORWARD_PORT:-3307}:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD:-root_local}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  mysql-data:

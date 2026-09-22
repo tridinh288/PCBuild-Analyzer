@@ -1,0 +1,25 @@
+<?php
+
+return [
+    ['name' => 'MSI B550M PRO-VDH WIFI', 'brand' => 'MSI', 'model' => 'B550M PRO-VDH WIFI', 'price' => 2_590_000,
+        'specs' => ['socket' => 'am4', 'ram_type' => 'ddr4', 'ram_slots' => 4, 'max_ram_gb' => 128,
+            'form_factor' => 'matx', 'm2_slots' => 2, 'sata_ports' => 4]],
+    ['name' => 'Gigabyte B650M GAMING X AX', 'brand' => 'Gigabyte', 'model' => 'B650M GAMING X AX', 'price' => 4_290_000,
+        'specs' => ['socket' => 'am5', 'ram_type' => 'ddr5', 'ram_slots' => 4, 'max_ram_gb' => 192,
+            'form_factor' => 'matx', 'm2_slots' => 2, 'sata_ports' => 4]],
+    ['name' => 'ASUS ROG STRIX B650-A GAMING WIFI', 'brand' => 'ASUS', 'model' => 'B650-A GAMING WIFI', 'price' => 6_490_000,
+        'specs' => ['socket' => 'am5', 'ram_type' => 'ddr5', 'ram_slots' => 4, 'max_ram_gb' => 192,
+            'form_factor' => 'atx', 'm2_slots' => 3, 'sata_ports' => 4]],
+    ['name' => 'ASUS ROG STRIX B650E-I GAMING WIFI', 'brand' => 'ASUS', 'model' => 'B650E-I GAMING WIFI', 'price' => 7_990_000,
+        'specs' => ['socket' => 'am5', 'ram_type' => 'ddr5', 'ram_slots' => 2, 'max_ram_gb' => 96,
+            'form_factor' => 'itx', 'm2_slots' => 2, 'sata_ports' => 2]],
+    ['name' => 'MSI PRO B760M-A DDR4', 'brand' => 'MSI', 'model' => 'PRO B760M-A DDR4', 'price' => 3_190_000,
+        'specs' => ['socket' => 'lga1700', 'ram_type' => 'ddr4', 'ram_slots' => 4, 'max_ram_gb' => 128,
+            'form_factor' => 'matx', 'm2_slots' => 2, 'sata_ports' => 4]],
+    ['name' => 'MSI PRO Z790-P WIFI', 'brand' => 'MSI', 'model' => 'PRO Z790-P WIFI', 'price' => 5_690_000,
+        'specs' => ['socket' => 'lga1700', 'ram_type' => 'ddr5', 'ram_slots' => 4, 'max_ram_gb' => 192,
+            'form_factor' => 'atx', 'm2_slots' => 4, 'sata_ports' => 6]],
+    ['name' => 'ASUS PRIME Z890-P', 'brand' => 'ASUS', 'model' => 'PRIME Z890-P', 'price' => 6_990_000,
+        'specs' => ['socket' => 'lga1851', 'ram_type' => 'ddr5', 'ram_slots' => 4, 'max_ram_gb' => 192,
+            'form_factor' => 'atx', 'm2_slots' => 4, 'sata_ports' => 4]],
+];

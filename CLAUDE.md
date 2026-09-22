@@ -51,22 +51,28 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
 - Before each commit: run relevant tests, check `git status` and `git diff --staged`,
   make sure no secrets are staged (.env, API keys, CLOUDINARY_URL, DB passwords, tokens).
 - Push right after each commit: `git push -u origin <branch>`.
-- Merge into `main` only after my approval: `git merge --no-ff`, then push `main`.
+- Merge into `main` only after my approval, through a GitHub pull request with a merge commit
+  (`gh pr create` → `gh pr merge --merge`), equivalent to `git merge --no-ff`.
+- Pull request titles and descriptions are written in Vietnamese (commit messages stay English).
 - Never force push, never rewrite pushed history, never commit build output.
 - If a push fails (remote or auth), stop and report. Do not work around it.
 
 ## Commands
 
-(Fill in during Phase 2 and Phase 8.)
+(Phase 8 adds production commands.)
 
-- Start: `docker compose up -d`
+- Start: `docker compose up -d` (API on http://localhost:8000, MySQL on host port 3307)
 - Backend tests: `docker compose exec app php artisan test`
-- Migrate + seed: `docker compose exec app php artisan migrate --seed`
+- Migrate + seed: `docker compose exec app php artisan migrate --seed` (fresh: `migrate:fresh --seed`)
+- Code style: `docker compose exec app ./vendor/bin/pint`
+- DB checks: `docker compose exec app php artisan app:verify-database` (add `--env=tidb` for TiDB, see `docs/DEPLOYMENT.md`)
+- Composer: prefer `docker compose exec app composer ...` (host PATH may still resolve `php` to XAMPP 8.0)
 - Frontend dev: `npm run dev` (in `frontend/`)
 
 ## Current status
 
-- Phase: 1 — Planning (approved, merged to `main`)
-- Last completed step: planning docs (`docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `docs/API.md`), README skeleton, folder structure
-- Next step: Phase 2 — Backend Foundation (Laravel 13 in `backend/`, remove `backend/.gitkeep` first)
-- Environment: host PHP must be Laragon 8.3 (not XAMPP 8.0); Docker Desktop must be running
+- Phase: 2 — Backend Foundation (complete, waiting for approval) on branch `phase/2-backend-foundation`
+- Last completed step: `app:verify-database` passes on local MySQL 8.4 and on TiDB v8.5.3 (D-033)
+- Next step: after approval, merge to `main`; Phase 3 — Business Logic
+- TiDB: credentials in `backend/.env.tidb` (gitignored), database `pcbuild` — never `sys`
+- Note: the full test suite takes about 1 minute because the Windows bind mount is slow
