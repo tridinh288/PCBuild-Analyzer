@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Services;
 
+use App\Domain\Analysis\PerformanceAnalyzer;
 use App\Domain\Compatibility\CompatibilityEngine;
+use App\Enums\BuildPurpose;
 use App\Enums\CompatibilityStatus;
 use App\Models\Build;
 use App\Services\BuildConfigurationFactory;
@@ -29,6 +31,20 @@ class AnalysisWiringTest extends TestCase
 
         $this->assertCount(13, $engine->rules());
         $this->assertSame($engine, $this->app->make(CompatibilityEngine::class));
+    }
+
+    public function test_performance_analyzer_has_a_strategy_for_every_purpose(): void
+    {
+        $config = $this->app->make(BuildConfigurationFactory::class)
+            ->fromBuild(Build::where('slug', 'gaming-4k-cao-cap')->first());
+        $analyzer = $this->app->make(PerformanceAnalyzer::class);
+
+        foreach (BuildPurpose::cases() as $purpose) {
+            $result = $analyzer->analyze($config, $purpose);
+
+            $this->assertSame($purpose, $result->profile);
+            $this->assertGreaterThan(0, $result->score);
+        }
     }
 
     public function test_the_psu_demo_template_has_exactly_one_warning(): void

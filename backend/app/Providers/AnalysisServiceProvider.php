@@ -2,7 +2,14 @@
 
 namespace App\Providers;
 
+use App\Domain\Analysis\PerformanceAnalyzer;
 use App\Domain\Analysis\PowerCalculator;
+use App\Domain\Analysis\Strategies\GamingStrategy;
+use App\Domain\Analysis\Strategies\GeneralUseStrategy;
+use App\Domain\Analysis\Strategies\ProgrammingStrategy;
+use App\Domain\Analysis\Strategies\WeightedStrategy;
+use App\Domain\Analysis\Strategies\WorkstationStrategy;
+use App\Domain\Analysis\SubScoreCalculator;
 use App\Domain\Compatibility\CompatibilityEngine;
 use App\Domain\Compatibility\Rules\CoolerCaseHeightRule;
 use App\Domain\Compatibility\Rules\CoolerCpuSocketRule;
@@ -20,6 +27,7 @@ use App\Domain\Compatibility\Rules\PsuWattageRule;
 use App\Domain\Configuration\SlotRules;
 use App\Domain\Hardware\EnumLabels;
 use App\Domain\Hardware\HardwareFactory;
+use App\Enums\BuildPurpose;
 use App\Support\Hardware\SpecSchema;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
@@ -52,6 +60,16 @@ class AnalysisServiceProvider extends ServiceProvider
         CpuCoolingRule::class,
     ];
 
+    /**
+     * @var array<string, class-string<WeightedStrategy>>
+     */
+    private const STRATEGIES = [
+        'gaming' => GamingStrategy::class,
+        'programming' => ProgrammingStrategy::class,
+        'workstation' => WorkstationStrategy::class,
+        'general_use' => GeneralUseStrategy::class,
+    ];
+
     public function register(): void
     {
         $this->app->singleton(HardwareFactory::class);
@@ -61,6 +79,23 @@ class AnalysisServiceProvider extends ServiceProvider
         $this->app->singleton(EnumLabels::class, fn (Application $app) => new EnumLabels($app->make(SpecSchema::class)->enums()));
 
         $this->app->singleton(PowerCalculator::class, fn (Application $app) => new PowerCalculator($app->make(SpecSchema::class)->power()));
+
+        $this->app->singleton(SubScoreCalculator::class, fn (Application $app) => new SubScoreCalculator($app->make(SpecSchema::class)->scoring()));
+
+        // One strategy per purpose; weights and adjustments come from config (D-031).
+        $this->app->singleton(PerformanceAnalyzer::class, function (Application $app) {
+            $scoring = $app->make(SpecSchema::class)->scoring();
+            $subScores = $app->make(SubScoreCalculator::class);
+
+            return new PerformanceAnalyzer(array_map(
+                fn (BuildPurpose $purpose) => new (self::STRATEGIES[$purpose->value])(
+                    $subScores,
+                    $scoring['weights'][$purpose->value],
+                    $scoring['adjustments'][$purpose->value] ?? [],
+                ),
+                BuildPurpose::cases(),
+            ));
+        });
 
         // Rules are resolved by the container, so their own dependencies are auto-wired.
         $this->app->singleton(CompatibilityEngine::class, fn (Application $app) => new CompatibilityEngine(
