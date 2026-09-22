@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AnalysisController;
 use App\Http\Controllers\Api\BuildController;
 use App\Http\Controllers\Api\BuilderController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CompareController;
 use App\Http\Controllers\Api\ComponentController;
 use App\Support\Http\ApiResponse;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,8 @@ Route::get('/builds/{slug}/analysis', [AnalysisController::class, 'show'])->name
 
 Route::post('/builder/options', [BuilderController::class, 'options'])->name('builder.options');
 Route::post('/builder/analyze', [BuilderController::class, 'analyze'])->name('builder.analyze');
+
+Route::post('/compare', CompareController::class)->name('compare');
 
 Route::prefix('admin')->name('admin.')->group(function () {
     // POST /admin/login (Phase 6)
