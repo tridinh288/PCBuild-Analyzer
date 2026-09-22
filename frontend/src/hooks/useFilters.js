@@ -34,10 +34,15 @@ export function useFilters() {
 
   const setFilter = useCallback((name, value) => setFilters({ [name]: value }), [setFilters])
 
-  const reset = useCallback((keep = []) => {
+  /**
+   * Clears every filter except `keep`, then applies `values` — in one URL update, because two
+   * setSearchParams calls in the same event would both start from the old query string.
+   */
+  const reset = useCallback((keep = [], values = {}) => {
     setSearchParams((previous) => {
       const next = new URLSearchParams()
       keep.forEach((name) => previous.has(name) && next.set(name, previous.get(name)))
+      Object.entries(values).forEach(([name, value]) => next.set(name, String(value)))
       return next
     }, { replace: true })
   }, [setSearchParams])
