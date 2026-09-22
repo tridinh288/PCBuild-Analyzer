@@ -221,6 +221,7 @@ Consequences: README documents two start commands. No `frontend` service in `doc
 ## D-026: Git workflow
 Status: Accepted
 Decision: `.gitignore` first; one branch per phase; commit per logical step with Conventional Commits; push after each commit; merge to `main` only after approval; no force push; stop on push failure.
+Update (Phase 2): merges go through a GitHub pull request (merge commit); PR titles and descriptions are in Vietnamese, commits stay in English.
 Why: Readable history for reviewers; safe automation.
 Consequences: Tests and secret checks run before every commit.
 

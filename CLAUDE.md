@@ -51,7 +51,9 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
 - Before each commit: run relevant tests, check `git status` and `git diff --staged`,
   make sure no secrets are staged (.env, API keys, CLOUDINARY_URL, DB passwords, tokens).
 - Push right after each commit: `git push -u origin <branch>`.
-- Merge into `main` only after my approval: `git merge --no-ff`, then push `main`.
+- Merge into `main` only after my approval, through a GitHub pull request with a merge commit
+  (`gh pr create` → `gh pr merge --merge`), equivalent to `git merge --no-ff`.
+- Pull request titles and descriptions are written in Vietnamese (commit messages stay English).
 - Never force push, never rewrite pushed history, never commit build output.
 - If a push fails (remote or auth), stop and report. Do not work around it.
 
