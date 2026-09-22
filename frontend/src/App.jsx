@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
 import MainLayout from './layouts/MainLayout'
+import Analysis from './pages/Analysis'
 import BuildDetail from './pages/BuildDetail'
 import Builder from './pages/Builder'
 import Builds from './pages/Builds'
@@ -21,7 +22,7 @@ const router = createBrowserRouter([
       { path: '/components', element: <Components /> },
       { path: '/components/:slug', element: <ComponentDetail /> },
       { path: '/compare', element: <Placeholder title="So sánh" /> },
-      { path: '/analysis', element: <Placeholder title="Phân tích" /> },
+      { path: '/analysis', element: <Analysis /> },
       { path: '*', element: <NotFound /> },
     ],
   },

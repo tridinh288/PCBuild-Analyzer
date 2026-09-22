@@ -1,3 +1,5 @@
+import { Link } from 'react-router'
+import { serializeSelection } from '../../utils/builderUrl'
 import { PURPOSES } from '../../utils/format'
 import CompatibilitySummary from '../analysis/CompatibilitySummary'
 import PowerCard from '../analysis/PowerCard'
@@ -33,6 +35,12 @@ export default function BuilderSummary({ builder }) {
           onChange={builder.setProfile} />
         <ScoreCard performance={data.performance} />
       </div>
+      {Object.keys(builder.selection).length > 0 && (
+        <Link to={`/analysis?${serializeSelection(builder.selection)}`}
+          className="block rounded-lg px-4 py-2.5 text-center font-semibold text-brand-700 ring-1 ring-brand-200 hover:bg-brand-50">
+          Phân tích chi tiết
+        </Link>
+      )}
     </div>
   )
 }
