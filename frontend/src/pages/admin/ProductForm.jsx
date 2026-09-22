@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
+import ImageUploader from '../../components/admin/ImageUploader'
 import SpecField from '../../components/admin/SpecField'
 import { ErrorState, LoadingState } from '../../components/ui/States'
 import { useApi } from '../../hooks/useApi'
@@ -50,6 +51,7 @@ function ProductEditor({ product, category: initialCategory, categories }) {
   const [message, setMessage] = useState(null)
   const [saving, setSaving] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [image, setImage] = useState(product?.image ?? null)
 
   // Spec values are initialised once the schema for the current category is known.
   const fields = schema.data?.category === category ? schema.data.fields : null
@@ -143,6 +145,18 @@ function ProductEditor({ product, category: initialCategory, categories }) {
             Mô tả
             <textarea rows={3} value={form.description} onChange={set('description')} className={input} />
           </label>
+          <div>
+            <span className="text-sm font-medium text-slate-700">Hình ảnh</span>
+            {product
+              ? (
+                <div className="mt-1">
+                  <ImageUploader image={image} category={category}
+                    onUpload={async (file) => setImage((await adminApi.uploadProductImage(product.id, file)).data.image)}
+                    onRemove={async () => setImage((await adminApi.deleteProductImage(product.id)).data.image)} />
+                </div>
+              )
+              : <p className="mt-1 text-xs text-slate-500">Lưu linh kiện trước, sau đó tải ảnh lên.</p>}
+          </div>
           <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
             <input type="checkbox" checked={form.is_active} onChange={(e) => setForm({ ...form, is_active: e.target.checked })}
               className="size-4 rounded border-slate-300 text-brand-600" />
