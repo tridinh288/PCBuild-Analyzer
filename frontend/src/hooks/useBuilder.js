@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
 import { useSearchParams } from 'react-router'
 import { BUILDER_ACTIONS as A, builderReducer, initialBuilderState } from '../reducers/builderReducer'
 import { api } from '../services/api'
-import { parseSelection, serializeSelection, toApiSelection } from '../utils/builderUrl'
+import { isEmptySelection, parseSelection, serializeSelection, toApiSelection } from '../utils/builderUrl'
+import { clearDraft, loadDraft, saveDraft } from '../utils/draft'
 import { useApi } from './useApi'
 import { useDebouncedValue } from './useDebouncedValue'
 
@@ -25,9 +26,19 @@ export function useBuilder(slots) {
   const [searchParams, setSearchParams] = useSearchParams()
   const templateSlug = searchParams.get('template')
 
-  // Modes 2 and 3 (D-002): start from a template (loaded below) or from the IDs in the URL.
-  const [state, dispatch] = useReducer(builderReducer, searchParams,
-    (params) => ({ ...initialBuilderState, selection: parseSelection(params) }))
+  // Modes 2 and 3 (D-002): start from a template (loaded below), from the IDs in the URL, or —
+  // only when the URL has neither — from the saved draft.
+  const [initial] = useState(() => {
+    const fromUrl = parseSelection(searchParams)
+    if (templateSlug || !isEmptySelection(fromUrl)) {
+      return { selection: fromUrl, fromDraft: false }
+    }
+    const draft = loadDraft()
+    const fromDraft = draft ? parseSelection(draft) : {}
+    return { selection: fromDraft, fromDraft: !isEmptySelection(fromDraft) }
+  })
+  const [state, dispatch] = useReducer(builderReducer, { ...initialBuilderState, selection: initial.selection })
+  const [draftRestored, setDraftRestored] = useState(initial.fromDraft)
   const [templateError, setTemplateError] = useState(null)
   const [profile, setProfile] = useState(null)
 
@@ -49,9 +60,12 @@ export function useBuilder(slots) {
 
   // Keep the URL in sync so the configuration survives a refresh and can be shared.
   // The template param is replaced by explicit IDs once the template is loaded.
+  // The same query string is autosaved as the draft.
   useEffect(() => {
     if (loadingTemplate || templateError) return
-    setSearchParams(serializeSelection(state.selection), { replace: true })
+    const query = serializeSelection(state.selection)
+    setSearchParams(query, { replace: true })
+    saveDraft(query.toString())
   }, [state.selection, loadingTemplate, templateError, setSearchParams])
 
   const selected = useMemo(() => toApiSelection(state.selection), [state.selection])
@@ -86,10 +100,14 @@ export function useBuilder(slots) {
   // Also clears the URL: a failed `?template=` must not be loaded again.
   const reset = useCallback(() => {
     setSearchParams(new URLSearchParams(), { replace: true })
+    clearDraft()
+    setDraftRestored(false)
     setTemplateError(null)
     setProfile(null)
     dispatch({ type: A.RESET })
   }, [setSearchParams])
+
+  const dismissDraftNotice = useCallback(() => setDraftRestored(false), [])
 
   return {
     selection: state.selection,
@@ -102,6 +120,8 @@ export function useBuilder(slots) {
     analysis,
     loadingTemplate,
     templateError,
+    draftRestored,
+    dismissDraftNotice,
     selectPart,
     removePart,
     setQuantity,

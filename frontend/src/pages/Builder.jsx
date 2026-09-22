@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router'
 import BuilderSummary from '../components/builder/BuilderSummary'
 import ComponentPicker from '../components/builder/ComponentPicker'
+import ShareActions from '../components/builder/ShareActions'
 import SlotList from '../components/builder/SlotList'
 import { ErrorState, LoadingState } from '../components/ui/States'
 import { useApi } from '../hooks/useApi'
@@ -54,11 +55,30 @@ function BuilderWorkspace({ categories }) {
               : 'Chọn linh kiện theo thứ tự bất kỳ; tương thích được kiểm tra ngay khi bạn chọn.'}
           </p>
         </div>
-        <button type="button" onClick={builder.reset}
-          className="self-start rounded-lg px-3 py-2 text-sm font-medium text-slate-600 ring-1 ring-slate-300 hover:bg-slate-100 sm:self-auto">
-          Làm lại từ đầu
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          <ShareActions builder={builder} />
+          <button type="button" onClick={builder.reset}
+            className="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 ring-1 ring-slate-300 hover:bg-slate-100">
+            Làm lại từ đầu
+          </button>
+        </div>
       </header>
+
+      {builder.draftRestored && (
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-brand-200 bg-brand-50 px-4 py-3 text-sm" role="status">
+          <span>Đã khôi phục bản nháp lần trước của bạn.</span>
+          <span className="flex gap-3">
+            <button type="button" onClick={builder.dismissDraftNotice} className="font-medium text-brand-700 hover:underline">Giữ lại</button>
+            <button type="button" onClick={builder.reset} className="font-medium text-slate-600 hover:underline">Bỏ bản nháp</button>
+          </span>
+        </div>
+      )}
+
+      {builder.missingIds.size > 0 && (
+        <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900" role="status">
+          Một số linh kiện trong liên kết không còn bán hoặc không tồn tại. Hãy bỏ chúng ra và chọn linh kiện thay thế.
+        </div>
+      )}
 
       <div className="mt-6 grid gap-6 lg:grid-cols-5">
         <section className="lg:col-span-3" aria-label="Linh kiện đã chọn">
