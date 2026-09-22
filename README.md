@@ -77,14 +77,27 @@ Check: `php -v` must report 8.3 or newer.
 
 ## Installation (local)
 
-_TBD (Phase 2 / Phase 8)._
+The API and MySQL run in Docker; the React app runs on the host (D-025).
 
 ```bash
-docker compose up -d
+# 1. Environment
+cp backend/.env.example backend/.env
+#    set DB_PASSWORD=pcbuild_local (matches docker-compose.yml) and ADMIN_EMAIL / ADMIN_PASSWORD
+
+# 2. API + MySQL
+docker compose up -d --build
 docker compose exec app composer install
+docker compose exec app php artisan key:generate
 docker compose exec app php artisan migrate --seed
+
+# 3. Check
+curl http://localhost:8000/api/status
+
+# 4. Frontend (Phase 5)
 cd frontend && npm install && npm run dev
 ```
+
+MySQL is published on host port `3307` (user `pcbuild`) for GUI clients such as HeidiSQL.
 
 ## Deployment
 
@@ -92,11 +105,14 @@ _TBD (Phase 8): Render, TiDB Cloud, Cloudinary._
 
 ## Testing
 
-_TBD (Phase 7)._
+PHPUnit runs against a separate `pcbuild_test` MySQL database (created by `docker/mysql/init`).
 
 ```bash
 docker compose exec app php artisan test
+docker compose exec app php artisan app:verify-database   # JSON queries / FK checks on the current DB
 ```
+
+Full test report: _TBD (Phase 7)._
 
 ## Screenshots
 

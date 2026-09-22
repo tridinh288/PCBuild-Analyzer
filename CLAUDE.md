@@ -57,16 +57,20 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
 
 ## Commands
 
-(Fill in during Phase 2 and Phase 8.)
+(Phase 8 adds production commands.)
 
-- Start: `docker compose up -d`
+- Start: `docker compose up -d` (API on http://localhost:8000, MySQL on host port 3307)
 - Backend tests: `docker compose exec app php artisan test`
-- Migrate + seed: `docker compose exec app php artisan migrate --seed`
+- Migrate + seed: `docker compose exec app php artisan migrate --seed` (fresh: `migrate:fresh --seed`)
+- Code style: `docker compose exec app ./vendor/bin/pint`
+- DB checks: `docker compose exec app php artisan app:verify-database` (add `--env=tidb` for TiDB, see `docs/DEPLOYMENT.md`)
+- Composer: prefer `docker compose exec app composer ...` (host PATH may still resolve `php` to XAMPP 8.0)
 - Frontend dev: `npm run dev` (in `frontend/`)
 
 ## Current status
 
-- Phase: 1 — Planning (approved, merged to `main`)
-- Last completed step: planning docs (`docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `docs/API.md`), README skeleton, folder structure
-- Next step: Phase 2 — Backend Foundation (Laravel 13 in `backend/`, remove `backend/.gitkeep` first)
-- Environment: host PHP must be Laragon 8.3 (not XAMPP 8.0); Docker Desktop must be running
+- Phase: 2 — Backend Foundation on branch `phase/2-backend-foundation` (steps 1–8 done)
+- Last completed step: `app:verify-database` passes on local MySQL 8.4
+- Waiting on: step 9 on TiDB Cloud needs the user's cluster credentials (`backend/.env.tidb`, see `docs/DEPLOYMENT.md`)
+- Next step: after the TiDB check and approval, merge to `main`; Phase 3 — Business Logic
+- Note: the full test suite takes about 1 minute because the Windows bind mount is slow
