@@ -1,0 +1,53 @@
+# Dependencies
+vendor/
+node_modules/
+
+# Environment files (secrets)
+.env
+.env.*
+!.env.example
+*.env.local
+
+# Build output
+dist/
+build/
+backend/public/build/
+backend/public/hot
+backend/public/storage
+
+# Laravel runtime
+backend/storage/*.key
+backend/storage/logs/
+backend/storage/framework/cache/data/
+backend/storage/framework/sessions/
+backend/storage/framework/views/
+backend/storage/framework/testing/
+backend/bootstrap/cache/*.php
+.phpunit.result.cache
+.phpunit.cache/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Test / coverage output
+coverage/
+backend/coverage/
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+.fleet/
+.phpactor.json
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Docker local data
+docker/mysql/data/
