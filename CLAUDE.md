@@ -71,8 +71,9 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
 
 ## Current status
 
-- Phase: 2 — Backend Foundation (complete, waiting for approval) on branch `phase/2-backend-foundation`
-- Last completed step: `app:verify-database` passes on local MySQL 8.4 and on TiDB v8.5.3 (D-033)
-- Next step: after approval, merge to `main`; Phase 3 — Business Logic
+- Phase: 3 — Business Logic (complete, waiting for approval) on branch `phase/3-business-logic`, PR open
+- Last completed step: BuildAnalyzer, BuilderService, ComparisonService, SpecFormatter; 187 tests pass
+- Next step: after approval, merge the PR; Phase 4 — API (controllers, Form Requests, Resources, rate limiting)
+- Engine map: `app/Domain` (pure), `app/Services` (DB orchestration); implementation notes in `docs/ARCHITECTURE.md` § 3
 - TiDB: credentials in `backend/.env.tidb` (gitignored), database `pcbuild` — never `sys`
 - Note: the full test suite takes about 1 minute because the Windows bind mount is slow
