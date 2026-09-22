@@ -14,7 +14,11 @@ This is a student portfolio project (Junior/Intern Fullstack). The focus is the
 
 ## Live Demo
 
-_TBD (Phase 8)._ Free hosting may take about 1 minute to wake up on the first request.
+- **Web:** https://pcbuild-web.onrender.com
+- **API:** https://pcbuild-api-2mwk.onrender.com/api/status
+
+Free hosting sleeps when idle: the first request can take about 1 minute (the site shows
+"Máy chủ đang khởi động…").
 
 ## Features
 
