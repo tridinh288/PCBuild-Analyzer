@@ -69,8 +69,8 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
 
 ## Current status
 
-- Phase: 2 — Backend Foundation on branch `phase/2-backend-foundation` (steps 1–8 done)
-- Last completed step: `app:verify-database` passes on local MySQL 8.4
-- Waiting on: step 9 on TiDB Cloud needs the user's cluster credentials (`backend/.env.tidb`, see `docs/DEPLOYMENT.md`)
-- Next step: after the TiDB check and approval, merge to `main`; Phase 3 — Business Logic
+- Phase: 2 — Backend Foundation (complete, waiting for approval) on branch `phase/2-backend-foundation`
+- Last completed step: `app:verify-database` passes on local MySQL 8.4 and on TiDB v8.5.3 (D-033)
+- Next step: after approval, merge to `main`; Phase 3 — Business Logic
+- TiDB: credentials in `backend/.env.tidb` (gitignored), database `pcbuild` — never `sys`
 - Note: the full test suite takes about 1 minute because the Windows bind mount is slow

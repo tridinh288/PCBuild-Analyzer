@@ -269,3 +269,10 @@ Decision: The total is still computed, never stored (as in D-008), but with a `w
 Why: `withSum()` sums one column of the related table; it cannot multiply the product price by the item quantity across the join.
 Alternatives: `withSum` ignoring quantity (wrong for RAM ×2); a stored `total_price` column (drifts when prices change).
 Consequences: The build list can filter and sort by total price in SQL. A test asserts both paths return the same total.
+
+## D-033: TiDB compatibility verified in Phase 2
+Status: Accepted (Phase 2)
+Decision: Keep the plain Eloquent JSON queries (`where('specs->key', ...)`, `whereJsonContains`), the `withTotalPrice()` subquery with `having` + `paginate`, and database-level foreign keys. `php artisan app:verify-database` is the regression check for any database change.
+Why: All 9 checks passed on TiDB v8.5.3 (Starter) with the same results as MySQL 8.4; no TiDB-specific code needed.
+Alternatives: Explicit `CAST(JSON_EXTRACT(...))` queries (not needed); application-only FK checks (not needed, FKs are enforced).
+Consequences: Re-run the check after schema or repository query changes. `DB_DATABASE` must never be `sys` (the TiDB Connect default).

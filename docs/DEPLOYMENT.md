@@ -16,6 +16,10 @@ behave on TiDB exactly as on local MySQL.
 2. Open **Connect**, choose "General" / "PHP", and note host, port (4000), user, and password.
 3. Create a database, e.g. `pcbuild` (SQL editor: `CREATE DATABASE pcbuild;`).
 
+> **Warning:** the Connect dialog pre-fills the database as `sys` (a TiDB system schema).
+> Never point `DB_DATABASE` at `sys`: `migrate:fresh` drops every table in the target database.
+> Check with `php artisan db:show --env=tidb` before running migrations.
+
 ### 2. Local env file for TiDB (never committed)
 
 Create `backend/.env.tidb` (ignored by `.gitignore` through `.env.*`), starting from `backend/.env`:
@@ -57,3 +61,9 @@ shows up as `FAIL`.
 | Total price | `having` + `paginate` count query | Filter with `whereRaw` on the subquery instead of `having` |
 
 Record the result (and any fix) in `DECISIONS.md`.
+
+### Result (2026-09-22)
+
+TiDB `v8.5.3-serverless` (Starter, `ap-southeast-1`): all migrations ran, seeders completed, and all
+9 checks passed with no repository changes needed (D-033). Seeding takes about 45 s because every
+insert is a network round trip from the local machine to the cloud region.
