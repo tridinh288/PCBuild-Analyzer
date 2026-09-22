@@ -39,8 +39,8 @@ Alternatives: Templates only (rejected: engine would rarely find problems in cur
 Consequences: Engine must handle incomplete configurations and any selection order.
 
 ## D-003: UI language, code language, currency
-Status: Proposed
-Decision: UI in Vietnamese; code, identifiers, commits, docs in English; prices in VND.
+Status: Accepted (Phase 1)
+Decision: UI in Vietnamese; code, identifiers, commits, docs in English; prices in VND. No i18n layer for now.
 Why: Target employers in Vietnam; English code is standard practice.
 Alternatives: Full English UI; Laravel lang files for multi-language (future).
 Consequences: Spec labels in `config/hardware.php` are Vietnamese.
@@ -124,11 +124,11 @@ Alternatives: Encode rules as SQL conditions.
 Consequences: With a large catalog, add SQL pre-filtering for simple conditions (e.g. socket) while keeping PHP rules authoritative.
 
 ## D-014: Rule vs Specification boundary
-Status: Proposed
-Decision: Specifications are small combinable boolean conditions; Rules combine them and produce a `CompatibilityResult` with a message.
-Why: Keeps Specification Pattern meaningful instead of duplicating rules.
-Alternatives: Drop Specification Pattern if it adds no value.
-Consequences: Confirm concrete boundary when implementing the first four rules.
+Status: Accepted (Phase 1)
+Decision: A Specification is a small boolean condition over plain values (it knows nothing about `BuildConfiguration`) and is combinable with `and()` / `or()` / `not()`. A Specification exists only when the condition is reused by at least two rules (e.g. value-in-set for sockets and form factors, fits-within for GPU length, cooler height, slots and capacity). A Rule reads the configuration, picks the values, uses specifications, and produces a `CompatibilityResult` with a message. One-off rules (DisplayOutputRule, CpuCoolingRule) compare directly.
+Why: Keeps Specification Pattern meaningful instead of wrapping one-line comparisons.
+Alternatives: Specification in every rule (uniform but hollow); drop the pattern (simplest, but duplicated comparisons).
+Consequences: Confirm the concrete boundary when implementing the first four rules.
 
 ## D-015: Estimates, not benchmarks
 Status: Accepted
@@ -208,10 +208,11 @@ Alternatives: Other hosts.
 Consequences: Cold starts on free tier; frontend shows a "server waking up" message.
 
 ## D-025: Frontend in Docker for local development
-Status: Proposed
-Decision: To confirm in Phase 1: run Vite in a Docker service or on the host.
-Why: Trade-off between one-command setup and simpler hot reload.
-Consequences: Affects docker-compose and README.
+Status: Accepted (Phase 1)
+Decision: Vite runs on the host (`npm run dev` in `frontend/`). Docker Compose runs only the API (PHP) and MySQL.
+Why: The project lives on a Windows drive; Vite inside a container would need file polling for hot reload (slow, CPU heavy) and slow `node_modules` on a bind mount. Node is already installed on the host.
+Alternatives: Vite as a Compose service (one-command start, slower HMR); both via a Compose profile (two setups to maintain).
+Consequences: README documents two start commands. No `frontend` service in `docker-compose.yml`.
 
 ---
 
@@ -224,13 +225,22 @@ Why: Readable history for reviewers; safe automation.
 Consequences: Tests and secret checks run before every commit.
 
 ## D-027: Testing
-Status: Proposed
-Decision: PHPUnit; local MySQL test database; `FakeImageStorage`. Optional GitHub Actions CI.
-Why: Default in Laravel; tests match production SQL dialect more closely than SQLite.
-Alternatives: Pest; SQLite in-memory.
-Consequences: Docker must be running for tests.
+Status: Accepted (Phase 1)
+Decision: PHPUnit; separate `pcbuild_test` database in the local MySQL container; `FakeImageStorage`. Domain unit tests extend plain `PHPUnit\Framework\TestCase` (no database, no Laravel boot). GitHub Actions CI runs the suite with a MySQL service on every push.
+Why: Default in Laravel; tests match production SQL dialect (JSON queries, foreign keys) more closely than SQLite; a green CI badge is visible to reviewers.
+Alternatives: Pest; SQLite in-memory; no CI.
+Consequences: Docker must be running for feature tests. CI workflow added in Phase 7.
 
 ## D-028: Laravel version
-Status: Proposed
-Decision: Use the latest stable Laravel release at project start; confirm in Phase 1.
-Consequences: Update README and composer constraints accordingly.
+Status: Accepted (Phase 1)
+Decision: Laravel 13 (`laravel/framework: ^13.0`, latest stable v13.32.0 at project start, 2026-09-22), PHP `^8.3`.
+Why: Latest stable release; meets the spec ("12 or newer").
+Alternatives: Laravel 12 (more tutorials, shorter remaining support).
+Consequences: Docker image and CI use PHP 8.3. README states the versions.
+
+## D-029: Local toolchain
+Status: Accepted (Phase 1)
+Decision: Docker (PHP 8.3 + MySQL) is the runtime for the API and tests. The host uses Laragon's PHP 8.3 (placed before XAMPP's PHP 8.0 in PATH) for Composer and IDE tooling. Node 24 on the host for the frontend. Default branch is `main`.
+Why: Laravel 13 requires PHP 8.3; the machine had XAMPP PHP 8.0 first in PATH.
+Alternatives: Run every PHP/Composer command through Docker only (no local PHP for the IDE).
+Consequences: README lists the required versions and a `php -v` check.
