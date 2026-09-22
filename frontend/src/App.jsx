@@ -5,11 +5,11 @@ import Analysis from './pages/Analysis'
 import BuildDetail from './pages/BuildDetail'
 import Builder from './pages/Builder'
 import Builds from './pages/Builds'
+import Compare from './pages/Compare'
 import ComponentDetail from './pages/ComponentDetail'
 import Components from './pages/Components'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
-import Placeholder from './pages/Placeholder'
 
 const router = createBrowserRouter([
   {
@@ -21,7 +21,7 @@ const router = createBrowserRouter([
       { path: '/builder', element: <Builder /> },
       { path: '/components', element: <Components /> },
       { path: '/components/:slug', element: <ComponentDetail /> },
-      { path: '/compare', element: <Placeholder title="So sánh" /> },
+      { path: '/compare', element: <Compare /> },
       { path: '/analysis', element: <Analysis /> },
       { path: '*', element: <NotFound /> },
     ],

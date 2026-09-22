@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 import { serializeSelection } from '../../utils/builderUrl'
+import { serializeComparison } from '../../utils/compareUrl'
 import { PURPOSES } from '../../utils/format'
 import CompatibilitySummary from '../analysis/CompatibilitySummary'
 import PowerCard from '../analysis/PowerCard'
@@ -36,10 +37,16 @@ export default function BuilderSummary({ builder }) {
         <ScoreCard performance={data.performance} />
       </div>
       {Object.keys(builder.selection).length > 0 && (
-        <Link to={`/analysis?${serializeSelection(builder.selection)}`}
-          className="block rounded-lg px-4 py-2.5 text-center font-semibold text-brand-700 ring-1 ring-brand-200 hover:bg-brand-50">
-          Phân tích chi tiết
-        </Link>
+        <div className="grid grid-cols-2 gap-2">
+          <Link to={`/analysis?${serializeSelection(builder.selection)}`}
+            className="rounded-lg px-4 py-2.5 text-center font-semibold text-brand-700 ring-1 ring-brand-200 hover:bg-brand-50">
+            Phân tích chi tiết
+          </Link>
+          <Link to={`/compare?${serializeComparison([{ type: 'custom', selection: builder.selection }])}`}
+            className="rounded-lg px-4 py-2.5 text-center font-semibold text-slate-700 ring-1 ring-slate-300 hover:bg-slate-100">
+            So sánh
+          </Link>
+        </div>
       )}
     </div>
   )
