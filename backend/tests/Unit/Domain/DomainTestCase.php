@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\Domain;
 
+use App\Domain\Configuration\BuildConfiguration;
+use App\Domain\Configuration\SlotRules;
 use App\Domain\Hardware\Components\HardwareComponent;
 use App\Domain\Hardware\HardwareFactory;
 use PHPUnit\Framework\TestCase;
@@ -35,6 +37,36 @@ abstract class DomainTestCase extends TestCase
     protected static function hardwareConfig(): array
     {
         return require __DIR__.'/../../../config/hardware.php';
+    }
+
+    protected function slotRules(): SlotRules
+    {
+        return new SlotRules(self::hardwareConfig()['slots']);
+    }
+
+    /**
+     * A configuration from components; pass [component, quantity] for more than one unit.
+     *
+     * @param  HardwareComponent|array{0: HardwareComponent, 1: int}  ...$parts
+     */
+    protected function configuration(HardwareComponent|array ...$parts): BuildConfiguration
+    {
+        $config = BuildConfiguration::empty($this->slotRules());
+
+        foreach ($parts as $part) {
+            $config = is_array($part) ? $config->with($part[0], $part[1]) : $config->with($part);
+        }
+
+        return $config;
+    }
+
+    /**
+     * A complete, compatible configuration built from the default specs (GPU and cooler included).
+     */
+    protected function completeConfiguration(): BuildConfiguration
+    {
+        return $this->configuration(...array_map(fn (string $category) => $this->component($category),
+            array_keys(self::DEFAULT_SPECS)));
     }
 
     /**
