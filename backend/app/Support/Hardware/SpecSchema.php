@@ -84,6 +84,39 @@ class SpecSchema
     }
 
     /**
+     * Filterable specs of a category, keyed by query parameter name.
+     * min / max filters use `<param>_min` / `<param>_max`.
+     *
+     * @return array<string, array{key: string, filter: string, type: string, enum: ?string}>
+     */
+    public function filters(string $category): array
+    {
+        $filters = [];
+
+        foreach ($this->specs($category) as $key => $definition) {
+            if (! isset($definition['filter'])) {
+                continue;
+            }
+
+            $param = $definition['filter_param'] ?? $key;
+            $param = match ($definition['filter']) {
+                'min' => "{$param}_min",
+                'max' => "{$param}_max",
+                default => $param,
+            };
+
+            $filters[$param] = [
+                'key' => $key,
+                'filter' => $definition['filter'],
+                'type' => $definition['type'],
+                'enum' => $definition['enum'] ?? null,
+            ];
+        }
+
+        return $filters;
+    }
+
+    /**
      * @return array<string, array<string, mixed>>
      */
     public function slots(): array
