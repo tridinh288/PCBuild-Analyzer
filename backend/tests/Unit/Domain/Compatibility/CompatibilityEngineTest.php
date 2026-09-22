@@ -59,7 +59,7 @@ class CompatibilityEngineTest extends DomainTestCase
         $first = $this->engine()->check($this->configuration($cpu, $board))->toArray();
         $second = $this->engine()->check($this->configuration($board, $cpu))->toArray();
 
-        $this->assertSame($first, $second);
+        $this->assertEquals($first, $second);
     }
 
     public function test_candidate_ram_is_not_blamed_for_an_existing_cpu_motherboard_mismatch(): void

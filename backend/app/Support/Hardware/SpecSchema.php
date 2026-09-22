@@ -125,6 +125,38 @@ class SpecSchema
     }
 
     /**
+     * Validation rules for a category's spec filters (query string or request body),
+     * nested under $prefix (e.g. 'filters.').
+     *
+     * @return array<string, list<mixed>>
+     */
+    public function filterRulesFor(string $category, string $prefix = ''): array
+    {
+        $rules = [];
+
+        foreach ($this->filters($category) as $param => $filter) {
+            $rules[$prefix.$param] = match (true) {
+                $filter['filter'] === 'boolean' => ['nullable', 'boolean'],
+                $filter['enum'] !== null => ['nullable', 'string', Rule::in(array_keys($this->enum($filter['enum'])))],
+                default => ['nullable', 'integer', 'min:0'],
+            };
+        }
+
+        return $rules;
+    }
+
+    /**
+     * Label and unit of a spec, for filter definitions.
+     *
+     * @return array<string, mixed>
+     */
+    public function spec(string $category, string $key): array
+    {
+        return $this->specs($category)[$key]
+            ?? throw new InvalidArgumentException("Unknown spec [{$category}.{$key}].");
+    }
+
+    /**
      * @return array<string, array<string, mixed>>
      */
     public function slots(): array

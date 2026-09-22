@@ -39,6 +39,20 @@ interface ProductRepositoryInterface
     public function search(string $category, array $filters = [], ?string $sort = null): Collection;
 
     /**
+     * Distinct brands of the active products of a category, sorted (filter options).
+     *
+     * @return list<string>
+     */
+    public function brands(string $category): array;
+
+    /**
+     * Lowest and highest price of the active products of a category.
+     *
+     * @return array{min: int, max: int}
+     */
+    public function priceRange(string $category): array;
+
+    /**
      * Active products, paginated (public catalog).
      *
      * @param  array<string, mixed>  $filters

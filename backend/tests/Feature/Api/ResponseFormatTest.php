@@ -68,6 +68,33 @@ class ResponseFormatTest extends TestCase
             ->assertExactJson(['success' => false, 'message' => 'Đã xảy ra lỗi máy chủ.', 'errors' => []]);
     }
 
+    public function test_validation_messages_are_in_vietnamese(): void
+    {
+        $this->getJson('/api/components')
+            ->assertUnprocessable()
+            ->assertJsonPath('errors.category.0', 'Trường loại linh kiện là bắt buộc.');
+    }
+
+    public function test_not_found_message_depends_on_the_model(): void
+    {
+        $this->getJson('/api/builds/nope')->assertNotFound()->assertJsonPath('message', 'Không tìm thấy cấu hình.');
+        $this->getJson('/api/components/nope')->assertNotFound()->assertJsonPath('message', 'Không tìm thấy linh kiện.');
+        $this->getJson('/api/categories/nope/filters')->assertNotFound()->assertJsonPath('message', 'Không tìm thấy loại linh kiện.');
+    }
+
+    public function test_malformed_json_body_returns_400(): void
+    {
+        $this->call('POST', '/api/builder/analyze', [], [], [], ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'],
+            '{"selected": {"cpu": 1,}')
+            ->assertStatus(400)
+            ->assertJsonPath('message', 'Dữ liệu JSON gửi lên không hợp lệ.');
+    }
+
+    public function test_wrong_http_method_returns_405_envelope(): void
+    {
+        $this->getJson('/api/builder/analyze')->assertStatus(405)->assertJsonPath('success', false);
+    }
+
     public function test_paginated_resource_collection_adds_pagination_meta(): void
     {
         Product::factory()->count(3)->create();

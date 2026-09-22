@@ -82,7 +82,7 @@ final readonly class CompatibilityReport
             'errors' => $this->errors(),
             'warnings' => $this->warnings(),
             'results' => array_map(fn (CompatibilityResult $r) => $r->toArray(), $this->results),
-            'by_category' => $this->problemsByCategory(),
+            'by_category' => (object) $this->problemsByCategory(),
         ];
     }
 

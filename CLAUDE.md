@@ -71,9 +71,9 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
 
 ## Current status
 
-- Phase: 3 — Business Logic (complete, waiting for approval) on branch `phase/3-business-logic`, PR open
-- Last completed step: BuildAnalyzer, BuilderService, ComparisonService, SpecFormatter; 187 tests pass
-- Next step: after approval, merge the PR; Phase 4 — API (controllers, Form Requests, Resources, rate limiting)
+- Phase: 4 — API (complete, waiting for approval) on branch `phase/4-api`, PR open
+- Last completed step: public API (catalog, builds, analysis, builder, compare), Vietnamese errors, rate limiting, CORS, examples in `docs/API.md`; 220 tests pass
+- Next step: after approval, merge the PR; Phase 5 — React (Vite + Tailwind in `frontend/`, remove `frontend/.gitkeep` first)
 - Engine map: `app/Domain` (pure), `app/Services` (DB orchestration); implementation notes in `docs/ARCHITECTURE.md` § 3
 - TiDB: credentials in `backend/.env.tidb` (gitignored), database `pcbuild` — never `sys`
 - Note: the full test suite takes about 1 minute because the Windows bind mount is slow

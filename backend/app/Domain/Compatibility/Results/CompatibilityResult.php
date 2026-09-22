@@ -37,7 +37,7 @@ final readonly class CompatibilityResult
             'rule' => $this->rule,
             'title' => $this->title,
             'message' => $this->message,
-            'details' => $this->details,
+            'details' => (object) $this->details, // always a JSON object, even when empty
         ];
     }
 }
