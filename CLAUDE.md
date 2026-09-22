@@ -71,9 +71,11 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
 
 ## Current status
 
-- Phase: 4 — API (complete, waiting for approval) on branch `phase/4-api`, PR open
-- Last completed step: public API (catalog, builds, analysis, builder, compare), Vietnamese errors, rate limiting, CORS, examples in `docs/API.md`; 220 tests pass
-- Next step: after approval, merge the PR; Phase 5 — React (Vite + Tailwind in `frontend/`, remove `frontend/.gitkeep` first)
+- Phase: 5 — React (complete, waiting for approval) on branch `phase/5-react`, PR open
+- Last completed step: all public pages (home, builds, detail, catalog, builder, analysis, compare), share/draft, responsive picker; 33 frontend + 220 backend tests pass
+- Not yet verified in a real browser (Chrome extension was not connected): ask the user to click through before merging
+- Next step: after approval, merge the PR; Phase 6 — Admin (Sanctum login, category editing, product CRUD with schema form, Cloudinary images, build CRUD)
+- Frontend commands: `npm run dev`, `npm test`, `npx oxlint`, `npm run build` (in `frontend/`)
 - Engine map: `app/Domain` (pure), `app/Services` (DB orchestration); implementation notes in `docs/ARCHITECTURE.md` § 3
 - TiDB: credentials in `backend/.env.tidb` (gitignored), database `pcbuild` — never `sys`
 - Note: the full test suite takes about 1 minute because the Windows bind mount is slow

@@ -71,6 +71,9 @@ class BuilderApiTest extends TestCase
 
         // Template 26.33M + one more RAM kit (3.19M) + a SATA SSD (1.69M)
         $response->assertJsonPath('data.price.total', 31_210_000)
+            ->assertJsonPath('data.items.0.category', 'cpu')
+            ->assertJsonPath('data.items.0.product.name', 'AMD Ryzen 5 7600')
+            ->assertJsonPath('data.items.2.quantity', 2)
             ->assertJsonPath('data.compatibility.status', 'compatible')
             ->assertJsonPath('meta.profile', 'gaming')
             ->assertJsonPath('data.is_complete', true);

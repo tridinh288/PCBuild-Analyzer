@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+/* Design tokens: one accent color plus the compatibility status colors used everywhere. */
+@theme {
+  --font-sans: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand-50: #eef6ff;
+  --color-brand-100: #d9eaff;
+  --color-brand-500: #2f7cf6;
+  --color-brand-600: #1f63d8;
+  --color-brand-700: #1a50ae;
+}
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-800 antialiased;
+  }
+}

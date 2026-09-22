@@ -61,15 +61,28 @@ class BuilderService
     }
 
     /**
+     * Also returns the selected products, so a Builder opened from a link (IDs only) can show
+     * names, prices and specs without extra requests.
+     *
      * @param  array<string, mixed>  $selected
-     * @return array{analysis: BuildAnalysis, missing: list<array{category: string, id: int}>}
+     * @return array{analysis: BuildAnalysis, items: list<array{category: string, quantity: int, product: Product}>,
+     *     missing: list<array{category: string, id: int}>}
      */
     public function analyze(array $selected, ?BuildPurpose $profile = null): array
     {
         $resolved = $this->configurations->fromSelection($selected);
+        $configuration = $resolved->configuration;
+
+        $ids = array_map(fn ($item) => $item->component->id(), $configuration->allItems());
+        $products = $this->products->findActiveByIds($ids)->keyBy('id');
 
         return [
-            'analysis' => $this->analyzer->analyze($resolved->configuration, $profile),
+            'analysis' => $this->analyzer->analyze($configuration, $profile),
+            'items' => array_map(fn ($item) => [
+                'category' => $item->category(),
+                'quantity' => $item->quantity,
+                'product' => $products[$item->component->id()],
+            ], $configuration->allItems()),
             'missing' => $resolved->missing,
         ];
     }

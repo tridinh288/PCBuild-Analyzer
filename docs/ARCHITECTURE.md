@@ -279,6 +279,23 @@ The Specification only answers one yes/no question about a value (`ValueInSet`, 
 `services/api.js`: Axios instance with `VITE_API_URL`, bearer token interceptor, error normalization
 to `{ message, errors }`, and a "server waking up" flag when a request takes longer than ~5 s.
 
+### Implementation notes (Phase 5)
+
+| Piece | What was built |
+|---|---|
+| `services/serverStatus.js` | Tiny external store of slow requests (> 5 s), read with `useSyncExternalStore` by the "Máy chủ đang khởi động…" banner |
+| `hooks/useApi(load, key)` | Loads one api.* call; aborts the previous request when `key` changes; `loading` is derived during render (no setState inside the effect) |
+| `hooks/useFilters()` | Filters ↔ query string; changing a filter resets `page`; `reset(keep, values)` does one URL update |
+| `utils/builderUrl.js`, `utils/compareUrl.js` | The only code that reads or writes the Builder (`cpu=3&ram=12x2&storage=4,9x2`) and comparison (`c=slug&c=~<builder query>`) URL formats |
+| `reducers/builderReducer.js` | Pure reducer; slot rules come from the API categories in the action payload |
+| `hooks/useBuilder()` | Reducer + template loading (`?template=` rewritten to explicit IDs) + URL sync + draft autosave + debounced `/builder/analyze` |
+| `utils/draft.js`, `utils/clipboard.js` | localStorage and clipboard access, both guarded; draft restored only when the URL holds no configuration |
+| `utils/recommendations.js` | Next steps on the analysis page, restating only what the engine found |
+| Backend change | `/builder/analyze` returns `items` (selected products) so a Builder opened from a link can show names and prices |
+
+Unit tests (Vitest, `npm test`) cover every pure module: URL formats, reducer, formatters, draft storage,
+text export, recommendations, compatibility helpers and the server status store.
+
 ---
 
 ## 6. Open points for the end of Phase 1
