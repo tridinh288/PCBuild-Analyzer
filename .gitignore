@@ -15,14 +15,8 @@ backend/public/build/
 backend/public/hot
 backend/public/storage
 
-# Laravel runtime
+# Laravel runtime (storage/ and bootstrap/cache/ contents are ignored by Laravel's own nested .gitignore files)
 backend/storage/*.key
-backend/storage/logs/
-backend/storage/framework/cache/data/
-backend/storage/framework/sessions/
-backend/storage/framework/views/
-backend/storage/framework/testing/
-backend/bootstrap/cache/*.php
 .phpunit.result.cache
 .phpunit.cache/
 
