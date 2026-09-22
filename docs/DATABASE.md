@@ -280,7 +280,7 @@ CPU and GPU contribute their `tdp`. A CPU using only integrated graphics adds no
         'workstation' => ['cpu' => 0.40, 'gpu' => 0.20, 'ram' => 0.30, 'storage' => 0.10],
         'general_use' => ['cpu' => 0.25, 'gpu' => 0.25, 'ram' => 0.25, 'storage' => 0.25],
     ],
-    'adjustments' => [                                                   // D-031 (Proposed)
+    'adjustments' => [                                                   // D-031
         'gaming'      => ['max_cpu_gpu_tier_gap' => 30, 'penalty' => 10],
         'programming' => ['min_ram_gb' => 16, 'penalty' => 10],
         'workstation' => ['min_ram_gb' => 32, 'penalty' => 10],

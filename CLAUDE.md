@@ -66,8 +66,7 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
 
 ## Current status
 
-- Phase: 1 — Planning (complete, waiting for approval) on branch `phase/1-planning`
+- Phase: 1 — Planning (approved, merged to `main`)
 - Last completed step: planning docs (`docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `docs/API.md`), README skeleton, folder structure
-- Open: D-030, D-031, D-032 are Proposed — confirm before Phase 2/3
-- Next step: after approval, merge to `main`; Phase 2 — Backend Foundation (Laravel 13 in `backend/`, remove `backend/.gitkeep` first)
+- Next step: Phase 2 — Backend Foundation (Laravel 13 in `backend/`, remove `backend/.gitkeep` first)
 - Environment: host PHP must be Laragon 8.3 (not XAMPP 8.0); Docker Desktop must be running

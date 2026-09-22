@@ -69,7 +69,7 @@ plain `PHPUnit\Framework\TestCase` (no Laravel boot, milliseconds per test), and
 the same for templates and custom builds. Configuration values (power constants, scoring weights,
 slot rules) are passed in by the service provider when the container builds the object.
 
-### Structural changes vs. spec section 6 (to confirm at end of Phase 1 — see D-030)
+### Structural changes vs. spec section 6 (D-030)
 
 | Spec | Plan | Why |
 |---|---|---|
@@ -112,7 +112,7 @@ BuilderController
 ```
 
 `compatible_only` keeps `compatible` and `warning` candidates (a warning is still buildable).
-To confirm in D-030.
+See D-030.
 
 ---
 

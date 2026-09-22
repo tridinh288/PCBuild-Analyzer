@@ -250,21 +250,21 @@ Consequences: README lists the required versions and a `php -v` check.
 ## Planning (Phase 1)
 
 ## D-030: Domain has no database or config access; structure adjustments
-Status: Proposed
+Status: Accepted (Phase 1)
 Decision: `app/Domain` contains pure PHP only (no Eloquent, no queries, no `config()` calls). Config values are passed in through constructors by a service provider. Therefore: analyzers and `CompatibilityEngine` live in `app/Domain`, `BuildConfigurationFactory` (loads products) lives in `app/Services`, `SpecSchema` / `SpecFormatter` live in `app/Support/Hardware`. `compatible_only` removes incompatible candidates and keeps warnings.
 Why: Domain unit tests run on plain PHPUnit without Laravel or a database; the folder tree shows the boundary.
 Alternatives: Follow spec section 6 literally (analyzers under Services, factory under Domain).
 Consequences: One more service provider wiring constructor arguments. Details in `docs/ARCHITECTURE.md`.
 
 ## D-031: Strategies differ by more than weights
-Status: Proposed
+Status: Accepted (Phase 1)
 Decision: Each strategy has its weights (from config) plus one profile-specific adjustment with an explanatory note: Gaming penalizes a large CPU/GPU tier gap (bottleneck); Programming and Workstation add a note/penalty below a RAM capacity threshold; General Use keeps balanced weights with no adjustment. Sub-scores are computed once by a shared `SubScoreCalculator`.
 Why: If strategies only differed by four numbers, a single weighted scorer with data would be simpler and the Strategy Pattern would be hard to defend in an interview.
 Alternatives: Weights-only strategies (spec baseline); one scorer class with a weights table and no Strategy Pattern.
 Consequences: Thresholds and penalties are config values; each strategy gets its own unit tests.
 
 ## D-032: Build total price via a subquery scope
-Status: Proposed
+Status: Accepted (Phase 1)
 Decision: The total is still computed, never stored (as in D-008), but with a `withTotalPrice()` query scope: a correlated subquery `SUM(products.price * build_items.quantity)`. `PriceAnalyzer` computes the same total from a loaded configuration.
 Why: `withSum()` sums one column of the related table; it cannot multiply the product price by the item quantity across the join.
 Alternatives: `withSum` ignoring quantity (wrong for RAM ×2); a stored `total_price` column (drifts when prices change).
