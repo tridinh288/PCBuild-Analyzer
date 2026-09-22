@@ -1,7 +1,109 @@
 # Deployment
 
-The full Render + TiDB + Cloudinary guide is written in Phase 8. This file starts with the
-TiDB compatibility check from Phase 2 (D-021: verify early, not at the end).
+Render (API + static site) · TiDB Cloud Starter (database) · Cloudinary (images). All free tiers.
+Decisions: D-021 (database), D-022/D-037 (images), D-023 (tokens), D-024 (Render).
+
+```text
+Browser ──► React (Render Static Site) ──Axios──► Laravel API (Render Web Service, Docker)
+   │                                                   ├──► TiDB Cloud (TLS, port 4000)
+   │                                                   └──► Cloudinary (upload / delete)
+   └──► images straight from the Cloudinary CDN
+```
+
+The Render services are stateless: data lives in TiDB, images in Cloudinary. Redeploying or a
+restarted container loses nothing.
+
+---
+
+## 1. Before you start
+
+| You need | Where |
+|---|---|
+| The GitHub repository | already connected |
+| TiDB Cloud Starter cluster with database `pcbuild` | done in Phase 2 (§ TiDB check below) |
+| Cloudinary account | cloudinary.com → free plan → Dashboard shows the **API environment variable** `cloudinary://<key>:<secret>@<cloud>` |
+| Render account | render.com, sign in with GitHub |
+| An `APP_KEY` | `docker compose exec app php artisan key:generate --show` (copy the whole `base64:…` value) |
+| A strong admin password | any password manager |
+
+Never paste these values into the repository, an issue, or a chat message.
+
+## 2. Create both services from the Blueprint
+
+1. Render Dashboard → **New → Blueprint** → select `PCBuild-Analyzer` → Render reads `render.yaml`.
+2. It lists `pcbuild-api` (Docker) and `pcbuild-web` (static site) and asks for every `sync: false`
+   value. Service URLs are `https://<name>.onrender.com`; if a name is taken, Render adds a suffix —
+   use the real URLs shown in the dashboard.
+
+| Service | Variable | Value |
+|---|---|---|
+| pcbuild-api | `APP_KEY` | the `base64:…` value from step 1 |
+| | `APP_URL` | `https://pcbuild-api.onrender.com` |
+| | `FRONTEND_URL` | `https://pcbuild-web.onrender.com` (no trailing slash; the only CORS origin) |
+| | `DB_HOST`, `DB_USERNAME`, `DB_PASSWORD` | TiDB **Connect** dialog (host `gateway01…tidbcloud.com`, user `xxxx.root`) |
+| | `CLOUDINARY_URL` | `cloudinary://<key>:<secret>@<cloud>` |
+| | `ADMIN_EMAIL`, `ADMIN_PASSWORD` | the admin account to create |
+| pcbuild-web | `VITE_API_URL` | `https://pcbuild-api.onrender.com/api` |
+
+3. **First deploy only:** on `pcbuild-api` → Environment, set `SEED_DATABASE=true` so the start script
+   loads the demo data and creates the admin. After the service is live, set it back to `false`.
+   (Seeders are idempotent: an accidental second run does not duplicate data.)
+4. Apply. The API build takes a few minutes (Docker image); the static site about a minute.
+
+`VITE_API_URL` is baked in at build time: after changing it, trigger **Manual Deploy → Clear build
+cache & deploy** on `pcbuild-web`.
+
+## 3. What happens on each API deploy
+
+`backend/Dockerfile` builds a multi-stage Alpine image (Composer without dev packages, OPcache,
+non-root user). The free plan has no pre-deploy command, so `backend/docker/start.sh` runs at start:
+
+```sh
+php artisan migrate --force          # schema changes before serving
+[SEED_DATABASE=true] php artisan db:seed --force
+php artisan config:cache && php artisan route:cache
+exec php artisan serve --host=0.0.0.0 --port=$PORT --no-reload   # PHP_CLI_SERVER_WORKERS=4
+```
+
+Render routes traffic only after `GET /up` answers 200.
+
+## 4. Check the deployment
+
+```bash
+API=https://pcbuild-api.onrender.com
+curl -s $API/up                                        # 200 (first call can take ~1 min: cold start)
+curl -s "$API/api/builds?per_page=1"                   # success: true, demo data
+curl -s -D - -o /dev/null -H "Origin: https://pcbuild-web.onrender.com" $API/api/categories \
+  | grep -i access-control-allow-origin                 # the frontend URL
+```
+
+Then in the browser: open the static site, open a template, customize it in the Builder, copy the
+link and open it in a private window, log in at `/admin/login`, upload a product image.
+
+Optional database check against TiDB from your machine: § TiDB check below
+(`php artisan app:verify-database --env=tidb`).
+
+## 5. Troubleshooting
+
+| Symptom | Cause / fix |
+|---|---|
+| First request takes ~1 minute | Free instances sleep after 15 min idle. The frontend shows "Máy chủ đang khởi động…". Expected. |
+| Browser: CORS error | `FRONTEND_URL` differs from the site URL (scheme, trailing slash, renamed service). Fix it, redeploy the API. |
+| Frontend calls `localhost:8000` | `VITE_API_URL` was missing at build time → clear build cache & deploy the static site. |
+| Page refresh on `/builds/…` gives 404 | The `/* → /index.html` rewrite is missing on the static site (it is in `render.yaml`). |
+| API crashes at start: `SQLSTATE[HY000] [2002]` / TLS error | Wrong `DB_HOST`/port, or `MYSQL_ATTR_SSL_CA` missing (must be `/etc/ssl/certs/ca-certificates.crt`). |
+| `Access denied … for table 'migrations'` in `sys` | `DB_DATABASE` must be `pcbuild`, never `sys`. |
+| "No application encryption key" | `APP_KEY` missing or without the `base64:` prefix. |
+| Image upload: "Chưa cấu hình dịch vụ ảnh" | `CLOUDINARY_URL` not set on the API service. |
+| Everyone gets 429 at once | Rate limits must see the real client IP; check `trustProxies` in `bootstrap/app.php` (private networks trusted, not `*`). |
+
+## 6. Security checklist
+
+- `APP_DEBUG=false` (500 responses show no internal details), `APP_ENV=production`.
+- Secrets only in Render environment variables; `.env*` files are gitignored and dockerignored.
+- CORS allows only `FRONTEND_URL`; admin uses expiring bearer tokens, logout revokes them.
+- The API container runs as a non-root user; the static site sends `X-Frame-Options: DENY`,
+  `X-Content-Type-Options: nosniff` and a strict referrer policy.
 
 ---
 
