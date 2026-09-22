@@ -14,13 +14,14 @@ export const MAX_CONFIGURATIONS = 3
 const SLUG = /^[a-z0-9-]+$/
 
 export function parseComparison(searchParams) {
-  return searchParams.getAll('c').slice(0, MAX_CONFIGURATIONS).map((value) => {
+  // Invalid values are dropped first, so they cannot push valid ones past the limit.
+  return searchParams.getAll('c').map((value) => {
     if (value.startsWith('~')) {
       const selection = parseSelection(value.slice(1))
       return isEmptySelection(selection) ? null : { type: 'custom', selection }
     }
     return SLUG.test(value) ? { type: 'template', slug: value } : null
-  }).filter(Boolean)
+  }).filter(Boolean).slice(0, MAX_CONFIGURATIONS)
 }
 
 export function serializeComparison(entries) {

@@ -15,7 +15,7 @@ describe('compareUrl', () => {
 
   it('drops invalid entries and keeps at most three', () => {
     const params = new URLSearchParams('c=a&c=Bad Slug&c=~nothing=1&c=b&c=c&c=d')
-    expect(parseComparison(params).map((entry) => entry.slug)).toEqual(['a', 'b'])
+    expect(parseComparison(params).map((entry) => entry.slug)).toEqual(['a', 'b', 'c'])
   })
 
   it('round-trips through the URL', () => {
