@@ -32,6 +32,27 @@ class RateLimitAndCorsTest extends TestCase
         $this->getJson('/api/categories')->assertOk();
     }
 
+    public function test_rate_limit_is_per_client_behind_the_proxy(): void
+    {
+        config(['api.rate_limits.analysis' => 1]);
+        $proxy = ['REMOTE_ADDR' => '10.0.0.1'];
+
+        $this->withServerVariables($proxy)->withHeader('X-Forwarded-For', '203.0.113.7')
+            ->postJson('/api/builder/analyze', ['selected' => []])->assertOk();
+
+        // Same proxy, different client: its own limit.
+        $this->withHeader('X-Forwarded-For', '198.51.100.9')
+            ->postJson('/api/builder/analyze', ['selected' => []])->assertOk();
+
+        // A spoofed leftmost value does not help: the proxy-appended (rightmost) IP counts.
+        $this->withHeader('X-Forwarded-For', '1.2.3.4, 203.0.113.7')
+            ->postJson('/api/builder/analyze', ['selected' => []])->assertStatus(429);
+
+        // Extra internal (private) hops are skipped too.
+        $this->withHeader('X-Forwarded-For', '203.0.113.7, 10.20.30.40')
+            ->postJson('/api/builder/analyze', ['selected' => []])->assertStatus(429);
+    }
+
     public function test_cors_allows_only_the_frontend_origin(): void
     {
         $frontend = config('cors.allowed_origins')[0];
