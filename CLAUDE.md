@@ -71,10 +71,11 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
 
 ## Current status
 
-- Phase: 7 — Testing (complete, waiting for approval) on branch `phase/7-testing`, PR open
-- Last completed step: spec § 30 mapping + gap tests, flaky factory fixed, coverage 98.5 % lines, parallel tests, GitHub Actions CI green; report in `docs/TESTING.md`
-- Not yet verified in a real browser (Chrome extension not connected in Phases 5–7), and Cloudinary not tested live (no CLOUDINARY_URL yet)
-- Next step: after approval, merge the PR; Phase 8 — Docker & Deployment (production Dockerfile, Render, TiDB, Cloudinary, static site)
+- Phase: 8 — Docker & Deployment on branch `phase/8-deployment`
+- Last completed step: production image (Alpine, 262 MB) verified locally against a fresh MySQL; trusted proxies fixed; `render.yaml` Blueprint; `docs/DEPLOYMENT.md`
+- Waiting on: the user creates the Render Blueprint (branch `phase/8-deployment`) and Cloudinary account, then the live deployment is checked
+- Next step: verify the live site (incl. browser check and a real Cloudinary upload), fix issues on this branch, then PR and merge; Phase 9 — Finalization
+- Production image check: `docker build -t pcbuild-api:prod backend` then run it with production env vars (see `docs/DEPLOYMENT.md`)
 - Pre-commit gate: lint + build + tests must pass before `git commit` (never chain a commit after a failing step)
 - Frontend commands: `npm run dev`, `npm test`, `npx oxlint`, `npm run build` (in `frontend/`)
 - Engine map: `app/Domain` (pure), `app/Services` (DB orchestration); implementation notes in `docs/ARCHITECTURE.md` § 3
