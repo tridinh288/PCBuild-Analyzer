@@ -62,7 +62,7 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
 (Phase 8 adds production commands.)
 
 - Start: `docker compose up -d` (API on http://localhost:8000, MySQL on host port 3307)
-- Backend tests: `docker compose exec app php artisan test`
+- Backend tests: `docker compose exec app php artisan test` (faster: `--parallel --processes=4`; coverage: see `docs/TESTING.md`)
 - Migrate + seed: `docker compose exec app php artisan migrate --seed` (fresh: `migrate:fresh --seed`)
 - Code style: `docker compose exec app ./vendor/bin/pint`
 - DB checks: `docker compose exec app php artisan app:verify-database` (add `--env=tidb` for TiDB, see `docs/DEPLOYMENT.md`)
@@ -71,10 +71,10 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
 
 ## Current status
 
-- Phase: 6 — Admin (complete, waiting for approval) on branch `phase/6-admin`, PR open
-- Last completed step: admin auth, categories, product CRUD with schema form, images (Cloudinary REST, D-037), template editor reusing the Builder; 37 frontend + 263 backend tests pass
-- Not yet verified in a real browser (Chrome extension not connected in Phases 5–6), and Cloudinary not tested live (no CLOUDINARY_URL yet)
-- Next step: after approval, merge the PR; Phase 7 — Testing (fill gaps, GitHub Actions CI)
+- Phase: 7 — Testing (complete, waiting for approval) on branch `phase/7-testing`, PR open
+- Last completed step: spec § 30 mapping + gap tests, flaky factory fixed, coverage 98.5 % lines, parallel tests, GitHub Actions CI green; report in `docs/TESTING.md`
+- Not yet verified in a real browser (Chrome extension not connected in Phases 5–7), and Cloudinary not tested live (no CLOUDINARY_URL yet)
+- Next step: after approval, merge the PR; Phase 8 — Docker & Deployment (production Dockerfile, Render, TiDB, Cloudinary, static site)
 - Pre-commit gate: lint + build + tests must pass before `git commit` (never chain a commit after a failing step)
 - Frontend commands: `npm run dev`, `npm test`, `npx oxlint`, `npm run build` (in `frontend/`)
 - Engine map: `app/Domain` (pure), `app/Services` (DB orchestration); implementation notes in `docs/ARCHITECTURE.md` § 3

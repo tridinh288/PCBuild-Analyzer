@@ -104,6 +104,28 @@ class BuildAdminTest extends AdminTestCase
         $this->assertSame(0, $build->items()->count());
     }
 
+    public function test_slug_can_be_changed_on_update(): void
+    {
+        $build = Build::factory()->create(['slug' => 'old-slug']);
+
+        $this->actingAsAdmin()->putJson("/api/admin/builds/{$build->id}", ['name' => $build->name, 'purpose' => 'gaming', 'slug' => 'new-slug'])
+            ->assertOk()->assertJsonPath('data.build.slug', 'new-slug');
+    }
+
+    public function test_replacing_and_removing_a_build_image(): void
+    {
+        $build = Build::factory()->create(['image_public_id' => 'pcbuild/builds/old']);
+        $png = UploadedFile::fake()->createWithContent('b.png', base64_decode(
+            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='));
+
+        $this->actingAsAdmin()->post("/api/admin/builds/{$build->id}/image", ['image' => $png], ['Accept' => 'application/json'])->assertOk();
+        $this->assertSame(['pcbuild/builds/old'], $this->images->deleted);
+
+        $this->deleteJson("/api/admin/builds/{$build->id}/image")->assertOk()->assertJsonPath('data.image', null);
+        $this->assertNull($build->fresh()->image_public_id);
+        $this->assertSame(['pcbuild/builds/old', 'pcbuild/builds/fake-1'], $this->images->deleted);
+    }
+
     public function test_build_image_upload_and_delete_with_the_build(): void
     {
         $build = Build::factory()->create();

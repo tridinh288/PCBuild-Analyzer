@@ -1,5 +1,7 @@
 # PCBuild Analyzer
 
+[![CI](https://github.com/tridinh288/PCBuild-Analyzer/actions/workflows/ci.yml/badge.svg)](https://github.com/tridinh288/PCBuild-Analyzer/actions/workflows/ci.yml)
+
 > Status: in development (Phase 1 — Planning). Sections marked _TBD_ are filled in later phases.
 
 A public web app for analyzing PC builds: browse admin-curated templates, customize them or build
@@ -108,15 +110,17 @@ _TBD (Phase 8): Render, TiDB Cloud, Cloudinary._
 
 ## Testing
 
-PHPUnit runs against a separate `pcbuild_test` MySQL database (created by `docker/mysql/init`).
+270 backend tests (98.5 % line coverage) and 37 frontend tests, run by GitHub Actions on every push.
+PHPUnit runs against a separate `pcbuild_test` MySQL database (created by `docker/mysql/init`); tests
+never call external services.
 
 ```bash
-docker compose exec app php artisan test
+docker compose exec app php artisan test                  # add --parallel --processes=4 to go faster
 docker compose exec app php artisan app:verify-database   # JSON queries / FK checks on the current DB
 cd frontend && npm test                                     # frontend unit tests (Vitest)
 ```
 
-Full test report: _TBD (Phase 7)._
+Full report, requirement-by-requirement mapping and coverage: [docs/TESTING.md](docs/TESTING.md).
 
 ## Screenshots
 
