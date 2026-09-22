@@ -27,8 +27,18 @@ class AnalysisWiringTest extends TestCase
     {
         $engine = $this->app->make(CompatibilityEngine::class);
 
-        $this->assertNotEmpty($engine->rules());
+        $this->assertCount(13, $engine->rules());
         $this->assertSame($engine, $this->app->make(CompatibilityEngine::class));
+    }
+
+    public function test_the_psu_demo_template_has_exactly_one_warning(): void
+    {
+        $build = Build::where('slug', 'gaming-1440p-nguon-sat-gioi-han')->first();
+        $report = $this->app->make(CompatibilityEngine::class)
+            ->check($this->app->make(BuildConfigurationFactory::class)->fromBuild($build));
+
+        $this->assertSame(CompatibilityStatus::Warning, $report->status());
+        $this->assertSame(['psu_wattage'], array_map(fn ($r) => $r->rule, $report->problems()));
     }
 
     public function test_seeded_templates_have_no_incompatible_parts(): void

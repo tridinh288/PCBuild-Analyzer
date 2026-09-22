@@ -4,10 +4,19 @@ namespace App\Providers;
 
 use App\Domain\Analysis\PowerCalculator;
 use App\Domain\Compatibility\CompatibilityEngine;
+use App\Domain\Compatibility\Rules\CoolerCaseHeightRule;
+use App\Domain\Compatibility\Rules\CoolerCpuSocketRule;
+use App\Domain\Compatibility\Rules\CoolerCpuTdpRule;
+use App\Domain\Compatibility\Rules\CpuCoolingRule;
 use App\Domain\Compatibility\Rules\CpuMotherboardSocketRule;
+use App\Domain\Compatibility\Rules\DisplayOutputRule;
+use App\Domain\Compatibility\Rules\GpuCaseClearanceRule;
 use App\Domain\Compatibility\Rules\MotherboardCaseFormFactorRule;
 use App\Domain\Compatibility\Rules\MotherboardRamCapacityRule;
 use App\Domain\Compatibility\Rules\MotherboardRamTypeRule;
+use App\Domain\Compatibility\Rules\MotherboardStorageSlotsRule;
+use App\Domain\Compatibility\Rules\PsuCaseFormFactorRule;
+use App\Domain\Compatibility\Rules\PsuWattageRule;
 use App\Domain\Configuration\SlotRules;
 use App\Domain\Hardware\EnumLabels;
 use App\Domain\Hardware\HardwareFactory;
@@ -32,6 +41,15 @@ class AnalysisServiceProvider extends ServiceProvider
         MotherboardRamTypeRule::class,
         MotherboardRamCapacityRule::class,
         MotherboardCaseFormFactorRule::class,
+        MotherboardStorageSlotsRule::class,
+        GpuCaseClearanceRule::class,
+        CoolerCpuSocketRule::class,
+        CoolerCpuTdpRule::class,
+        CoolerCaseHeightRule::class,
+        PsuCaseFormFactorRule::class,
+        PsuWattageRule::class,
+        DisplayOutputRule::class,
+        CpuCoolingRule::class,
     ];
 
     public function register(): void
