@@ -12,7 +12,7 @@ concurrency:
 jobs:
   backend:
     name: Backend (PHP 8.3, MySQL 8.4)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04 # pinned: ubuntu-latest moves to 26.04 in Oct 2026
     defaults:
       run:
         working-directory: backend
@@ -66,7 +66,7 @@ jobs:
 
   frontend:
     name: Frontend (Node 24)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04 # pinned: ubuntu-latest moves to 26.04 in Oct 2026
     defaults:
       run:
         working-directory: frontend
