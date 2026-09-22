@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Api\AnalysisController;
 use App\Http\Controllers\Api\BuildController;
 use App\Http\Controllers\Api\BuilderController;
@@ -50,5 +51,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::get('/me', [AuthController::class, 'me'])->name('me');
+
+        Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories.index');
+        Route::put('/categories/{category}', [AdminCategoryController::class, 'update'])->name('categories.update');
+        Route::get('/categories/{category:slug}/spec-schema', [AdminCategoryController::class, 'specSchema'])->name('categories.spec-schema');
     });
 });

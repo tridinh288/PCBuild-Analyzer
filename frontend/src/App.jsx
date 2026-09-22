@@ -4,6 +4,7 @@ import RequireAdmin from './components/admin/RequireAdmin'
 import { AuthProvider } from './context/AuthProvider'
 import AdminLayout from './layouts/AdminLayout'
 import MainLayout from './layouts/MainLayout'
+import Categories from './pages/admin/Categories'
 import Dashboard from './pages/admin/Dashboard'
 import Login from './pages/admin/Login'
 import Analysis from './pages/Analysis'
@@ -40,6 +41,7 @@ const router = createBrowserRouter([
         element: <AdminLayout />,
         children: [
           { index: true, element: <Dashboard /> },
+          { path: 'categories', element: <Categories /> },
         ],
       },
     ],

@@ -27,6 +27,7 @@ class CategoryResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'sort_order' => $this->sort_order,
+            'products_count' => $this->whenCounted('products'),
             // Builder slot behaviour (config/hardware.php `slots`)
             'slot' => [
                 'required' => $slot['required'], // true, or a condition such as 'unless_cpu_has_integrated_graphics'
