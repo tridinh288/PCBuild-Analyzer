@@ -3,6 +3,7 @@
 namespace Tests\Feature\Database;
 
 use App\Models\Build;
+use App\Models\BuildItem;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
@@ -43,11 +44,11 @@ class SeederTest extends TestCase
     public function test_seeding_twice_does_not_duplicate_data(): void
     {
         $this->seed(DatabaseSeeder::class);
-        $counts = [Product::count(), Build::count(), \App\Models\BuildItem::count()];
+        $counts = [Product::count(), Build::count(), BuildItem::count()];
 
         $this->seed(DatabaseSeeder::class);
 
-        $this->assertSame($counts, [Product::count(), Build::count(), \App\Models\BuildItem::count()]);
+        $this->assertSame($counts, [Product::count(), Build::count(), BuildItem::count()]);
     }
 
     public function test_admin_is_not_seeded_without_credentials(): void
