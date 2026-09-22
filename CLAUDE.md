@@ -71,10 +71,11 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
 
 ## Current status
 
-- Phase: 5 — React (complete, waiting for approval) on branch `phase/5-react`, PR open
-- Last completed step: all public pages (home, builds, detail, catalog, builder, analysis, compare), share/draft, responsive picker; 33 frontend + 220 backend tests pass
-- Not yet verified in a real browser (Chrome extension was not connected): ask the user to click through before merging
-- Next step: after approval, merge the PR; Phase 6 — Admin (Sanctum login, category editing, product CRUD with schema form, Cloudinary images, build CRUD)
+- Phase: 6 — Admin (complete, waiting for approval) on branch `phase/6-admin`, PR open
+- Last completed step: admin auth, categories, product CRUD with schema form, images (Cloudinary REST, D-037), template editor reusing the Builder; 37 frontend + 263 backend tests pass
+- Not yet verified in a real browser (Chrome extension not connected in Phases 5–6), and Cloudinary not tested live (no CLOUDINARY_URL yet)
+- Next step: after approval, merge the PR; Phase 7 — Testing (fill gaps, GitHub Actions CI)
+- Pre-commit gate: lint + build + tests must pass before `git commit` (never chain a commit after a failing step)
 - Frontend commands: `npm run dev`, `npm test`, `npx oxlint`, `npm run build` (in `frontend/`)
 - Engine map: `app/Domain` (pure), `app/Services` (DB orchestration); implementation notes in `docs/ARCHITECTURE.md` § 3
 - TiDB: credentials in `backend/.env.tidb` (gitignored), database `pcbuild` — never `sys`
