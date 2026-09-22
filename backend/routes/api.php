@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\ProductImageController;
 use App\Http\Controllers\Api\AnalysisController;
 use App\Http\Controllers\Api\BuildController;
 use App\Http\Controllers\Api\BuilderController;
@@ -58,5 +59,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/categories/{category:slug}/spec-schema', [AdminCategoryController::class, 'specSchema'])->name('categories.spec-schema');
 
         Route::apiResource('products', AdminProductController::class);
+        Route::post('/products/{product}/image', [ProductImageController::class, 'store'])->name('products.image.store');
+        Route::delete('/products/{product}/image', [ProductImageController::class, 'destroy'])->name('products.image.destroy');
     });
 });

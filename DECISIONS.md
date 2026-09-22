@@ -297,3 +297,10 @@ Decision: The frontend stays React + Vite + React Router in JavaScript, deployed
 Why: The main page (Builder) is fully client-side interactive, so SSR adds little; SEO does not matter for this portfolio app. Next.js with SSR on Render needs a second Node web service that also sleeps on the free tier (two cold starts instead of one); a static export removes most of its benefits. Plain React shows hooks, reducer and routing fundamentals more clearly in an interview.
 Alternatives: Next.js App Router with SSR (extra service, cold start); Next.js static export (little gain); hosting the frontend on Vercel (one more platform).
 Consequences: No change to the plan or to Phases 2–3. Revisit only if target job posts require Next.js; the API is framework-agnostic, so a later migration touches the frontend only.
+
+## D-037: Cloudinary through its REST API instead of the PHP SDK
+Status: Accepted (Phase 6)
+Decision: `CloudinaryImageStorage` calls the Cloudinary Upload API (signed upload and destroy) with Laravel's HTTP client and builds delivery URLs from the configured presets. It stays behind the `ImageStorage` interface (D-022).
+Why: `cloudinary/cloudinary_php` v2/v3 requires Guzzle 7; Laravel 13 ships Guzzle 8, so Composer could only install the legacy v1 SDK (global static configuration, harder to test). The REST calls are small, documented, and testable with `Http::fake()`.
+Alternatives: legacy SDK v1; downgrading Guzzle (breaks Laravel); an unofficial fork.
+Consequences: Deviates from spec section 25 ("official SDK"). Revisit when the SDK supports Guzzle 8: only this class changes. Tests bind `FakeImageStorage` in the base TestCase and block all real HTTP requests.

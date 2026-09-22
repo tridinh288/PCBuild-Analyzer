@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\Concerns\HasImageUrls;
 use App\Models\Product;
 use App\Support\Hardware\SpecFormatter;
 use Illuminate\Http\Request;
@@ -14,6 +15,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class ProductResource extends JsonResource
 {
+    use HasImageUrls;
+
     /**
      * @return array<string, mixed>
      */
@@ -33,9 +36,8 @@ class ProductResource extends JsonResource
             'is_active' => $this->is_active,
             'description' => $this->description,
             'specs' => app(SpecFormatter::class)->format($category, $this->specs),
-            // Cloudinary URLs are added with image storage in Phase 6; the frontend shows a
-            // per-category placeholder while this is null.
-            'image' => null,
+            // null → the frontend shows a per-category placeholder
+            'image' => $this->imageUrls($this->image_public_id),
         ];
     }
 }

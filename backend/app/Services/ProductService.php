@@ -5,13 +5,17 @@ namespace App\Services;
 use App\Exceptions\ConflictException;
 use App\Models\Category;
 use App\Models\Product;
+use App\Support\Images\ImageStorage;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 
 /**
- * Admin writes for products. Image handling is added with ImageStorage (Phase 6, step 4).
+ * Admin writes for products, including their image on the image service (D-022).
  */
 class ProductService
 {
+    public function __construct(private readonly ImageStorage $images) {}
+
     /**
      * @param  array<string, mixed>  $data  Validated ProductRequest data
      */
@@ -54,6 +58,39 @@ class ProductService
         }
 
         $product->delete();
+
+        if ($product->image_public_id) {
+            $this->images->delete($product->image_public_id);
+        }
+    }
+
+    /**
+     * Upload first, then switch the product to the new image, then delete the old one:
+     * a failed upload leaves the current image untouched.
+     */
+    public function replaceImage(Product $product, UploadedFile $file): Product
+    {
+        $previous = $product->image_public_id;
+
+        $product->image_public_id = $this->images->upload($file, config('images.folders.products'));
+        $product->save();
+
+        if ($previous) {
+            $this->images->delete($previous);
+        }
+
+        return $product->load('category');
+    }
+
+    public function removeImage(Product $product): Product
+    {
+        if ($product->image_public_id) {
+            $this->images->delete($product->image_public_id);
+            $product->image_public_id = null;
+            $product->save();
+        }
+
+        return $product->load('category');
     }
 
     /**

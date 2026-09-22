@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\Concerns\HasImageUrls;
 use App\Models\Build;
 use App\Models\BuildItem;
 use Illuminate\Http\Request;
@@ -15,6 +16,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class BuildResource extends JsonResource
 {
+    use HasImageUrls;
+
     /**
      * @return array<string, mixed>
      */
@@ -29,7 +32,7 @@ class BuildResource extends JsonResource
             'purpose_label' => $this->purpose->label(),
             'is_featured' => $this->is_featured,
             'total_price' => (int) $this->total_price,
-            'image' => null, // Cloudinary URLs in Phase 6
+            'image' => $this->imageUrls($this->image_public_id),
             'items' => $this->whenLoaded('items', fn () => $this->items->map(fn (BuildItem $item) => [
                 'category' => $item->product->category->slug,
                 'quantity' => $item->quantity,
