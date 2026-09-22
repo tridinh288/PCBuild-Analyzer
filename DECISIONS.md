@@ -78,7 +78,7 @@ Alternatives: Soft deletes; cascade deletes.
 Consequences: Inactive products are hidden from Builder and catalog; APIs report them as missing in custom selections.
 
 ## D-008: Build total price is computed, not stored
-Status: Accepted
+Status: Superseded by D-032
 Decision: Use `withSum` / analyzers.
 Why: Stored totals drift when product prices change.
 Alternatives: Cached total column.
@@ -262,3 +262,10 @@ Decision: Each strategy has its weights (from config) plus one profile-specific 
 Why: If strategies only differed by four numbers, a single weighted scorer with data would be simpler and the Strategy Pattern would be hard to defend in an interview.
 Alternatives: Weights-only strategies (spec baseline); one scorer class with a weights table and no Strategy Pattern.
 Consequences: Thresholds and penalties are config values; each strategy gets its own unit tests.
+
+## D-032: Build total price via a subquery scope
+Status: Proposed
+Decision: The total is still computed, never stored (as in D-008), but with a `withTotalPrice()` query scope: a correlated subquery `SUM(products.price * build_items.quantity)`. `PriceAnalyzer` computes the same total from a loaded configuration.
+Why: `withSum()` sums one column of the related table; it cannot multiply the product price by the item quantity across the join.
+Alternatives: `withSum` ignoring quantity (wrong for RAM ×2); a stored `total_price` column (drifts when prices change).
+Consequences: The build list can filter and sort by total price in SQL. A test asserts both paths return the same total.
