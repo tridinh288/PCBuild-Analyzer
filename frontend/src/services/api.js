@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { clearToken, getToken } from './authStore'
 import { trackRequest } from './serverStatus'
 
 /**
@@ -23,6 +24,10 @@ export class ApiError extends Error {
 
 http.interceptors.request.use((config) => {
   config.metadata = { done: trackRequest() }
+  const token = getToken()
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
   return config
 })
 
@@ -36,6 +41,11 @@ http.interceptors.response.use(
 
     if (axios.isCancel(error)) {
       return Promise.reject(error)
+    }
+
+    // Expired or revoked admin token: forget it; RequireAdmin then shows the login page.
+    if (error.response?.status === 401 && getToken()) {
+      clearToken()
     }
 
     const body = error.response?.data
@@ -58,6 +68,23 @@ async function post(url, body, signal) {
   return { data: data.data, meta: data.meta ?? {} }
 }
 
+async function put(url, body) {
+  const { data } = await http.put(url, body)
+  return { data: data.data, meta: data.meta ?? {} }
+}
+
+async function destroy(url) {
+  await http.delete(url)
+}
+
+/** Multipart upload (POST: PHP does not parse multipart bodies on PUT). */
+async function upload(url, file) {
+  const form = new FormData()
+  form.append('image', file)
+  const { data } = await http.post(url, form)
+  return { data: data.data, meta: data.meta ?? {} }
+}
+
 export const api = {
   categories: (signal) => get('/categories', undefined, signal),
   categoryFilters: (slug, signal) => get(`/categories/${slug}/filters`, undefined, signal),
@@ -73,4 +100,31 @@ export const api = {
   builderAnalyze: (body, signal) => post('/builder/analyze', body, signal),
 
   compare: (body, signal) => post('/compare', body, signal),
+}
+
+export const adminApi = {
+  login: (email, password) => post('/admin/login', { email, password }),
+  logout: () => post('/admin/logout'),
+  me: (signal) => get('/admin/me', undefined, signal),
+
+  categories: (signal) => get('/admin/categories', undefined, signal),
+  updateCategory: (id, body) => put(`/admin/categories/${id}`, body),
+  specSchema: (slug, signal) => get(`/admin/categories/${slug}/spec-schema`, undefined, signal),
+
+  products: (params, signal) => get('/admin/products', params, signal),
+  product: (id, signal) => get(`/admin/products/${id}`, undefined, signal),
+  createProduct: (body) => post('/admin/products', body),
+  updateProduct: (id, body) => put(`/admin/products/${id}`, body),
+  deleteProduct: (id) => destroy(`/admin/products/${id}`),
+  uploadProductImage: (id, file) => upload(`/admin/products/${id}/image`, file),
+  deleteProductImage: (id) => destroy(`/admin/products/${id}/image`),
+
+  builds: (params, signal) => get('/admin/builds', params, signal),
+  build: (id, signal) => get(`/admin/builds/${id}`, undefined, signal),
+  createBuild: (body) => post('/admin/builds', body),
+  updateBuild: (id, body) => put(`/admin/builds/${id}`, body),
+  deleteBuild: (id) => destroy(`/admin/builds/${id}`),
+  updateBuildItems: (id, items) => put(`/admin/builds/${id}/items`, { items }),
+  uploadBuildImage: (id, file) => upload(`/admin/builds/${id}/image`, file),
+  deleteBuildImage: (id) => destroy(`/admin/builds/${id}/image`),
 }

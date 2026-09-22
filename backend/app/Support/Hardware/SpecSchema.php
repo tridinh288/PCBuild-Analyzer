@@ -146,6 +146,39 @@ class SpecSchema
     }
 
     /**
+     * Field definitions for the admin product form (enum → select, enum_list → checkboxes,
+     * integer → number with unit, boolean → switch). Same source as validation.
+     *
+     * @return list<array<string, mixed>>
+     */
+    public function formSchema(string $category): array
+    {
+        $fields = [];
+
+        foreach ($this->specs($category) as $key => $definition) {
+            $field = [
+                'key' => $key,
+                'label' => $definition['label'],
+                'type' => $definition['type'],
+                'unit' => $definition['unit'] ?? null,
+                'required' => $definition['required'] ?? false, // true, or ['when' => [otherKey => value]]
+                'min' => $definition['min'] ?? null,
+                'max' => $definition['max'] ?? null,
+            ];
+
+            if (isset($definition['enum'])) {
+                $enum = $this->enum($definition['enum']);
+                $field['options'] = array_map(fn (string $code, string $label) => ['value' => $code, 'label' => $label],
+                    array_keys($enum), $enum);
+            }
+
+            $fields[] = $field;
+        }
+
+        return $fields;
+    }
+
+    /**
      * Label and unit of a spec, for filter definitions.
      *
      * @return array<string, mixed>

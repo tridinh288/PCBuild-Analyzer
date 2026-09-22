@@ -1,10 +1,12 @@
 <?php
 
+use App\Exceptions\ConflictException;
 use App\Http\Middleware\RejectMalformedJson;
 use App\Models\Build;
 use App\Models\Category;
 use App\Models\Product;
 use App\Support\Http\ApiResponse;
+use App\Support\Images\ImageStorageException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
@@ -39,6 +41,8 @@ return Application::configure(basePath: dirname(__DIR__))
 
             return match (true) {
                 $e instanceof ValidationException => ApiResponse::error('Dữ liệu không hợp lệ.', 422, $e->errors()),
+                $e instanceof ConflictException => ApiResponse::error($e->getMessage(), 409),
+                $e instanceof ImageStorageException => ApiResponse::error($e->getMessage(), 502),
                 $e instanceof AuthenticationException => ApiResponse::error('Bạn cần đăng nhập để tiếp tục.', 401),
                 $e instanceof ModelNotFoundException => ApiResponse::error(match ($e->getModel()) {
                     Build::class => 'Không tìm thấy cấu hình.',

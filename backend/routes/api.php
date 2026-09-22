@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\BuildController as AdminBuildController;
+use App\Http\Controllers\Admin\BuildImageController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\ProductImageController;
 use App\Http\Controllers\Api\AnalysisController;
 use App\Http\Controllers\Api\BuildController;
 use App\Http\Controllers\Api\BuilderController;
@@ -44,9 +50,23 @@ Route::middleware('throttle:analysis')->group(function () {
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
-    // POST /admin/login with throttle:login (Phase 6)
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login')->name('login');
 
     Route::middleware('auth:sanctum')->group(function () {
-        // Admin CRUD (Phase 6)
+        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+        Route::get('/me', [AuthController::class, 'me'])->name('me');
+
+        Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories.index');
+        Route::put('/categories/{category}', [AdminCategoryController::class, 'update'])->name('categories.update');
+        Route::get('/categories/{category:slug}/spec-schema', [AdminCategoryController::class, 'specSchema'])->name('categories.spec-schema');
+
+        Route::apiResource('products', AdminProductController::class);
+        Route::post('/products/{product}/image', [ProductImageController::class, 'store'])->name('products.image.store');
+        Route::delete('/products/{product}/image', [ProductImageController::class, 'destroy'])->name('products.image.destroy');
+
+        Route::apiResource('builds', AdminBuildController::class);
+        Route::put('/builds/{build}/items', [AdminBuildController::class, 'items'])->name('builds.items');
+        Route::post('/builds/{build}/image', [BuildImageController::class, 'store'])->name('builds.image.store');
+        Route::delete('/builds/{build}/image', [BuildImageController::class, 'destroy'])->name('builds.image.destroy');
     });
 });

@@ -141,6 +141,10 @@ No winner field (D-017).
 
 ## 3. Admin endpoints (`auth:sanctum`)
 
+Implemented in Phase 6. Send `Authorization: Bearer <token>` from `POST /admin/login`; tokens expire
+after `SANCTUM_EXPIRATION` minutes (default 480) and logout revokes them. Image uploads return 502
+with a Vietnamese message when the image service fails; the current image is kept.
+
 | Method | Path | Purpose |
 |---|---|---|
 | POST | `/admin/login` | Email + password → `{ token, expires_at, user }` (no auth) |
@@ -158,7 +162,7 @@ No winner field (D-017).
 | DELETE | `/admin/products/{id}/image` | Remove image |
 | GET | `/admin/builds` | Paginated |
 | POST | `/admin/builds` | Create → 201 |
-| GET | `/admin/builds/{id}` | Detail with items |
+| GET | `/admin/builds/{id}` | `{ build, image_public_id, analysis }` — detail with items plus the engine's analysis (same shape for create, update and items) |
 | PUT | `/admin/builds/{id}` | Update info, purpose, featured |
 | DELETE | `/admin/builds/{id}` | 204 (items cascade, Cloudinary image deleted) |
 | PUT | `/admin/builds/{id}/items` | Replace the full item list `[{ product_id, quantity }]`; returns the build + compatibility report for live feedback |

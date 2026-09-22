@@ -1,6 +1,16 @@
 import { createBrowserRouter } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
+import RequireAdmin from './components/admin/RequireAdmin'
+import { AuthProvider } from './context/AuthProvider'
+import AdminLayout from './layouts/AdminLayout'
 import MainLayout from './layouts/MainLayout'
+import AdminBuilds from './pages/admin/AdminBuilds'
+import BuildForm from './pages/admin/BuildForm'
+import Categories from './pages/admin/Categories'
+import Dashboard from './pages/admin/Dashboard'
+import Login from './pages/admin/Login'
+import ProductForm from './pages/admin/ProductForm'
+import Products from './pages/admin/Products'
 import Analysis from './pages/Analysis'
 import BuildDetail from './pages/BuildDetail'
 import Builder from './pages/Builder'
@@ -26,8 +36,32 @@ const router = createBrowserRouter([
       { path: '*', element: <NotFound /> },
     ],
   },
+  { path: '/admin/login', element: <Login /> },
+  {
+    path: '/admin',
+    element: <RequireAdmin />,
+    children: [
+      {
+        element: <AdminLayout />,
+        children: [
+          { index: true, element: <Dashboard /> },
+          { path: 'categories', element: <Categories /> },
+          { path: 'products', element: <Products /> },
+          { path: 'products/new', element: <ProductForm /> },
+          { path: 'products/:id', element: <ProductForm /> },
+          { path: 'builds', element: <AdminBuilds /> },
+          { path: 'builds/new', element: <BuildForm /> },
+          { path: 'builds/:id', element: <BuildForm /> },
+        ],
+      },
+    ],
+  },
 ])
 
 export default function App() {
-  return <RouterProvider router={router} />
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  )
 }

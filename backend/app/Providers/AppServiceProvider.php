@@ -7,6 +7,8 @@ use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Repositories\Eloquent\BuildRepository;
 use App\Repositories\Eloquent\ProductRepository;
 use App\Support\Hardware\SpecSchema;
+use App\Support\Images\CloudinaryImageStorage;
+use App\Support\Images\ImageStorage;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -27,6 +29,11 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(SpecSchema::class, fn () => new SpecSchema(config('hardware')));
+
+        $this->app->singleton(ImageStorage::class, fn () => CloudinaryImageStorage::fromUrl(
+            config('images.cloudinary_url'),
+            config('images.presets'),
+        ));
     }
 
     public function boot(): void
