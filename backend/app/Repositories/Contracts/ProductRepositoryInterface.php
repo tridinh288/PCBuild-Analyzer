@@ -53,6 +53,14 @@ interface ProductRepositoryInterface
     public function priceRange(string $category): array;
 
     /**
+     * Admin list: active and inactive products, newest first.
+     * Filters: category, search, is_active.
+     *
+     * @param  array<string, mixed>  $filters
+     */
+    public function paginateForAdmin(array $filters = [], int $perPage = 20): LengthAwarePaginator;
+
+    /**
      * Active products, paginated (public catalog).
      *
      * @param  array<string, mixed>  $filters

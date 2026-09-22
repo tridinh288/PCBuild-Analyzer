@@ -46,6 +46,23 @@ class ProductRepository implements ProductRepositoryInterface
         return ['min' => (int) $range->min_price, 'max' => (int) $range->max_price];
     }
 
+    public function paginateForAdmin(array $filters = [], int $perPage = 20): LengthAwarePaginator
+    {
+        $query = Product::query()->with('category')->withCount('buildItems');
+
+        if (filled($filters['category'] ?? null)) {
+            $query->whereRelation('category', 'slug', $filters['category']);
+        }
+
+        if (isset($filters['is_active']) && $filters['is_active'] !== '') {
+            $query->where('is_active', filter_var($filters['is_active'], FILTER_VALIDATE_BOOL));
+        }
+
+        $this->applyCommonFilters($query, ['search' => $filters['search'] ?? null]);
+
+        return $query->latest()->orderByDesc('id')->paginate($perPage)->withQueryString();
+    }
+
     public function paginate(array $filters = [], ?string $sort = null, int $perPage = 12): LengthAwarePaginator
     {
         $category = $filters['category'] ?? null;
