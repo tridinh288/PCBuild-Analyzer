@@ -47,6 +47,7 @@ return Application::configure(basePath: dirname(__DIR__))
                     default => 'Không tìm thấy dữ liệu.',
                 }, 404),
                 $e instanceof NotFoundHttpException => ApiResponse::error('Không tìm thấy dữ liệu.', 404),
+                // Keep the exception headers (Retry-After on 429, Allow on 405).
                 $e instanceof HttpExceptionInterface => ApiResponse::error(
                     match ($e->getStatusCode()) {
                         403 => 'Bạn không có quyền thực hiện thao tác này.',
@@ -55,7 +56,7 @@ return Application::configure(basePath: dirname(__DIR__))
                         default => $e->getMessage() ?: 'Yêu cầu không hợp lệ.',
                     },
                     $e->getStatusCode(),
-                ),
+                )->withHeaders($e->getHeaders()),
                 default => ApiResponse::error(
                     'Đã xảy ra lỗi máy chủ.',
                     500,
