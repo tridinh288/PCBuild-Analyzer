@@ -26,13 +26,6 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->api(prepend: [RejectMalformedJson::class]);
-
-        // Render terminates HTTPS at its proxy. Trusting it gives the real client IP (per-user rate
-        // limits) and https URLs. Not '*': in Laravel that trusts every address, so a client could
-        // spoof its IP with its own X-Forwarded-For header and escape rate limits. Trusted are the
-        // connecting address and private networks (the platform's internal hops); the client IP is
-        // then the rightmost public address, which the proxy itself appended.
-        $middleware->trustProxies(at: ['REMOTE_ADDR', '10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16']);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // Every /api error uses the same envelope. No internal details unless APP_DEBUG=true.

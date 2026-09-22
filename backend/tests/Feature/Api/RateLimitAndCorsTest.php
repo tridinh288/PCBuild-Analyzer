@@ -53,6 +53,27 @@ class RateLimitAndCorsTest extends TestCase
             ->postJson('/api/builder/analyze', ['selected' => []])->assertStatus(429);
     }
 
+    /**
+     * The chain measured on Render: client → Cloudflare edge → Render internal proxy → app.
+     */
+    public function test_client_ip_is_found_behind_cloudflare_and_render(): void
+    {
+        config(['api.rate_limits.analysis' => 1]);
+        $this->withServerVariables(['REMOTE_ADDR' => '127.0.0.1']);
+        $viaEdge = fn (string $edge) => "203.0.113.7, {$edge}, 10.30.106.237";
+
+        $this->withHeader('X-Forwarded-For', $viaEdge('162.158.106.151'))
+            ->postJson('/api/builder/analyze', ['selected' => []])->assertOk();
+
+        // Same client through another Cloudflare edge server: same bucket.
+        $this->withHeader('X-Forwarded-For', $viaEdge('172.70.1.2'))
+            ->postJson('/api/builder/analyze', ['selected' => []])->assertStatus(429);
+
+        // A different client through the same edge: its own bucket.
+        $this->withHeader('X-Forwarded-For', '198.51.100.9, 162.158.106.151, 10.30.106.237')
+            ->postJson('/api/builder/analyze', ['selected' => []])->assertOk();
+    }
+
     public function test_cors_allows_only_the_frontend_origin(): void
     {
         $frontend = config('cors.allowed_origins')[0];

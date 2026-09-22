@@ -138,16 +138,25 @@ DB_PASSWORD=<password>
 MYSQL_ATTR_SSL_CA=/etc/ssl/certs/ca-certificates.crt
 ```
 
-Keep `APP_KEY` and the other values from `.env`.
+Keep `APP_KEY` and the other values from `.env`, but **leave `ADMIN_EMAIL` and `ADMIN_PASSWORD`
+empty**: otherwise seeding from this file creates an admin with the local development password in the
+real database (this happened in Phase 2; the password was replaced when the production admin was
+seeded in Phase 8).
 
 ### 3. Run the check
 
 `--env=tidb` makes Laravel load `.env.tidb` instead of `.env`:
 
 ```bash
-docker compose exec app php artisan migrate:fresh --seed --env=tidb
+docker compose exec app php artisan db:show --env=tidb             # confirm the target database first
 docker compose exec app php artisan app:verify-database --env=tidb
 ```
+
+> **Danger — production data.** Since Phase 8 this TiDB database is the live database. Never run
+> `migrate:fresh`, `migrate:refresh`, `db:wipe` or `db:seed` against it from your machine: the first
+> three delete everything. `app:verify-database` only reads, plus one insert inside a transaction that
+> is rolled back. The first-time setup in Phase 2 used `migrate:fresh --seed --env=tidb` on an empty
+> database; schema changes now happen through the deploy start script (`migrate --force`).
 
 Expected output: every line `PASS`, then `All checks passed.` The command compares each SQL result
 with the same filter computed in PHP, so a silent difference (e.g. JSON numbers compared as strings)

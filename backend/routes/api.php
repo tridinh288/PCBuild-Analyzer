@@ -27,19 +27,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/status', fn () => ApiResponse::success([
     'name' => config('app.name'),
 ]))->name('status');
-
-// TEMPORARY diagnostic (Phase 8): shows how the caller's own request arrives through the
-// platform proxies. Returns only the caller's data. Removed right after checking.
-Route::get('/debug/client-ip', fn (Illuminate\Http\Request $request) => ApiResponse::success([
-    'ip' => $request->ip(),
-    'ips' => $request->ips(),
-    'remote_addr' => $request->server('REMOTE_ADDR'),
-    'x_forwarded_for' => $request->header('X-Forwarded-For'),
-    'cf_connecting_ip' => $request->header('CF-Connecting-IP'),
-    'true_client_ip' => $request->header('True-Client-IP'),
-    'x_real_ip' => $request->header('X-Real-IP'),
-]));
-
 Route::middleware('throttle:public')->group(function () {
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/{category:slug}/filters', [CategoryController::class, 'filters'])->name('categories.filters');
