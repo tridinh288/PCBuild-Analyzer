@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\BuildController as AdminBuildController;
+use App\Http\Controllers\Admin\BuildImageController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\ProductImageController;
@@ -61,5 +63,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::apiResource('products', AdminProductController::class);
         Route::post('/products/{product}/image', [ProductImageController::class, 'store'])->name('products.image.store');
         Route::delete('/products/{product}/image', [ProductImageController::class, 'destroy'])->name('products.image.destroy');
+
+        Route::apiResource('builds', AdminBuildController::class);
+        Route::put('/builds/{build}/items', [AdminBuildController::class, 'items'])->name('builds.items');
+        Route::post('/builds/{build}/image', [BuildImageController::class, 'store'])->name('builds.image.store');
+        Route::delete('/builds/{build}/image', [BuildImageController::class, 'destroy'])->name('builds.image.destroy');
     });
 });
