@@ -93,8 +93,11 @@ docker compose exec app php artisan migrate --seed
 # 3. Check
 curl http://localhost:8000/api/status
 
-# 4. Frontend (Phase 5)
-cd frontend && npm install && npm run dev
+# 4. Frontend (on the host, D-025)
+cd frontend
+cp .env.example .env        # VITE_API_URL=http://localhost:8000/api
+npm install
+npm run dev                 # http://localhost:5173
 ```
 
 MySQL is published on host port `3307` (user `pcbuild`) for GUI clients such as HeidiSQL.
@@ -110,6 +113,7 @@ PHPUnit runs against a separate `pcbuild_test` MySQL database (created by `docke
 ```bash
 docker compose exec app php artisan test
 docker compose exec app php artisan app:verify-database   # JSON queries / FK checks on the current DB
+cd frontend && npm test                                     # frontend unit tests (Vitest)
 ```
 
 Full test report: _TBD (Phase 7)._
