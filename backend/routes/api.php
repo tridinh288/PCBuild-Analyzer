@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Api\AnalysisController;
 use App\Http\Controllers\Api\BuildController;
 use App\Http\Controllers\Api\BuilderController;
@@ -44,9 +45,10 @@ Route::middleware('throttle:analysis')->group(function () {
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
-    // POST /admin/login with throttle:login (Phase 6)
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login')->name('login');
 
     Route::middleware('auth:sanctum')->group(function () {
-        // Admin CRUD (Phase 6)
+        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+        Route::get('/me', [AuthController::class, 'me'])->name('me');
     });
 });
