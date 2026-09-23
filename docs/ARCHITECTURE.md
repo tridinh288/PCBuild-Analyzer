@@ -1,8 +1,9 @@
 # Architecture Plan
 
-Phase 1 planning output. Covers scope, architecture, class responsibilities, and where each
-design pattern is (and is not) used. Database and `config/hardware.php` design: `docs/DATABASE.md`.
-API design: `docs/API.md`. Decisions referenced as `D-XXX` are in `DECISIONS.md`.
+Planned in Phase 1; section 3b (the Domain class diagrams) was added in Phase 9. Covers scope,
+layers, class responsibilities, and where each design pattern is (and is not) used. Database and
+`config/hardware.php` design: `docs/DATABASE.md`. API design: `docs/API.md`. Decisions referenced as
+`D-XXX` are in `DECISIONS.md`.
 
 ---
 
