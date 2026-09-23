@@ -29,6 +29,7 @@ yarn-error.log*
 # Test / coverage output
 coverage/
 backend/coverage/
+backend/storage/coverage.txt
 
 # IDE / editor
 .idea/
