@@ -73,11 +73,11 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
 ## Current status
 
 - Phase: 9 — Finalization on branch `phase/9-finalization` (Phase 8 merged as PR #7, merge commit `6f85e0a`)
-- Last completed step: Vietnamese README with the generated architecture diagram and six product screenshots; D-039 and D-040 recorded
+- Last completed step: all Phase 9 deliverables done — README, screenshots, Domain class diagrams (ARCHITECTURE.md 3b), ERD (already Mermaid in DATABASE.md), API docs gap closed (GET /status), test report re-measured, docs/CV.md
 - Live: API https://pcbuild-api-2mwk.onrender.com, web https://pcbuild-web.onrender.com (Render still builds from `phase/8-deployment`; switch both services to `main`)
 - Verified live in a real browser (headless Chrome over CDP): home, build list and build analysis all load real data — power 392 W, recommended PSU 550 W, selected 450 W, score and price breakdown all render. The earlier `VITE_API_URL` misconfiguration (missing `/api`) is fixed.
 - Verified: API, CORS, data, admin login rejects the old dev password, real client IP behind Cloudflare (D-038); browser check done with headless Chrome over CDP. Pending: a real Cloudinary upload by the user
-- Next step: switch Render services to `main`, then the rest of Phase 9 (ERD image, class diagram, API examples, test report, CV description)
+- Next step: PR for `phase/9-finalization` and merge after approval; switch Render services to `main`
 - Screenshots: regenerate by running the app locally and capturing with headless Chrome over CDP (the Claude in Chrome extension does not connect on this machine)
 - Architecture diagram: edit `docs/architecture.archify.json`, then `archify deliver architecture <spec> docs/images/architecture.html --quality showcase --repo-root .` (D-040)
 - Production image check: `docker build -t pcbuild-api:prod backend` then run it with production env vars (see `docs/DEPLOYMENT.md`)
