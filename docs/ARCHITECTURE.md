@@ -225,6 +225,234 @@ The Specification only answers one yes/no question about a value (`ValueInSet`, 
 `AtLeast`). Combinators are used where they read naturally: the PSU warning band is
 `AtLeast(estimate)->and(AtLeast(recommended)->not())`.
 
+## 3b. Domain class diagrams
+
+Three views of `app/Domain`, one per sub-namespace. Together they are the Phase 9 class diagram
+deliverable (spec section 39). Only the members that matter for the relationships are listed; see the
+classes themselves for the full signatures.
+
+Everything below is plain PHP: no Eloquent, no HTTP, no `config()` (section 2, "Layer rules").
+
+### Configuration and Hardware
+
+`BuildConfiguration` is the object every rule and analyzer receives. It is immutable: `with()` and
+`without()` return a new instance, so evaluating a candidate component cannot corrupt the
+configuration being edited.
+
+```mermaid
+classDiagram
+    direction LR
+
+    class BuildConfiguration {
+        +with(HardwareComponent, int) BuildConfiguration
+        +without(string, int) BuildConfiguration
+        +get(string) HardwareComponent
+        +items(string) array
+        +missingRequiredSlots() array
+        +cpu() Cpu
+        +motherboard() Motherboard
+    }
+    class ConfigurationItem {
+        +category() string
+        +totalPrice() int
+    }
+    class SlotRules
+    class HardwareFactory {
+        +make(string, array) HardwareComponent
+        +categories() array
+    }
+    class HardwareComponent {
+        <<abstract>>
+        +id() int
+        +name() string
+        +price() int
+        +specs() array
+        #int(string) int
+        #string(string) string
+    }
+    class Cpu
+    class Motherboard
+    class Ram
+    class Gpu
+    class Storage
+    class Psu
+    class PcCase
+    class Cooler
+
+    BuildConfiguration o-- "many" ConfigurationItem
+    BuildConfiguration --> SlotRules : required slots
+    ConfigurationItem o-- "1" HardwareComponent
+    HardwareFactory ..> HardwareComponent : creates
+    HardwareComponent <|-- Cpu
+    HardwareComponent <|-- Motherboard
+    HardwareComponent <|-- Ram
+    HardwareComponent <|-- Gpu
+    HardwareComponent <|-- Storage
+    HardwareComponent <|-- Psu
+    HardwareComponent <|-- PcCase
+    HardwareComponent <|-- Cooler
+```
+
+`HardwareComponent` holds the raw spec array and exposes typed accessors (`int()`, `string()`,
+`bool()`) to its subclasses, so a rule asks `$cpu->socket()` instead of digging through JSON.
+`HardwareFactory` maps a category slug to the right subclass — this is why rules never see raw data.
+
+### Compatibility
+
+The engine holds a list of rules and knows nothing about what any of them does. Adding a rule means
+adding a class and registering it in the provider; the engine is not touched (Open/Closed).
+
+```mermaid
+classDiagram
+    direction LR
+
+    class CompatibilityEngine {
+        +check(BuildConfiguration) CompatibilityReport
+        +checkCandidate(BuildConfiguration, string) CompatibilityReport
+        +rules() array
+    }
+    class CompatibilityRule {
+        <<interface>>
+        +key() string
+        +title() string
+        +involves() array
+        +appliesTo(BuildConfiguration) bool
+        +check(BuildConfiguration) CompatibilityResult
+    }
+    class Rule {
+        <<abstract>>
+        +appliesTo(BuildConfiguration) bool
+        #compatible(string, array) CompatibilityResult
+        #warning(string, array) CompatibilityResult
+        #incompatible(string, array) CompatibilityResult
+    }
+    class CpuMotherboardSocketRule
+    class MotherboardRamTypeRule
+    class PsuWattageRule
+    class GpuCaseClearanceRule
+    class OtherRules {
+        9 more rules
+    }
+    class CompatibilityReport {
+        +status() CompatibilityStatus
+        +errors() int
+        +warnings() int
+        +problemsByCategory() array
+    }
+    class CompatibilityResult
+    class CompatibilityStatus {
+        <<enumeration>>
+        compatible
+        warning
+        incompatible
+        skipped
+    }
+
+    CompatibilityEngine o-- "13" CompatibilityRule
+    CompatibilityRule <|.. Rule
+    Rule <|-- CpuMotherboardSocketRule
+    Rule <|-- MotherboardRamTypeRule
+    Rule <|-- PsuWattageRule
+    Rule <|-- GpuCaseClearanceRule
+    Rule <|-- OtherRules
+    CompatibilityEngine --> CompatibilityReport : produces
+    CompatibilityReport o-- "many" CompatibilityResult
+    CompatibilityResult --> CompatibilityStatus
+```
+
+`involves()` is what makes the builder fast: when scoring one candidate component,
+`checkCandidate()` runs only the rules whose `involves()` contains that category, not all 13.
+
+Conditions inside rules are built from specifications, which compose:
+
+```mermaid
+classDiagram
+    direction LR
+
+    class Specification {
+        <<abstract>>
+        +isSatisfiedBy(mixed)* bool
+        +and(Specification) Specification
+        +or(Specification) Specification
+        +not() Specification
+    }
+    class ValueInSet
+    class FitsWithin
+    class AtLeast
+    class AndSpecification
+    class OrSpecification
+    class NotSpecification
+
+    Specification <|-- ValueInSet
+    Specification <|-- FitsWithin
+    Specification <|-- AtLeast
+    Specification <|-- AndSpecification
+    Specification <|-- OrSpecification
+    Specification <|-- NotSpecification
+    AndSpecification o-- "2" Specification
+    OrSpecification o-- "2" Specification
+    NotSpecification o-- "1" Specification
+```
+
+Specifications are used where a condition is reused by several rules. One-off comparisons stay inline
+(D-014) — a specification that wraps a single `===` adds a class and hides the check.
+
+### Analysis
+
+`BuildAnalyzer` is a facade over four independent calculations. Only the score varies by purpose, so
+only the score uses Strategy.
+
+```mermaid
+classDiagram
+    direction LR
+
+    class BuildAnalyzer {
+        +analyze(BuildConfiguration, BuildPurpose) BuildAnalysis
+    }
+    class PowerCalculator {
+        +calculate(BuildConfiguration) PowerResult
+    }
+    class PriceAnalyzer {
+        +analyze(BuildConfiguration) PriceResult
+    }
+    class PerformanceAnalyzer {
+        +analyze(BuildConfiguration, BuildPurpose) PerformanceResult
+    }
+    class AnalysisStrategy {
+        <<interface>>
+        +profile() BuildPurpose
+        +score(BuildConfiguration) PerformanceResult
+    }
+    class WeightedStrategy {
+        <<abstract>>
+        +score(BuildConfiguration) PerformanceResult
+    }
+    class GamingStrategy
+    class ProgrammingStrategy
+    class WorkstationStrategy
+    class GeneralUseStrategy
+    class SubScoreCalculator
+    class BuildAnalysis
+
+    BuildAnalyzer --> CompatibilityEngine
+    BuildAnalyzer --> PowerCalculator
+    BuildAnalyzer --> PriceAnalyzer
+    BuildAnalyzer --> PerformanceAnalyzer
+    BuildAnalyzer --> BuildAnalysis : produces
+    PerformanceAnalyzer o-- "4" AnalysisStrategy
+    AnalysisStrategy <|.. WeightedStrategy
+    WeightedStrategy <|-- GamingStrategy
+    WeightedStrategy <|-- ProgrammingStrategy
+    WeightedStrategy <|-- WorkstationStrategy
+    WeightedStrategy <|-- GeneralUseStrategy
+    WeightedStrategy --> SubScoreCalculator : per-component scores
+```
+
+`WeightedStrategy::score()` is `final`: every profile shares the same weighted-sum algorithm and
+differs only in the weights passed to its constructor. A subclass therefore cannot change *how*
+scoring works, only *what* it weighs — which is the point of the pattern here. Power and price have
+no such variation, so they are single classes, not strategies.
+
 ---
 
 ## 4. Design patterns — where and where not

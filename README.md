@@ -97,6 +97,11 @@ Một vài quyết định đáng chú ý khác:
 | Controller mỏng, logic nằm ở Service và Domain | Controller chỉ điều phối HTTP |
 | Rule và analyzer nhận `BuildConfiguration`, không nhận Eloquent model | Giữ Domain tách khỏi tầng dữ liệu |
 
+**Class diagram** của tầng Domain (4 sơ đồ: Configuration + Hardware, Compatibility, Specification,
+Analysis) nằm ở [docs/ARCHITECTURE.md § 3b](docs/ARCHITECTURE.md#3b-domain-class-diagrams).
+**ERD** của cơ sở dữ liệu ở [docs/DATABASE.md § 1](docs/DATABASE.md#1-erd). Cả hai viết bằng Mermaid
+nên GitHub render trực tiếp, không cần ảnh rời dễ lệch với code.
+
 Chi tiết: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · Nhật ký quyết định: [DECISIONS.md](DECISIONS.md)
 
 ## Công nghệ sử dụng
