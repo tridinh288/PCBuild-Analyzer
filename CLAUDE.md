@@ -72,17 +72,36 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
 
 ## Current status
 
-- Phase: 9 — Finalization on branch `phase/9-finalization` (Phase 8 merged as PR #7, merge commit `6f85e0a`)
-- Last completed step: all Phase 9 deliverables done — README, screenshots, Domain class diagrams (ARCHITECTURE.md 3b), ERD (already Mermaid in DATABASE.md), API docs gap closed (GET /status), test report re-measured, docs/CV.md
-- Live: API https://pcbuild-api-2mwk.onrender.com, web https://pcbuild-web.onrender.com (Render still builds from `phase/8-deployment`; switch both services to `main`)
-- Verified live in a real browser (headless Chrome over CDP): home, build list and build analysis all load real data — power 392 W, recommended PSU 550 W, selected 450 W, score and price breakdown all render. The earlier `VITE_API_URL` misconfiguration (missing `/api`) is fixed.
-- Verified: API, CORS, data, admin login rejects the old dev password, real client IP behind Cloudflare (D-038); browser check done with headless Chrome over CDP. Pending: a real Cloudinary upload by the user
-- Next step: PR for `phase/9-finalization` and merge after approval; switch Render services to `main`
-- Screenshots: regenerate by running the app locally and capturing with headless Chrome over CDP (the Claude in Chrome extension does not connect on this machine)
-- Architecture diagram: edit `docs/architecture.archify.json`, then `archify deliver architecture <spec> docs/images/architecture.html --quality showcase --repo-root .` (D-040)
-- Production image check: `docker build -t pcbuild-api:prod backend` then run it with production env vars (see `docs/DEPLOYMENT.md`)
-- Pre-commit gate: lint + build + tests must pass before `git commit` (never chain a commit after a failing step)
-- Frontend commands: `npm run dev`, `npm test`, `npx oxlint`, `npm run build` (in `frontend/`)
-- Engine map: `app/Domain` (pure), `app/Services` (DB orchestration); implementation notes in `docs/ARCHITECTURE.md` § 3
-- TiDB: credentials in `backend/.env.tidb` (gitignored), database `pcbuild` — never `sys`
-- Note: the full test suite takes about 1 minute because the Windows bind mount is slow
+- **All 9 phases complete.** `main` is the released version (merge commit `a7239ec`, CI green on it).
+  Every phase branch was merged and then deleted; `main` is the only branch left.
+- Live: API https://pcbuild-api-2mwk.onrender.com, web https://pcbuild-web.onrender.com.
+  Both Render services now build from `main`.
+- Verified live in a real browser (headless Chrome over CDP): home, build list and build analysis all
+  load real data — 392 W estimated, 550 W recommended, 450 W selected, score and price breakdown render.
+- Verified: API, CORS, seeded data, admin login rejects the old dev password, real client IP behind
+  Cloudflare (D-038), rate limit counts per client.
+- **Only open item: a real Cloudinary upload has never run.** Every test binds `FakeImageStorage` and
+  blocks outbound HTTP, so the live upload path is unexercised. The owner will do this manually.
+  Build cards currently show the "PC Build" placeholder; once real images exist, re-take the README
+  screenshots.
+
+### If work resumes
+
+- Branch per change as before (`git checkout -b <name> main`), PR into `main`, merge with `--merge`.
+- Screenshots: run the app locally (`docker compose up -d`, then `npm run dev`) and capture with
+  headless Chrome over CDP — the Claude in Chrome extension does not connect on this machine.
+  Deep links that produce a filled page: `/builder?cpu=3&motherboard=10&ram=19&gpu=24&storage=28&psu=33&case=42`
+  and `/compare?c=<slug>&c=<slug>`.
+- Architecture diagram: edit `docs/architecture.archify.json`, then
+  `archify deliver architecture <spec> docs/images/architecture.html --quality showcase --repo-root .` (D-040).
+  Its `meta.repository.revision` pins a commit — refresh it when referenced files move.
+- Class diagrams and the ERD are Mermaid inside `docs/ARCHITECTURE.md` § 3b and `docs/DATABASE.md` § 1;
+  GitHub renders them, so there is no image to regenerate.
+- Production image check: `docker build -t pcbuild-api:prod backend`, then run it with production env
+  vars (see `docs/DEPLOYMENT.md`).
+- Pre-commit gate: lint + build + tests must pass before `git commit` (never chain a commit after a
+  failing step).
+- Frontend commands: `npm run dev`, `npm test`, `npx oxlint`, `npm run build` (in `frontend/`).
+- Engine map: `app/Domain` (pure), `app/Services` (DB orchestration); notes in `docs/ARCHITECTURE.md` § 3.
+- TiDB: credentials in `backend/.env.tidb` (gitignored), database `pcbuild` — never `sys`.
+- Note: the full test suite takes about 2.5 minutes because the Windows bind mount is slow.
