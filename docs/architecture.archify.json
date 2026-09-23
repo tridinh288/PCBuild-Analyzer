@@ -1,0 +1,412 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "PCBuild Analyzer — Kiến trúc phân tầng",
+    "output": "images/architecture.html",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1140,
+      420
+    ],
+    "repository": {
+      "url": "https://github.com/tridinh288/PCBuild-Analyzer",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "6f85e0a82bc0f354fad57e46c1571666c226990b"
+    },
+    "views": [
+      {
+        "id": "luong-chinh",
+        "label": "Luồng request chính",
+        "focus": [
+          "users",
+          "react",
+          "routes",
+          "controllers",
+          "services",
+          "repos",
+          "db"
+        ],
+        "note": "Đường đi của một request từ trình duyệt xuống tới database."
+      },
+      {
+        "id": "engine",
+        "label": "Engine phân tích",
+        "focus": [
+          "services",
+          "buildconfig",
+          "compat",
+          "analysis"
+        ],
+        "note": "Phần lõi của dự án: PHP thuần, không chạm database hay HTTP."
+      },
+      {
+        "id": "du-lieu",
+        "label": "Dữ liệu và ảnh",
+        "focus": [
+          "services",
+          "repos",
+          "db",
+          "cloudinary"
+        ],
+        "note": "Hai nơi duy nhất chạm ra bên ngoài: database và Cloudinary."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "users",
+      "type": "external",
+      "label": "Người dùng",
+      "sublabel": "Trình duyệt",
+      "pos": [
+        30,
+        35
+      ],
+      "size": [
+        140,
+        54
+      ]
+    },
+    {
+      "id": "react",
+      "type": "frontend",
+      "label": "React SPA",
+      "sublabel": "pages → hooks → api.js",
+      "pos": [
+        215,
+        35
+      ],
+      "size": [
+        180,
+        54
+      ],
+      "sources": [
+        {
+          "path": "frontend/src/services/api.js",
+          "label": "api.js"
+        },
+        {
+          "path": "frontend/src/reducers/builderReducer.js",
+          "label": "builderReducer"
+        }
+      ]
+    },
+    {
+      "id": "routes",
+      "type": "security",
+      "label": "routes/api.php",
+      "sublabel": "throttle · sanctum",
+      "pos": [
+        440,
+        35
+      ],
+      "size": [
+        180,
+        54
+      ],
+      "sources": [
+        {
+          "path": "backend/routes/api.php",
+          "label": "api.php"
+        },
+        {
+          "path": "backend/config/trustedproxy.php",
+          "label": "trusted proxies"
+        }
+      ]
+    },
+    {
+      "id": "controllers",
+      "type": "backend",
+      "label": "Controllers (mỏng)",
+      "sublabel": "Request → Resource",
+      "pos": [
+        665,
+        35
+      ],
+      "size": [
+        180,
+        54
+      ],
+      "sources": [
+        {
+          "path": "backend/app/Http/Controllers/Api/BuilderController.php",
+          "label": "BuilderController"
+        },
+        {
+          "path": "backend/app/Http/Requests/BuilderOptionsRequest.php",
+          "label": "Form Request"
+        }
+      ]
+    },
+    {
+      "id": "compat",
+      "type": "backend",
+      "label": "CompatibilityEngine",
+      "sublabel": "13 luật · Specification",
+      "pos": [
+        890,
+        35
+      ],
+      "size": [
+        190,
+        54
+      ],
+      "sources": [
+        {
+          "path": "backend/app/Domain/Compatibility/CompatibilityEngine.php",
+          "label": "CompatibilityEngine"
+        },
+        {
+          "path": "backend/app/Domain/Compatibility/Rules/PsuWattageRule.php",
+          "label": "PsuWattageRule"
+        }
+      ]
+    },
+    {
+      "id": "cloudinary",
+      "type": "cloud",
+      "label": "Cloudinary",
+      "sublabel": "chỉ lưu public_id",
+      "pos": [
+        440,
+        170
+      ],
+      "size": [
+        180,
+        54
+      ]
+    },
+    {
+      "id": "services",
+      "type": "backend",
+      "label": "Services",
+      "sublabel": "điều phối",
+      "pos": [
+        665,
+        170
+      ],
+      "size": [
+        180,
+        54
+      ],
+      "sources": [
+        {
+          "path": "backend/app/Services/BuilderService.php",
+          "label": "BuilderService"
+        }
+      ]
+    },
+    {
+      "id": "buildconfig",
+      "type": "backend",
+      "label": "BuildConfiguration",
+      "sublabel": "Hardware · Factory",
+      "pos": [
+        890,
+        170
+      ],
+      "size": [
+        190,
+        54
+      ],
+      "sources": [
+        {
+          "path": "backend/app/Domain/Configuration/BuildConfiguration.php",
+          "label": "BuildConfiguration"
+        },
+        {
+          "path": "backend/app/Domain/Hardware/HardwareFactory.php",
+          "label": "HardwareFactory"
+        }
+      ]
+    },
+    {
+      "id": "db",
+      "type": "database",
+      "label": "MySQL 8 · TiDB",
+      "sublabel": "local · production",
+      "pos": [
+        440,
+        305
+      ],
+      "size": [
+        180,
+        54
+      ]
+    },
+    {
+      "id": "repos",
+      "type": "backend",
+      "label": "Repositories",
+      "sublabel": "lọc và truy vấn",
+      "pos": [
+        665,
+        305
+      ],
+      "size": [
+        180,
+        54
+      ],
+      "sources": [
+        {
+          "path": "backend/app/Repositories/Eloquent/ProductRepository.php",
+          "label": "ProductRepository"
+        }
+      ]
+    },
+    {
+      "id": "analysis",
+      "type": "backend",
+      "label": "BuildAnalyzer",
+      "sublabel": "điện · giá · điểm",
+      "pos": [
+        890,
+        305
+      ],
+      "size": [
+        190,
+        54
+      ],
+      "sources": [
+        {
+          "path": "backend/app/Domain/Analysis/BuildAnalyzer.php",
+          "label": "BuildAnalyzer"
+        },
+        {
+          "path": "backend/app/Domain/Analysis/Strategies/GamingStrategy.php",
+          "label": "GamingStrategy"
+        }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Domain — PHP thuần, không chạm DB hay HTTP",
+      "wraps": [
+        "compat",
+        "buildconfig",
+        "analysis"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "user-web",
+      "from": "users",
+      "to": "react",
+      "label": "HTTPS",
+      "variant": "emphasis",
+      "labelDy": 34
+    },
+    {
+      "id": "web-api",
+      "from": "react",
+      "to": "routes",
+      "label": "Axios · JSON",
+      "variant": "emphasis",
+      "labelDy": 51
+    },
+    {
+      "id": "api-ctrl",
+      "from": "routes",
+      "to": "controllers",
+      "label": "qua middleware",
+      "labelDy": 51
+    },
+    {
+      "id": "ctrl-svc",
+      "from": "controllers",
+      "to": "services",
+      "label": "dữ liệu hợp lệ",
+      "labelDy": 24
+    },
+    {
+      "id": "svc-img",
+      "from": "services",
+      "to": "cloudinary",
+      "label": "tải ảnh",
+      "variant": "dashed",
+      "labelDy": 34
+    },
+    {
+      "id": "svc-cfg",
+      "from": "services",
+      "to": "buildconfig",
+      "label": "dựng cấu hình",
+      "labelDy": 51
+    },
+    {
+      "id": "cfg-compat",
+      "from": "buildconfig",
+      "to": "compat",
+      "label": "kiểm tra tương thích",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "cfg-analysis",
+      "from": "buildconfig",
+      "to": "analysis",
+      "label": "chấm điểm",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 24
+    },
+    {
+      "id": "svc-repo",
+      "from": "services",
+      "to": "repos",
+      "label": "đọc sản phẩm",
+      "labelDy": 24
+    },
+    {
+      "id": "repo-db",
+      "from": "repos",
+      "to": "db",
+      "label": "Eloquent · SQL",
+      "labelDy": 51
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Giao diện",
+      "items": [
+        "React + Vite + Tailwind, không dùng Next.js",
+        "Cấu hình tuỳ chỉnh nằm trên URL, không lưu vào database",
+        "Chia sẻ bằng link, không cần tài khoản"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "API Laravel",
+      "items": [
+        "Controller mỏng: Form Request kiểm tra vào, API Resource định dạng ra",
+        "Service điều phối, Repository giữ toàn bộ truy vấn",
+        "Sanctum cho khu vực quản trị, throttle cho phần công khai"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Engine phân tích",
+      "items": [
+        "13 luật tương thích viết bằng PHP, không nhân bản sang SQL",
+        "Điểm số theo 4 hồ sơ: Gaming, Lập trình, Workstation, Phổ thông",
+        "Domain nhận giá trị qua constructor nên test được bằng PHPUnit thuần"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Dữ liệu và ảnh",
+      "items": [
+        "MySQL 8 trong Docker khi local, TiDB Cloud khi chạy thật",
+        "config/hardware.php là nguồn duy nhất cho spec và hằng số điện",
+        "Cloudinary chỉ lưu public_id, không lưu URL đầy đủ"
+      ]
+    }
+  ]
+}
