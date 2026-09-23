@@ -105,11 +105,17 @@ cd frontend && npm test
 | Where | Backend suite |
 |---|---|
 | GitHub Actions (Linux) | ~26 s |
-| Local Docker on Windows, sequential | ~130–145 s |
-| Local Docker on Windows, 4 processes | ~80–105 s |
+| Local Docker on Windows, 4 processes | ~20 s |
+| Local Docker on Windows, before `vendor/` moved off the bind mount | ~80–105 s |
 
-The local cost is per-test application boot and database work over a Windows bind mount. Enabling
-OPcache for the CLI was measured and gave no improvement, so it is not configured.
+The local cost used to be dominated by reading `vendor/` through the Windows bind mount, not by
+application boot or database work as this section previously claimed. Measured inside the container,
+one PHP file took **63 ms** to read through the mount against **0.009 ms** on the container's own
+filesystem. Moving `vendor/` to a named volume (`docker-compose.yml`) took the suite from ~100 s to
+~20 s and an API request from ~3 s to ~0.05 s.
+
+Enabling OPcache for the CLI was measured again afterwards and still gave no improvement, so it stays
+off — the original conclusion was right even though the reason recorded for it was not.
 
 ## Limitations
 
