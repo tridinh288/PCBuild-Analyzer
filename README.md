@@ -217,3 +217,4 @@ Hướng dẫn từng bước, biến môi trường, cách kiểm tra và xử 
 - [Kiểm thử](docs/TESTING.md)
 - [Triển khai](docs/DEPLOYMENT.md)
 - [Nhật ký quyết định](DECISIONS.md)
+- [Mô tả dự án cho CV](docs/CV.md) — kèm số liệu đo được và câu hỏi phỏng vấn thường gặp
