@@ -164,6 +164,7 @@ Optional database check against TiDB from your machine: § TiDB check below
 | `Access denied … for table 'migrations'` in `sys` | `DB_DATABASE` must be `pcbuild`, never `sys`. |
 | "No application encryption key" | `APP_KEY` missing or without the `base64:` prefix. |
 | Image upload: "Chưa cấu hình dịch vụ ảnh" | `CLOUDINARY_URL` not set on the API service. |
+| Images exist in the database but every `image` field is `null` | The API cannot parse `CLOUDINARY_URL`, so it has no cloud name to build a URL from. Check the value on the API service and redeploy. Nothing logs this — the rows look fine and the pictures simply never appear. |
 | Everyone gets 429 at once | Rate limits must see the real client IP; check `trustProxies` in `bootstrap/app.php` (private networks trusted, not `*`). |
 
 ## 6. Security checklist
