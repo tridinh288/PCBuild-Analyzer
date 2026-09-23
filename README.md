@@ -14,7 +14,11 @@ This is a student portfolio project (Junior/Intern Fullstack). The focus is the
 
 ## Live Demo
 
-_TBD (Phase 8)._ Free hosting may take about 1 minute to wake up on the first request.
+- **Web:** https://pcbuild-web.onrender.com
+- **API:** https://pcbuild-api-2mwk.onrender.com/api/status
+
+Free hosting sleeps when idle: the first request can take about 1 minute (the site shows
+"Máy chủ đang khởi động…").
 
 ## Features
 
@@ -106,7 +110,11 @@ MySQL is published on host port `3307` (user `pcbuild`) for GUI clients such as 
 
 ## Deployment
 
-_TBD (Phase 8): Render, TiDB Cloud, Cloudinary._
+Render (Docker API + static site, declared in [`render.yaml`](render.yaml)), TiDB Cloud Starter and
+Cloudinary — all free tiers. The API image is a multi-stage Alpine build (`backend/Dockerfile`) whose
+start script migrates, caches config and routes, and serves on `$PORT`.
+
+Step-by-step guide, environment variables, checks and troubleshooting: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 ## Testing
 

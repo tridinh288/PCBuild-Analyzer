@@ -304,3 +304,10 @@ Decision: `CloudinaryImageStorage` calls the Cloudinary Upload API (signed uploa
 Why: `cloudinary/cloudinary_php` v2/v3 requires Guzzle 7; Laravel 13 ships Guzzle 8, so Composer could only install the legacy v1 SDK (global static configuration, harder to test). The REST calls are small, documented, and testable with `Http::fake()`.
 Alternatives: legacy SDK v1; downgrading Guzzle (breaks Laravel); an unofficial fork.
 Consequences: Deviates from spec section 25 ("official SDK"). Revisit when the SDK supports Guzzle 8: only this class changes. Tests bind `FakeImageStorage` in the base TestCase and block all real HTTP requests.
+
+## D-038: Trusted proxies are listed explicitly (Render + Cloudflare), never '*'
+Status: Accepted (Phase 8)
+Decision: `config/trustedproxy.php` lists REMOTE_ADDR, private networks and Cloudflare's published ranges. The client IP is the rightmost X-Forwarded-For address that is not a trusted proxy.
+Why: Measured on Render: `X-Forwarded-For: <client>, <Cloudflare edge>, <Render 10.x>` with REMOTE_ADDR 127.0.0.1. In Laravel, '*' trusts every address, so a client could spoof its IP with its own header and escape rate limits (caught by a test before deploying). Trusting only private networks made the Cloudflare edge IP look like the client, so limits were split per edge server (seen in production: the counter never decreased).
+Alternatives: '*' (spoofable); reading `CF-Connecting-IP` directly (ties the code to Cloudflare and trusts a header that any direct caller could send).
+Consequences: Cloudflare's ranges must be updated if they change (source and date in the config file). Verified in production: the rate-limit counter decreases per client and spoofed headers are ignored.
