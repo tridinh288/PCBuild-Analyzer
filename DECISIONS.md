@@ -311,3 +311,17 @@ Decision: `config/trustedproxy.php` lists REMOTE_ADDR, private networks and Clou
 Why: Measured on Render: `X-Forwarded-For: <client>, <Cloudflare edge>, <Render 10.x>` with REMOTE_ADDR 127.0.0.1. In Laravel, '*' trusts every address, so a client could spoof its IP with its own header and escape rate limits (caught by a test before deploying). Trusting only private networks made the Cloudflare edge IP look like the client, so limits were split per edge server (seen in production: the counter never decreased).
 Alternatives: '*' (spoofable); reading `CF-Connecting-IP` directly (ties the code to Cloudflare and trusts a header that any direct caller could send).
 Consequences: Cloudflare's ranges must be updated if they change (source and date in the config file). Verified in production: the rate-limit counter decreases per client and spoofed headers are ignored.
+
+## D-039: README is written in Vietnamese, the rest of the docs stay in English
+Status: Accepted (Phase 9)
+Decision: `README.md` is in Vietnamese and carries the architecture diagram plus product screenshots. Every other document (`docs/*.md`, `DECISIONS.md`), along with code, identifiers and commit messages, stays in English.
+Why: Requested by the project owner. The README is the page a Vietnamese reviewer or interviewer opens first, so it works better in the same language as the UI. The remaining docs are read alongside the code, where English keeps them consistent with identifiers.
+Alternatives: keeping the whole README in English (the original core rule); maintaining README.md and README.vi.md side by side (two copies drift apart).
+Consequences: Deviates from the "docs in English" core rule for this one file; CLAUDE.md records the exception. The architecture diagram is generated from `docs/architecture.archify.json` and its source references are pinned to a commit, so both must be regenerated when the layers change.
+
+## D-040: The architecture diagram is generated from a checked-in specification
+Status: Accepted (Phase 9)
+Decision: `docs/architecture.archify.json` is the source; `docs/images/architecture.html` (interactive) and `architecture-light.png` / `architecture-dark.png` (for the README) are generated from it with Archify.
+Why: A diagram drawn by hand drifts from the code within one phase. The specification pins each box to a real file at a fixed commit, and the generator refuses to build when a referenced path no longer exists — so a rename breaks the diagram build instead of silently leaving it wrong.
+Alternatives: an ASCII diagram in the README (no detail, but no drift either — kept in `docs/ARCHITECTURE.md`); a hand-drawn image (drifts, and nothing checks it).
+Consequences: Regenerating needs Archify plus a local Chrome. The pinned revision must be refreshed when the referenced files move; the paths are verified against the repository at build time, not the labels, so wording still needs a human read.
