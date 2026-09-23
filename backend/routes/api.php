@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/status', fn () => ApiResponse::success([
     'name' => config('app.name'),
 ]))->name('status');
+
 Route::middleware('throttle:public')->group(function () {
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/{category:slug}/filters', [CategoryController::class, 'filters'])->name('categories.filters');
