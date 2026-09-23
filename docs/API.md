@@ -68,12 +68,22 @@ Implemented in Phase 4; real examples in § 5. Admin endpoints (§ 3) come in Ph
 
 Limits live in `config/api.php` (env overridable). A 429 response carries `Retry-After`.
 
+`GET /status` is registered outside the `throttle:public` group on purpose. On free hosting the API
+sleeps when idle, and the frontend polls this endpoint to show "Máy chủ đang khởi động…" while the
+container wakes; counting those polls against the user's own 60/min budget would exhaust the limit
+before the first real request. It reads no database and returns only the app name, so leaving it
+unthrottled costs nothing.
+
+`PUT` on the admin resource routes also answers to `PATCH`: `Route::apiResource` registers both verbs
+for the same `update` method. The tables list `PUT` only; `PATCH` behaves identically.
+
 ---
 
 ## 2. Public endpoints
 
 | Method | Path | Purpose | Notes |
 |---|---|---|---|
+| GET | `/status` | Liveness probe: `{ "name": "PCBuild Analyzer" }` | **Not throttled** — see below |
 | GET | `/categories` | Categories in `sort_order`, with slot info | |
 | GET | `/categories/{slug}/filters` | Filter definitions for the category (from config) + available brands | Frontend renders filters from this |
 | GET | `/components` | Catalog | `category` (required), `search`, `brand`, `price_min`, `price_max`, spec filters, `sort`, `page`, `per_page` |

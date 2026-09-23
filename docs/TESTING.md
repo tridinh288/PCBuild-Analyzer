@@ -1,20 +1,25 @@
 # Test Report
 
-State at the end of Phase 7 (2026-09-22). Decisions: D-027 (PHPUnit + MySQL + CI), D-022/D-037 (no
-external calls in tests).
+Re-measured at Phase 9 (2026-09-23); first written at the end of Phase 7. Decisions: D-027 (PHPUnit
++ MySQL + CI), D-022/D-037 (no external calls in tests).
 
 ## Summary
 
 | Suite | Tool | Tests | Result |
 |---|---|---|---|
-| Backend | PHPUnit 12 (Laravel 13) on MySQL 8.4 | 270 tests, 959 assertions | ✅ pass |
-| Frontend | Vitest 5 | 37 tests (11 files) | ✅ pass |
+| Backend | PHPUnit 12 (Laravel 13) on MySQL 8.4 | 272 tests, 966 assertions | ✅ pass |
+| Frontend | Vitest 5 | 37 tests (10 files) | ✅ pass |
 | Lint | Pint (PSR-12 / Laravel), oxlint (warnings denied) | — | ✅ clean |
 | CI | GitHub Actions: backend + frontend jobs on every push | — | ✅ green |
 
-**Backend coverage (PCOV):** lines **98.5 %** (1553/1577), methods 95.7 %, classes 85.6 %.
+**Backend coverage (PCOV):** lines **98.48 %** (1553/1577), methods 95.65 % (418/437),
+classes 85.59 % (95/111).
 Uncovered lines are hardware getters the engine does not use yet (`Cpu::threads`, `Psu::efficiencyRating`…),
 defensive branches (unknown strategy profile) and a few `VerifyDatabaseCommand` failure messages.
+
+The two tests added in Phase 8 (`RateLimitAndCorsTest`, for the client IP behind Cloudflare — D-038)
+raised the count from 270 to 272 but left the covered lines unchanged at 1553/1577: they exercise
+middleware configuration that the existing tests already reached, not new branches.
 
 ## What is tested
 

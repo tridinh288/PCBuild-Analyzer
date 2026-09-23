@@ -53,6 +53,27 @@ Never paste these values into the repository, an issue, or a chat message.
 `VITE_API_URL` is baked in at build time: after changing it, trigger **Manual Deploy → Clear build
 cache & deploy** on `pcbuild-web`.
 
+### Pointing the services at another branch
+
+`render.yaml` does not declare `branch`, so each service tracks whatever branch it was created from —
+during development that is the phase branch. After a phase is merged, move both services to `main`,
+or they keep deploying the old branch and `main` never reaches production.
+
+Do it per service, twice (`pcbuild-api` and `pcbuild-web`):
+
+1. Dashboard → the service → **Settings**.
+2. In **Build & Deploy**, find **Branch** → **Edit** → pick `main` → **Save changes**.
+3. Render redeploys from the new branch. If it does not, use **Manual Deploy → Deploy latest commit**.
+
+For `pcbuild-web`, use **Manual Deploy → Clear build cache & deploy** instead: it is a static site and
+`VITE_API_URL` is compiled into the bundle, so a cached build can ship the old value.
+
+After the redeploy, confirm the browser is really running the new bundle — assets are served with
+`Cache-Control: immutable`, so a stale one survives an ordinary reload. Open the site in a private
+window, or check that the `index-*.js` filename in DevTools → Network matches the one in the new
+`dist/`. A deploy that looks fine to `curl` can still be broken in a browser that cached the previous
+bundle.
+
 ## 3. What happens on each API deploy
 
 `backend/Dockerfile` builds a multi-stage Alpine image (Composer without dev packages, OPcache,

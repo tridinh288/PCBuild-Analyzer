@@ -33,6 +33,7 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
 - Comparison never declares a "winner".
 - Custom configurations are never stored in the database.
 - UI text in Vietnamese; code, identifiers, commits, and docs in English. Currency: VND.
+  Exception: `README.md` is in Vietnamese (D-039). Every other document stays in English.
 
 ## Working method
 
@@ -71,11 +72,14 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
 
 ## Current status
 
-- Phase: 8 — Docker & Deployment on branch `phase/8-deployment`
-- Last completed step: production image (Alpine, 262 MB) verified locally against a fresh MySQL; trusted proxies fixed; `render.yaml` Blueprint; `docs/DEPLOYMENT.md`
-- Live: API https://pcbuild-api-2mwk.onrender.com, web https://pcbuild-web.onrender.com (Render branch `phase/8-deployment`; switch to `main` after merge)
-- Verified live: API, CORS, data, admin login rejects the old dev password, real client IP behind Cloudflare (D-038). Pending: browser check and a real Cloudinary upload by the user
-- Next step: PR and merge, switch Render services to `main`; Phase 9 — Finalization
+- Phase: 9 — Finalization on branch `phase/9-finalization` (Phase 8 merged as PR #7, merge commit `6f85e0a`)
+- Last completed step: all Phase 9 deliverables done — README, screenshots, Domain class diagrams (ARCHITECTURE.md 3b), ERD (already Mermaid in DATABASE.md), API docs gap closed (GET /status), test report re-measured, docs/CV.md
+- Live: API https://pcbuild-api-2mwk.onrender.com, web https://pcbuild-web.onrender.com (Render still builds from `phase/8-deployment`; switch both services to `main`)
+- Verified live in a real browser (headless Chrome over CDP): home, build list and build analysis all load real data — power 392 W, recommended PSU 550 W, selected 450 W, score and price breakdown all render. The earlier `VITE_API_URL` misconfiguration (missing `/api`) is fixed.
+- Verified: API, CORS, data, admin login rejects the old dev password, real client IP behind Cloudflare (D-038); browser check done with headless Chrome over CDP. Pending: a real Cloudinary upload by the user
+- Next step: PR for `phase/9-finalization` and merge after approval; switch Render services to `main`
+- Screenshots: regenerate by running the app locally and capturing with headless Chrome over CDP (the Claude in Chrome extension does not connect on this machine)
+- Architecture diagram: edit `docs/architecture.archify.json`, then `archify deliver architecture <spec> docs/images/architecture.html --quality showcase --repo-root .` (D-040)
 - Production image check: `docker build -t pcbuild-api:prod backend` then run it with production env vars (see `docs/DEPLOYMENT.md`)
 - Pre-commit gate: lint + build + tests must pass before `git commit` (never chain a commit after a failing step)
 - Frontend commands: `npm run dev`, `npm test`, `npx oxlint`, `npm run build` (in `frontend/`)

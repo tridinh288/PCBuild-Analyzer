@@ -1,94 +1,155 @@
 # PCBuild Analyzer
 
 [![CI](https://github.com/tridinh288/PCBuild-Analyzer/actions/workflows/ci.yml/badge.svg)](https://github.com/tridinh288/PCBuild-Analyzer/actions/workflows/ci.yml)
+![PHP](https://img.shields.io/badge/PHP-8.3-777BB4?logo=php&logoColor=white)
+![Laravel](https://img.shields.io/badge/Laravel-13-FF2D20?logo=laravel&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
+![Tests](https://img.shields.io/badge/tests-272%20backend%20%C2%B7%2037%20frontend-success)
 
-> Status: in development (Phase 1 — Planning). Sections marked _TBD_ are filled in later phases.
+Ứng dụng web phân tích cấu hình PC: xem các cấu hình mẫu, tùy chỉnh lại hoặc tự build từ đầu, rồi
+nhận ngay kết quả **kiểm tra tương thích**, **ước tính công suất** kèm mức nguồn khuyến nghị,
+**phân tích giá** theo từng nhóm linh kiện và **điểm cấu hình ước tính** theo mục đích sử dụng.
+Có thể so sánh nhiều cấu hình cạnh nhau và chia sẻ bằng link — **không cần tài khoản**.
 
-A public web app for analyzing PC builds: browse admin-curated templates, customize them or build
-from scratch, and get real-time compatibility checks, an estimated power draw with a recommended
-PSU, a price breakdown, and an estimated configuration score. Configurations can be compared
-side by side and shared by link — no account needed.
+Đây là đồ án cá nhân (Junior/Intern Fullstack). Trọng tâm là **engine phân tích cấu hình**, không
+phải CRUD. Đây **không phải** trang thương mại điện tử: không có giỏ hàng, thanh toán hay đơn hàng.
 
-This is a student portfolio project (Junior/Intern Fullstack). The focus is the
-**PC Build Analysis Engine**, not CRUD. It is **not** an e-commerce site: no cart, payment, or orders.
+## Demo
 
-## Live Demo
-
-- **Web:** https://pcbuild-web.onrender.com
-- **API:** https://pcbuild-api-2mwk.onrender.com/api/status
-
-Free hosting sleeps when idle: the first request can take about 1 minute (the site shows
-"Máy chủ đang khởi động…").
-
-## Features
-
-- Browse, filter, and compare PC build templates
-- Builder: customize a template or start from scratch, in any order
-- Real-time compatibility checks (13 rules: socket, RAM type/capacity, form factors, clearances, PSU wattage, …)
-- Power estimate and recommended PSU size
-- Price breakdown by category (VND)
-- Estimated configuration score per profile: Gaming, Programming, Workstation, General Use
-- Share configurations by link or as text; draft autosave
-- Component catalog with category-specific filters
-- Admin area: products, templates, images
-
-## Tech Stack
-
-| Layer | Technology |
+|  |  |
 |---|---|
-| Backend | PHP 8.3, Laravel 13, Eloquent, Sanctum (API tokens), PHPUnit |
+| **Web** | https://pcbuild-web.onrender.com |
+| **API** | https://pcbuild-api-2mwk.onrender.com/api/status |
+
+> Hosting miễn phí sẽ ngủ khi không có người dùng: request đầu tiên có thể mất khoảng 1 phút
+> (giao diện hiện dòng "Máy chủ đang khởi động…").
+
+## Hình ảnh
+
+Ảnh chụp từ ứng dụng chạy thật với dữ liệu đã seed.
+
+### Phân tích một cấu hình
+
+Tương thích, công suất ước tính, nguồn khuyến nghị và điểm số — tất cả tính lại theo thời gian thực.
+
+![Trang phân tích cấu hình](docs/images/build-analysis.png)
+
+### Tự build cấu hình
+
+Chọn linh kiện theo thứ tự bất kỳ. Mỗi lần chọn, engine chạy lại toàn bộ luật và cập nhật phân bổ chi phí.
+
+![Trình tự build cấu hình](docs/images/builder.png)
+
+### So sánh cấu hình
+
+Đặt 2–3 cấu hình cạnh nhau. Bảng so sánh **không bao giờ tuyên bố cấu hình nào "thắng"** — chỉ trình bày khác biệt.
+
+![Trang so sánh cấu hình](docs/images/compare.png)
+
+<details>
+<summary><b>Xem thêm ảnh</b> — trang chủ, danh sách cấu hình mẫu, danh mục linh kiện</summary>
+
+![Trang chủ](docs/images/home.png)
+
+![Danh sách cấu hình mẫu](docs/images/builds.png)
+
+![Danh mục linh kiện](docs/images/components.png)
+
+</details>
+
+## Tính năng
+
+- Xem, lọc và so sánh các cấu hình mẫu do admin dựng sẵn
+- Tự build: tùy chỉnh từ một cấu hình mẫu hoặc bắt đầu từ con số không, theo thứ tự bất kỳ
+- Kiểm tra tương thích theo thời gian thực — **13 luật**: socket, loại và dung lượng RAM, form factor,
+  khoảng hở card đồ họa và tản nhiệt, công suất nguồn, cổng xuất hình…
+- Ước tính công suất tiêu thụ và mức nguồn khuyến nghị
+- Phân tích giá theo từng nhóm linh kiện (VND)
+- Điểm cấu hình ước tính theo 4 hồ sơ: **Chơi game, Lập trình, Workstation, Sử dụng chung**
+- Chia sẻ cấu hình bằng link hoặc dạng văn bản; tự lưu nháp
+- Danh mục linh kiện với bộ lọc riêng cho từng nhóm
+- Khu vực quản trị: linh kiện, cấu hình mẫu, hình ảnh
+
+## Kiến trúc
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/architecture-dark.png">
+  <img alt="Kiến trúc phân tầng của PCBuild Analyzer" src="docs/images/architecture-light.png">
+</picture>
+
+> Bản tương tác (bấm vào từng khối để mở đúng file mã nguồn):
+> [`docs/images/architecture.html`](docs/images/architecture.html) — tải về rồi mở bằng trình duyệt.
+
+Quy tắc quan trọng nhất là khung kẻ đứt màu cam: **Domain là PHP thuần**. Các lớp bên trong không
+chạm vào database, HTTP hay `config()`; mọi giá trị cấu hình được truyền vào qua constructor lúc
+container dựng object. Nhờ vậy:
+
+- Test được bằng `PHPUnit\Framework\TestCase` trần, không cần khởi động Laravel — mỗi test vài mili giây.
+- Engine chạy **giống hệt nhau** cho cấu hình mẫu (lấy từ database) và cấu hình tự build (chỉ nằm trên URL).
+
+Một vài quyết định đáng chú ý khác:
+
+| Quyết định | Lý do |
+|---|---|
+| Luật tương thích chỉ viết bằng PHP, **không nhân bản sang SQL** | Một nguồn sự thật duy nhất, tránh hai phiên bản luật lệch nhau |
+| `config/hardware.php` là nguồn duy nhất cho spec, nhãn, đơn vị, luật slot và hằng số điện | Không có magic number rải rác trong code |
+| Cấu hình tự build **không bao giờ lưu vào database** | Không cần tài khoản, chia sẻ bằng link là đủ |
+| Controller mỏng, logic nằm ở Service và Domain | Controller chỉ điều phối HTTP |
+| Rule và analyzer nhận `BuildConfiguration`, không nhận Eloquent model | Giữ Domain tách khỏi tầng dữ liệu |
+
+**Class diagram** của tầng Domain (4 sơ đồ: Configuration + Hardware, Compatibility, Specification,
+Analysis) nằm ở [docs/ARCHITECTURE.md § 3b](docs/ARCHITECTURE.md#3b-domain-class-diagrams).
+**ERD** của cơ sở dữ liệu ở [docs/DATABASE.md § 1](docs/DATABASE.md#1-erd). Cả hai viết bằng Mermaid
+nên GitHub render trực tiếp, không cần ảnh rời dễ lệch với code.
+
+Chi tiết: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · Nhật ký quyết định: [DECISIONS.md](DECISIONS.md)
+
+## Công nghệ sử dụng
+
+| Tầng | Công nghệ |
+|---|---|
+| Backend | PHP 8.3, Laravel 13, Eloquent, Sanctum (API token), PHPUnit |
 | Frontend | React, Vite, JavaScript, React Router, Axios, Tailwind CSS |
-| Database | MySQL 8 (local, Docker) · TiDB Cloud Starter (production) |
-| Images | Cloudinary |
-| Hosting | Render (API as Docker web service, React as static site) |
+| Database | MySQL 8 (local, chạy trong Docker) · TiDB Cloud Starter (production) |
+| Hình ảnh | Cloudinary (chỉ lưu `public_id`) |
+| Hạ tầng | Render (API là Docker web service, React là static site) |
 | CI | GitHub Actions |
 
-## Architecture
+## Design pattern
 
-```text
-React → Axios → Laravel REST API → Controller (thin) → Service → Domain → Repository → Eloquent → MySQL/TiDB
-```
+MVC, Service Layer, Repository, Strategy, Factory, Specification, Dependency Injection — chỗ nào
+dùng và chỗ nào **cố ý không dùng**:
+[docs/ARCHITECTURE.md § 4](docs/ARCHITECTURE.md#4-design-patterns--where-and-where-not).
 
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Deployment diagram: _TBD (Phase 8)._
+## Giới hạn của phần phân tích
 
-## Database
+Phần này quan trọng, xin nói rõ:
 
-See [docs/DATABASE.md](docs/DATABASE.md). ERD image: _TBD (Phase 9)._
+- **Công suất là số ước tính**, tính từ TDP của linh kiện cộng các hằng số cố định (hệ số 1,25).
+  Đây không phải số đo thực tế.
+- **Điểm cấu hình là thang điểm do dự án tự định nghĩa**, dựa trên mức hiệu năng do admin nhập tay.
+  Đây không phải dữ liệu benchmark.
+- **So sánh không bao giờ tuyên bố cấu hình nào thắng** — chỉ đặt các con số cạnh nhau.
+- Phần tương thích mới phủ 13 luật kể trên. Một số ràng buộc vật lý khác (kích thước radiator,
+  đầu cấp nguồn PCIe, số khay ổ cứng) **chưa được kiểm tra**.
 
-## API Documentation
+## Yêu cầu môi trường
 
-See [docs/API.md](docs/API.md). Example requests: _TBD (Phase 4)._
-
-## Design Patterns
-
-MVC, Service Layer, Repository, Strategy, Factory, Specification, Dependency Injection — where each
-is used and where it is deliberately not used: [docs/ARCHITECTURE.md § 4](docs/ARCHITECTURE.md#4-design-patterns--where-and-where-not).
-
-## Analysis Limitations
-
-- Power consumption is a rule-based **estimate** from component TDP plus fixed constants, not a measurement.
-- The configuration score is a **project-defined** weighted score based on admin-entered performance
-  tiers. It is not benchmark data.
-- Compatibility covers the rules listed above; some physical constraints (radiator size, PCIe power
-  connectors, drive bays) are not checked yet.
-
-## Requirements
-
-- PHP 8.3+ and Composer 2 (host, for tooling)
-- Node.js 20+ (tested with 24) and npm
-- Docker Desktop with Docker Compose
+- PHP 8.3+ và Composer 2 (trên máy host, dùng cho tooling)
+- Node.js 20+ (đã kiểm tra với 24) và npm
+- Docker Desktop kèm Docker Compose
 - Git
 
-Check: `php -v` must report 8.3 or newer.
+Kiểm tra: `php -v` phải báo 8.3 trở lên.
 
-## Installation (local)
+## Cài đặt (chạy local)
 
-The API and MySQL run in Docker; the React app runs on the host (D-025).
+API và MySQL chạy trong Docker; React chạy trên host (D-025).
 
 ```bash
-# 1. Environment
+# 1. Biến môi trường
 cp backend/.env.example backend/.env
-#    set DB_PASSWORD=pcbuild_local (matches docker-compose.yml) and ADMIN_EMAIL / ADMIN_PASSWORD
+#    đặt DB_PASSWORD=pcbuild_local (khớp docker-compose.yml) và ADMIN_EMAIL / ADMIN_PASSWORD
 
 # 2. API + MySQL
 docker compose up -d --build
@@ -96,51 +157,64 @@ docker compose exec app composer install
 docker compose exec app php artisan key:generate
 docker compose exec app php artisan migrate --seed
 
-# 3. Check
+# 3. Kiểm tra
 curl http://localhost:8000/api/status
 
-# 4. Frontend (on the host, D-025)
+# 4. Frontend (chạy trên host, D-025)
 cd frontend
 cp .env.example .env        # VITE_API_URL=http://localhost:8000/api
 npm install
 npm run dev                 # http://localhost:5173
 ```
 
-MySQL is published on host port `3307` (user `pcbuild`) for GUI clients such as HeidiSQL.
+MySQL mở ở cổng `3307` trên host (user `pcbuild`) để dùng với HeidiSQL hoặc client GUI khác.
 
-## Deployment
+> `VITE_API_URL` **phải có đuôi `/api`**. Thiếu phần này thì mọi request rơi vào 404 và trình duyệt
+> báo "Không kết nối được máy chủ", vì CORS chỉ áp cho các đường dẫn `api/*`.
 
-Render (Docker API + static site, declared in [`render.yaml`](render.yaml)), TiDB Cloud Starter and
-Cloudinary — all free tiers. The API image is a multi-stage Alpine build (`backend/Dockerfile`) whose
-start script migrates, caches config and routes, and serves on `$PORT`.
+## Kiểm thử
 
-Step-by-step guide, environment variables, checks and troubleshooting: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
-
-## Testing
-
-270 backend tests (98.5 % line coverage) and 37 frontend tests, run by GitHub Actions on every push.
-PHPUnit runs against a separate `pcbuild_test` MySQL database (created by `docker/mysql/init`); tests
-never call external services.
+**272 test backend** (966 assertion) và **37 test frontend**, chạy tự động bằng GitHub Actions ở mỗi
+lần push. Độ phủ dòng của backend là **98,48 %** (1553/1577), method 95,65 %, class 85,59 % —
+đo bằng PCOV, xem [docs/TESTING.md](docs/TESTING.md).
+PHPUnit chạy trên database `pcbuild_test` riêng (tạo bởi `docker/mysql/init`); test **không bao giờ
+gọi dịch vụ bên ngoài**.
 
 ```bash
-docker compose exec app php artisan test                  # add --parallel --processes=4 to go faster
-docker compose exec app php artisan app:verify-database   # JSON queries / FK checks on the current DB
-cd frontend && npm test                                     # frontend unit tests (Vitest)
+docker compose exec app php artisan test                  # thêm --parallel --processes=4 cho nhanh
+docker compose exec app php artisan app:verify-database   # kiểm tra truy vấn JSON và khóa ngoại
+cd frontend && npm test                                   # test frontend (Vitest)
 ```
 
-Full report, requirement-by-requirement mapping and coverage: [docs/TESTING.md](docs/TESTING.md).
+Báo cáo đầy đủ và bảng đối chiếu từng yêu cầu: [docs/TESTING.md](docs/TESTING.md).
 
-## Screenshots
+## Triển khai
 
-_TBD (Phase 9)._
+Render (API dạng Docker và static site, khai báo trong [`render.yaml`](render.yaml)), TiDB Cloud
+Starter và Cloudinary — tất cả đều dùng gói miễn phí. Image của API là bản multi-stage nền Alpine
+(`backend/Dockerfile`, 262 MB); script khởi động chạy migration, cache config và route, rồi phục vụ
+trên `$PORT`.
 
-## Future Improvements
+Một điểm đáng lưu ý khi chạy sau proxy: trên Render, request đi qua **Cloudflare → proxy nội bộ của
+Render → app**, nên `config/trustedproxy.php` phải liệt kê đủ các chặng đó. Dùng `'*'` sẽ cho phép
+client tự giả IP và vượt rate limit; ngược lại, chỉ tin mạng nội bộ thì IP của Cloudflare bị hiểu
+nhầm là IP người dùng. Chi tiết ở D-038 trong [DECISIONS.md](DECISIONS.md).
 
-- More compatibility rules: AIO radiator size vs case, GPU power connectors vs PSU, drive bays
-- "Explain this build" (AI) based only on verified analysis data
-- Multi-language UI
+Hướng dẫn từng bước, biến môi trường, cách kiểm tra và xử lý lỗi: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
-## Project Documents
+## Hướng phát triển
 
-- [Project specification](docs/PROJECT_SPEC.md)
-- [Decisions log](DECISIONS.md)
+- Thêm luật tương thích: kích thước radiator AIO với vỏ case, đầu cấp nguồn PCIe, số khay ổ cứng
+- "Giải thích cấu hình này" bằng AI, chỉ dựa trên dữ liệu phân tích đã kiểm chứng
+- Giao diện đa ngôn ngữ
+
+## Tài liệu dự án
+
+- [Đặc tả dự án](docs/PROJECT_SPEC.md)
+- [Kiến trúc](docs/ARCHITECTURE.md)
+- [Cơ sở dữ liệu](docs/DATABASE.md)
+- [Tài liệu API](docs/API.md)
+- [Kiểm thử](docs/TESTING.md)
+- [Triển khai](docs/DEPLOYMENT.md)
+- [Nhật ký quyết định](DECISIONS.md)
+- [Mô tả dự án cho CV](docs/CV.md) — kèm số liệu đo được và câu hỏi phỏng vấn thường gặp
