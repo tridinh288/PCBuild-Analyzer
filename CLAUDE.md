@@ -81,9 +81,11 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
 - Verified: API, CORS, seeded data, admin login rejects the old dev password, real client IP behind
   Cloudflare (D-038), rate limit counts per client.
 - **Only open item: a real Cloudinary upload has never run.** Every test binds `FakeImageStorage` and
-  blocks outbound HTTP, so the live upload path is unexercised. The owner will do this manually.
-  Build cards currently show the "PC Build" placeholder; once real images exist, re-take the README
-  screenshots.
+  blocks outbound HTTP, so the live upload path is unexercised. The images themselves are ready:
+  60 generated cards in `backend/resources/seed-images/`, uploaded by
+  `php artisan app:import-images` from the Render shell (D-041, steps in `docs/DEPLOYMENT.md` § 2).
+  Run it with `--dry-run` first. Afterwards the build cards stop showing the "PC Build" placeholder,
+  so the README screenshots are worth re-taking.
 
 ### If work resumes
 

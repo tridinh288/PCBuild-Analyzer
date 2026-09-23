@@ -74,6 +74,35 @@ window, or check that the `index-*.js` filename in DevTools → Network matches 
 `dist/`. A deploy that looks fine to `curl` can still be broken in a browser that cached the previous
 bundle.
 
+### Loading the placeholder images
+
+The seeded parts and templates have no photographs. `backend/resources/seed-images/` holds a
+generated card per row — the real model name, the real highlight specs and the real price on a
+category-coloured background (D-041). Upload them once, after the database is seeded:
+
+```bash
+# Render Dashboard → pcbuild-api → Shell
+php artisan app:import-images --dry-run   # matches files to rows, uploads nothing
+php artisan app:import-images             # 50 products + 10 builds
+```
+
+Files are matched to rows by slug (`products/<slug>.jpg`, `builds/<slug>.jpg`). Rows that already
+have an image are skipped, so an interrupted run can just be repeated; `--force` replaces them and
+deletes the image it replaced. A file whose slug matches no row is reported and fails the command
+rather than being ignored.
+
+To regenerate the cards — after editing the seed data, or to change the design:
+
+```bash
+# Locally, with the stack running; needs Chrome, which the server does not have
+node tools/export-seed-data.mjs      # refresh tools/seed-data.json from the API
+node tools/generate-seed-images.mjs  # redraw the 60 cards
+```
+
+The export reads the **public API**, not the database, so the specs printed on a card are formatted
+by `config/hardware.php` exactly as the UI formats them ("2.000 GB", "65 W", "AM5") instead of being
+re-derived from raw JSON. Point it elsewhere with `--api https://pcbuild-api-2mwk.onrender.com/api`.
+
 ## 3. What happens on each API deploy
 
 `backend/Dockerfile` builds a multi-stage Alpine image (Composer without dev packages, OPcache,
