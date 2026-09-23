@@ -16,9 +16,10 @@
  *   node tools/generate-seed-images.mjs                 # reads tools/seed-data.json
  *   node tools/generate-seed-images.mjs --port 9400     # if 9337 is busy
  *
- * Regenerating the data file is documented in docs/DEPLOYMENT.md.
+ * Refresh the data file first with `node tools/export-seed-data.mjs` (docs/DEPLOYMENT.md § 2).
  */
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -139,7 +140,8 @@ const send = (ws, method, params = {}) => {
       const d = JSON.parse(e.data);
       if (d.id === id) {
         ws.removeEventListener('message', onMsg);
-        d.error ? reject(new Error(method + ': ' + JSON.stringify(d.error))) : resolve(d.result);
+        if (d.error) reject(new Error(method + ': ' + JSON.stringify(d.error)));
+        else resolve(d.result);
       }
     };
     ws.addEventListener('message', onMsg);
@@ -177,7 +179,9 @@ const jobs = [
 fs.mkdirSync(path.join(OUT, 'products'), { recursive: true });
 fs.mkdirSync(path.join(OUT, 'builds'), { recursive: true });
 
-const profile = path.join(OUT, '.chrome-profile');
+// Outside OUT on purpose: that folder is committed, and Chrome leaves a profile behind whenever
+// the cleanup below cannot delete it.
+const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'pcbuild-cards-'));
 const chrome = spawn(
   chromePath(),
   [
@@ -225,6 +229,16 @@ try {
     /* already closed */
   }
   chrome.kill();
-  await sleep(600);
-  fs.rmSync(profile, { recursive: true, force: true });
+  // Windows keeps the profile's files locked for a moment after the process dies, so a single
+  // immediate delete loses a race that a short retry wins. A profile left in the temp folder is
+  // not worth failing a finished render over.
+  for (let i = 0; i < 10; i++) {
+    await sleep(300);
+    try {
+      fs.rmSync(profile, { recursive: true, force: true });
+      break;
+    } catch {
+      /* still locked */
+    }
+  }
 }
