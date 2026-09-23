@@ -169,8 +169,9 @@ MySQL mở ở cổng `3307` trên host (user `pcbuild`) để dùng với Heidi
 
 ## Kiểm thử
 
-**272 test backend** và **37 test frontend**, chạy tự động bằng GitHub Actions ở mỗi lần push.
-Độ phủ dòng của backend là 98,5 % (đo ở Phase 7, xem [docs/TESTING.md](docs/TESTING.md)).
+**272 test backend** (966 assertion) và **37 test frontend**, chạy tự động bằng GitHub Actions ở mỗi
+lần push. Độ phủ dòng của backend là **98,48 %** (1553/1577), method 95,65 %, class 85,59 % —
+đo bằng PCOV, xem [docs/TESTING.md](docs/TESTING.md).
 PHPUnit chạy trên database `pcbuild_test` riêng (tạo bởi `docker/mysql/init`); test **không bao giờ
 gọi dịch vụ bên ngoài**.
 
