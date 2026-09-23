@@ -41,6 +41,9 @@ class ImportImagesCommand extends Command
 
     private int $failed = 0;
 
+    /** Set when the image service itself fails, so the remaining files are not retried. */
+    private bool $aborted = false;
+
     public function handle(ProductService $products, BuildService $builds): int
     {
         $root = base_path((string) $this->argument('path'));
@@ -64,6 +67,13 @@ class ImportImagesCommand extends Command
         $this->newLine();
         $this->line("Uploaded {$this->uploaded}, skipped {$this->skipped}, failed {$this->failed}.");
 
+        if ($this->aborted) {
+            $this->newLine();
+            $this->error('Stopped at the first upload failure: the remaining files would fail the same way.');
+            $this->line('Rows already uploaded keep their image. Fix the cause and run the command again '
+                .'to carry on from where it stopped.');
+        }
+
         return $this->failed > 0 ? self::FAILURE : self::SUCCESS;
     }
 
@@ -73,6 +83,10 @@ class ImportImagesCommand extends Command
      */
     private function section(string $label, string $folder, string $model, callable $replace): void
     {
+        if ($this->aborted) {
+            return;
+        }
+
         $this->newLine();
         $this->line($label);
 
@@ -93,6 +107,10 @@ class ImportImagesCommand extends Command
         }
 
         foreach ($files as $file) {
+            if ($this->aborted) {
+                return;
+            }
+
             $this->importOne($file, $model, $replace);
         }
     }
@@ -132,7 +150,10 @@ class ImportImagesCommand extends Command
             $this->uploaded++;
             $this->info("  {$slug} — uploaded");
         } catch (ImageStorageException $e) {
+            // Every cause of this is systemic — unconfigured, unreachable, credentials rejected —
+            // so carrying on only prints the same line once per file and buries the reason.
             $this->failed++;
+            $this->aborted = true;
             $this->error("  {$slug} — {$e->getMessage()}");
         }
     }

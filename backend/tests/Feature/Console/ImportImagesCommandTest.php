@@ -50,9 +50,13 @@ class ImportImagesCommandTest extends TestCase
         ));
     }
 
+    /** One shared category: its slug is unique, so a second one per product would collide. */
     private function product(string $slug): Product
     {
-        return Product::factory()->for(Category::factory()->state(['slug' => 'cpu']))->create(['slug' => $slug]);
+        $category = Category::query()->firstWhere('slug', 'cpu')
+            ?? Category::factory()->state(['slug' => 'cpu'])->create();
+
+        return Product::factory()->for($category)->create(['slug' => $slug]);
     }
 
     public function test_it_uploads_images_and_records_the_public_id(): void
@@ -136,6 +140,43 @@ class ImportImagesCommandTest extends TestCase
         $this->artisan('app:import-images', ['path' => $this->path()])->assertFailed();
 
         $this->assertNull($product->refresh()->image_public_id);
+    }
+
+    /**
+     * A broken image service fails every file identically, which buries the reason under one
+     * line per file. Stopping at the first one keeps the message readable; the command is
+     * idempotent, so a re-run carries on.
+     */
+    public function test_an_upload_failure_stops_the_run_instead_of_retrying_every_file(): void
+    {
+        $this->product('amd-ryzen-5-5600');
+        $this->product('amd-ryzen-7-7700');
+        Build::factory()->create(['slug' => 'gaming-1440p']);
+        $this->image('products', 'amd-ryzen-5-5600');
+        $this->image('products', 'amd-ryzen-7-7700');
+        $this->image('builds', 'gaming-1440p');
+        $this->images->failUploads = true;
+
+        $this->artisan('app:import-images', ['path' => $this->path()])
+            ->expectsOutputToContain('Uploaded 0, skipped 0, failed 1.')
+            ->assertFailed();
+    }
+
+    /** Partial progress survives: the rows done before the failure keep their image. */
+    public function test_rows_uploaded_before_a_failure_keep_their_image(): void
+    {
+        $first = $this->product('amd-ryzen-5-5600');
+        $second = $this->product('amd-ryzen-7-7700');
+        $this->image('products', 'amd-ryzen-5-5600');
+        $this->image('products', 'amd-ryzen-7-7700');
+
+        // Succeed once, then break the service, as a revoked credential or an outage would.
+        $this->images->failAfter = 1;
+
+        $this->artisan('app:import-images', ['path' => $this->path()])->assertFailed();
+
+        $this->assertNotNull($first->refresh()->image_public_id);
+        $this->assertNull($second->refresh()->image_public_id);
     }
 
     public function test_a_missing_folder_is_reported_instead_of_crashing(): void

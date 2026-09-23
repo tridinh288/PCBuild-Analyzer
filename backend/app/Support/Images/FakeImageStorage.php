@@ -18,9 +18,12 @@ class FakeImageStorage implements ImageStorage
 
     public bool $failUploads = false;
 
+    /** Succeed this many uploads, then fail: an outage or a revoked credential mid-run. */
+    public ?int $failAfter = null;
+
     public function upload(UploadedFile $file, string $folder): string
     {
-        if ($this->failUploads) {
+        if ($this->failUploads || ($this->failAfter !== null && count($this->uploaded) >= $this->failAfter)) {
             throw new ImageStorageException('Không tải được ảnh lên, vui lòng thử lại.');
         }
 
