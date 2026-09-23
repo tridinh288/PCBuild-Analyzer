@@ -28,6 +28,11 @@ phải CRUD. Đây **không phải** trang thương mại điện tử: không c
 
 Ảnh chụp từ ứng dụng chạy thật với dữ liệu đã seed.
 
+> Ảnh của linh kiện và cấu hình là **thẻ minh hoạ tự sinh**, không phải ảnh chụp sản phẩm: mỗi thẻ
+> hiển thị đúng tên model, thông số nổi bật và giá của chính linh kiện đó. Dùng ảnh sản phẩm lấy
+> trên mạng vừa vướng bản quyền, vừa dễ hiển thị sai linh kiện — mà đây lại là app phân tích cấu
+> hình (D-041).
+
 ### Phân tích một cấu hình
 
 Tương thích, công suất ước tính, nguồn khuyến nghị và điểm số — tất cả tính lại theo thời gian thực.

@@ -74,6 +74,54 @@ window, or check that the `index-*.js` filename in DevTools → Network matches 
 `dist/`. A deploy that looks fine to `curl` can still be broken in a browser that cached the previous
 bundle.
 
+### Loading the placeholder images
+
+The seeded parts and templates have no photographs. `backend/resources/seed-images/` holds a
+generated card per row — the real model name, the real highlight specs and the real price on a
+category-coloured background (D-041). Upload them once, after the database is seeded:
+
+```bash
+# Render Dashboard → pcbuild-api → Shell
+php artisan app:import-images --dry-run   # matches files to rows, uploads nothing
+php artisan app:import-images             # 50 products + 10 builds
+```
+
+**The free plan has no Shell.** Run the same command from your own machine instead, pointed at the
+production database with `--env=tidb` (§ TiDB check below). The command only needs the database and
+the Cloudinary API, both reachable from anywhere — nothing about it requires running on the server:
+
+```bash
+# 1. Put the CLOUDINARY_URL from the Render dashboard into backend/.env.tidb (the key is
+#    already there, empty). That file is gitignored; leave ADMIN_PASSWORD empty as before.
+# 2. Confirm the target is `pcbuild`, never `sys`:
+docker compose exec app php artisan db:show --env=tidb
+# 3. Match files to rows without uploading, then upload:
+docker compose exec app php artisan app:import-images --env=tidb --dry-run
+docker compose exec app php artisan app:import-images --env=tidb
+```
+
+This writes `image_public_id` on live rows and uploads to the live Cloudinary account, so it is a
+real production change — but a narrow one: it touches no other column, creates and deletes no rows,
+and the `--dry-run` above shows exactly which rows it will touch first. Unlike `migrate:fresh` or
+`db:seed`, it is safe to run against the live database from a laptop.
+
+Files are matched to rows by slug (`products/<slug>.jpg`, `builds/<slug>.jpg`). Rows that already
+have an image are skipped, so an interrupted run can just be repeated; `--force` replaces them and
+deletes the image it replaced. A file whose slug matches no row is reported and fails the command
+rather than being ignored.
+
+To regenerate the cards — after editing the seed data, or to change the design:
+
+```bash
+# Locally, with the stack running; needs Chrome, which the server does not have
+node tools/export-seed-data.mjs      # refresh tools/seed-data.json from the API
+node tools/generate-seed-images.mjs  # redraw the 60 cards
+```
+
+The export reads the **public API**, not the database, so the specs printed on a card are formatted
+by `config/hardware.php` exactly as the UI formats them ("2.000 GB", "65 W", "AM5") instead of being
+re-derived from raw JSON. Point it elsewhere with `--api https://pcbuild-api-2mwk.onrender.com/api`.
+
 ## 3. What happens on each API deploy
 
 `backend/Dockerfile` builds a multi-stage Alpine image (Composer without dev packages, OPcache,
@@ -178,6 +226,10 @@ docker compose exec app php artisan app:verify-database --env=tidb
 > three delete everything. `app:verify-database` only reads, plus one insert inside a transaction that
 > is rolled back. The first-time setup in Phase 2 used `migrate:fresh --seed --env=tidb` on an empty
 > database; schema changes now happen through the deploy start script (`migrate --force`).
+>
+> `--env=tidb` is not off limits in itself — those four commands are. `app:import-images --env=tidb`
+> is the intended way to load the images on the free plan (§ 2): it only sets `image_public_id` on
+> rows that already exist.
 
 Expected output: every line `PASS`, then `All checks passed.` The command compares each SQL result
 with the same filter computed in PHP, so a silent difference (e.g. JSON numbers compared as strings)

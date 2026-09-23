@@ -1,0 +1,711 @@
+{
+ "products": [
+  {
+   "slug": "amd-ryzen-5-5600",
+   "name": "AMD Ryzen 5 5600",
+   "brand": "AMD",
+   "category": "cpu",
+   "category_name": "CPU",
+   "price": 2890000,
+   "highlights": [
+    "AM4",
+    "6",
+    "65 W"
+   ]
+  },
+  {
+   "slug": "amd-ryzen-5-7600",
+   "name": "AMD Ryzen 5 7600",
+   "brand": "AMD",
+   "category": "cpu",
+   "category_name": "CPU",
+   "price": 5290000,
+   "highlights": [
+    "AM5",
+    "6",
+    "65 W"
+   ]
+  },
+  {
+   "slug": "amd-ryzen-7-7700",
+   "name": "AMD Ryzen 7 7700",
+   "brand": "AMD",
+   "category": "cpu",
+   "category_name": "CPU",
+   "price": 7490000,
+   "highlights": [
+    "AM5",
+    "8",
+    "65 W"
+   ]
+  },
+  {
+   "slug": "amd-ryzen-7-7800x3d",
+   "name": "AMD Ryzen 7 7800X3D",
+   "brand": "AMD",
+   "category": "cpu",
+   "category_name": "CPU",
+   "price": 10990000,
+   "highlights": [
+    "AM5",
+    "8",
+    "120 W"
+   ]
+  },
+  {
+   "slug": "intel-core-i3-12100f",
+   "name": "Intel Core i3-12100F",
+   "brand": "Intel",
+   "category": "cpu",
+   "category_name": "CPU",
+   "price": 2190000,
+   "highlights": [
+    "LGA1700",
+    "4",
+    "58 W"
+   ]
+  },
+  {
+   "slug": "intel-core-i5-13400",
+   "name": "Intel Core i5-13400",
+   "brand": "Intel",
+   "category": "cpu",
+   "category_name": "CPU",
+   "price": 5190000,
+   "highlights": [
+    "LGA1700",
+    "10",
+    "65 W"
+   ]
+  },
+  {
+   "slug": "intel-core-i7-14700k",
+   "name": "Intel Core i7-14700K",
+   "brand": "Intel",
+   "category": "cpu",
+   "category_name": "CPU",
+   "price": 9990000,
+   "highlights": [
+    "LGA1700",
+    "20",
+    "125 W"
+   ]
+  },
+  {
+   "slug": "intel-core-ultra-5-245k",
+   "name": "Intel Core Ultra 5 245K",
+   "brand": "Intel",
+   "category": "cpu",
+   "category_name": "CPU",
+   "price": 7990000,
+   "highlights": [
+    "LGA1851",
+    "14",
+    "125 W"
+   ]
+  },
+  {
+   "slug": "asus-prime-z890-p",
+   "name": "ASUS PRIME Z890-P",
+   "brand": "ASUS",
+   "category": "motherboard",
+   "category_name": "Bo mạch chủ",
+   "price": 6990000,
+   "highlights": [
+    "LGA1851",
+    "DDR5",
+    "ATX"
+   ]
+  },
+  {
+   "slug": "asus-rog-strix-b650-a-gaming-wifi",
+   "name": "ASUS ROG STRIX B650-A GAMING WIFI",
+   "brand": "ASUS",
+   "category": "motherboard",
+   "category_name": "Bo mạch chủ",
+   "price": 6490000,
+   "highlights": [
+    "AM5",
+    "DDR5",
+    "ATX"
+   ]
+  },
+  {
+   "slug": "asus-rog-strix-b650e-i-gaming-wifi",
+   "name": "ASUS ROG STRIX B650E-I GAMING WIFI",
+   "brand": "ASUS",
+   "category": "motherboard",
+   "category_name": "Bo mạch chủ",
+   "price": 7990000,
+   "highlights": [
+    "AM5",
+    "DDR5",
+    "Mini-ITX"
+   ]
+  },
+  {
+   "slug": "gigabyte-b650m-gaming-x-ax",
+   "name": "Gigabyte B650M GAMING X AX",
+   "brand": "Gigabyte",
+   "category": "motherboard",
+   "category_name": "Bo mạch chủ",
+   "price": 4290000,
+   "highlights": [
+    "AM5",
+    "DDR5",
+    "Micro-ATX"
+   ]
+  },
+  {
+   "slug": "msi-b550m-pro-vdh-wifi",
+   "name": "MSI B550M PRO-VDH WIFI",
+   "brand": "MSI",
+   "category": "motherboard",
+   "category_name": "Bo mạch chủ",
+   "price": 2590000,
+   "highlights": [
+    "AM4",
+    "DDR4",
+    "Micro-ATX"
+   ]
+  },
+  {
+   "slug": "msi-pro-b760m-a-ddr4",
+   "name": "MSI PRO B760M-A DDR4",
+   "brand": "MSI",
+   "category": "motherboard",
+   "category_name": "Bo mạch chủ",
+   "price": 3190000,
+   "highlights": [
+    "LGA1700",
+    "DDR4",
+    "Micro-ATX"
+   ]
+  },
+  {
+   "slug": "msi-pro-z790-p-wifi",
+   "name": "MSI PRO Z790-P WIFI",
+   "brand": "MSI",
+   "category": "motherboard",
+   "category_name": "Bo mạch chủ",
+   "price": 5690000,
+   "highlights": [
+    "LGA1700",
+    "DDR5",
+    "ATX"
+   ]
+  },
+  {
+   "slug": "corsair-vengeance-64gb-2x32gb-ddr5-6000mhz",
+   "name": "Corsair Vengeance 64GB (2x32GB) DDR5 6000MHz",
+   "brand": "Corsair",
+   "category": "ram",
+   "category_name": "RAM",
+   "price": 5990000,
+   "highlights": [
+    "DDR5",
+    "64 GB",
+    "6.000 MHz"
+   ]
+  },
+  {
+   "slug": "corsair-vengeance-lpx-32gb-2x16gb-ddr4-3600mhz",
+   "name": "Corsair Vengeance LPX 32GB (2x16GB) DDR4 3600MHz",
+   "brand": "Corsair",
+   "category": "ram",
+   "category_name": "RAM",
+   "price": 1990000,
+   "highlights": [
+    "DDR4",
+    "32 GB",
+    "3.600 MHz"
+   ]
+  },
+  {
+   "slug": "gskill-trident-z5-rgb-32gb-2x16gb-ddr5-6000mhz",
+   "name": "G.Skill Trident Z5 RGB 32GB (2x16GB) DDR5 6000MHz",
+   "brand": "G.Skill",
+   "category": "ram",
+   "category_name": "RAM",
+   "price": 3190000,
+   "highlights": [
+    "DDR5",
+    "32 GB",
+    "6.000 MHz"
+   ]
+  },
+  {
+   "slug": "kingston-fury-beast-16gb-2x8gb-ddr4-3200mhz",
+   "name": "Kingston FURY Beast 16GB (2x8GB) DDR4 3200MHz",
+   "brand": "Kingston",
+   "category": "ram",
+   "category_name": "RAM",
+   "price": 1090000,
+   "highlights": [
+    "DDR4",
+    "16 GB",
+    "3.200 MHz"
+   ]
+  },
+  {
+   "slug": "kingston-fury-beast-16gb-2x8gb-ddr5-5600mhz",
+   "name": "Kingston FURY Beast 16GB (2x8GB) DDR5 5600MHz",
+   "brand": "Kingston",
+   "category": "ram",
+   "category_name": "RAM",
+   "price": 1490000,
+   "highlights": [
+    "DDR5",
+    "16 GB",
+    "5.600 MHz"
+   ]
+  },
+  {
+   "slug": "asus-dual-geforce-rtx-4060-oc-8gb",
+   "name": "ASUS Dual GeForce RTX 4060 OC 8GB",
+   "brand": "ASUS",
+   "category": "gpu",
+   "category_name": "Card đồ họa",
+   "price": 7990000,
+   "highlights": [
+    "8 GB",
+    "115 W"
+   ]
+  },
+  {
+   "slug": "asus-tuf-gaming-geforce-rtx-4070-super-12gb",
+   "name": "ASUS TUF Gaming GeForce RTX 4070 SUPER 12GB",
+   "brand": "ASUS",
+   "category": "gpu",
+   "category_name": "Card đồ họa",
+   "price": 17990000,
+   "highlights": [
+    "12 GB",
+    "220 W"
+   ]
+  },
+  {
+   "slug": "gigabyte-geforce-rtx-3050-windforce-oc-6g",
+   "name": "Gigabyte GeForce RTX 3050 WINDFORCE OC 6G",
+   "brand": "Gigabyte",
+   "category": "gpu",
+   "category_name": "Card đồ họa",
+   "price": 4690000,
+   "highlights": [
+    "6 GB",
+    "70 W"
+   ]
+  },
+  {
+   "slug": "gigabyte-geforce-rtx-4080-super-gaming-oc-16g",
+   "name": "Gigabyte GeForce RTX 4080 SUPER GAMING OC 16G",
+   "brand": "Gigabyte",
+   "category": "gpu",
+   "category_name": "Card đồ họa",
+   "price": 29990000,
+   "highlights": [
+    "16 GB",
+    "320 W"
+   ]
+  },
+  {
+   "slug": "msi-geforce-rtx-4060-ti-ventus-2x-8g",
+   "name": "MSI GeForce RTX 4060 Ti VENTUS 2X 8G",
+   "brand": "MSI",
+   "category": "gpu",
+   "category_name": "Card đồ họa",
+   "price": 10490000,
+   "highlights": [
+    "8 GB",
+    "160 W"
+   ]
+  },
+  {
+   "slug": "sapphire-pulse-radeon-rx-7700-xt-12gb",
+   "name": "Sapphire PULSE Radeon RX 7700 XT 12GB",
+   "brand": "Sapphire",
+   "category": "gpu",
+   "category_name": "Card đồ họa",
+   "price": 11990000,
+   "highlights": [
+    "12 GB",
+    "245 W"
+   ]
+  },
+  {
+   "slug": "crucial-mx500-1tb-sata",
+   "name": "Crucial MX500 1TB SATA",
+   "brand": "Crucial",
+   "category": "storage",
+   "category_name": "Ổ cứng",
+   "price": 1690000,
+   "highlights": [
+    "SATA",
+    "1.000 GB"
+   ]
+  },
+  {
+   "slug": "kingston-a400-480gb-sata",
+   "name": "Kingston A400 480GB SATA",
+   "brand": "Kingston",
+   "category": "storage",
+   "category_name": "Ổ cứng",
+   "price": 790000,
+   "highlights": [
+    "SATA",
+    "480 GB"
+   ]
+  },
+  {
+   "slug": "samsung-980-500gb-nvme",
+   "name": "Samsung 980 500GB NVMe",
+   "brand": "Samsung",
+   "category": "storage",
+   "category_name": "Ổ cứng",
+   "price": 1190000,
+   "highlights": [
+    "NVMe",
+    "500 GB"
+   ]
+  },
+  {
+   "slug": "samsung-990-pro-2tb-nvme",
+   "name": "Samsung 990 PRO 2TB NVMe",
+   "brand": "Samsung",
+   "category": "storage",
+   "category_name": "Ổ cứng",
+   "price": 4490000,
+   "highlights": [
+    "NVMe",
+    "2.000 GB"
+   ]
+  },
+  {
+   "slug": "seagate-barracuda-2tb-hdd",
+   "name": "Seagate BarraCuda 2TB HDD",
+   "brand": "Seagate",
+   "category": "storage",
+   "category_name": "Ổ cứng",
+   "price": 1590000,
+   "highlights": [
+    "SATA",
+    "2.000 GB"
+   ]
+  },
+  {
+   "slug": "wd-blue-sn580-1tb-nvme",
+   "name": "WD Blue SN580 1TB NVMe",
+   "brand": "Western Digital",
+   "category": "storage",
+   "category_name": "Ổ cứng",
+   "price": 1590000,
+   "highlights": [
+    "NVMe",
+    "1.000 GB"
+   ]
+  },
+  {
+   "slug": "corsair-cx650-650w",
+   "name": "Corsair CX650 650W",
+   "brand": "Corsair",
+   "category": "psu",
+   "category_name": "Nguồn",
+   "price": 1690000,
+   "highlights": [
+    "650 W",
+    "80 Plus Bronze"
+   ]
+  },
+  {
+   "slug": "corsair-rm850e-850w",
+   "name": "Corsair RM850e 850W",
+   "brand": "Corsair",
+   "category": "psu",
+   "category_name": "Nguồn",
+   "price": 3090000,
+   "highlights": [
+    "850 W",
+    "80 Plus Gold"
+   ]
+  },
+  {
+   "slug": "corsair-sf750-750w-sfx",
+   "name": "Corsair SF750 750W SFX",
+   "brand": "Corsair",
+   "category": "psu",
+   "category_name": "Nguồn",
+   "price": 4990000,
+   "highlights": [
+    "750 W",
+    "80 Plus Platinum"
+   ]
+  },
+  {
+   "slug": "deepcool-pf450-450w",
+   "name": "Deepcool PF450 450W",
+   "brand": "Deepcool",
+   "category": "psu",
+   "category_name": "Nguồn",
+   "price": 790000,
+   "highlights": [
+    "450 W",
+    "80 Plus"
+   ]
+  },
+  {
+   "slug": "deepcool-pk550d-550w",
+   "name": "Deepcool PK550D 550W",
+   "brand": "Deepcool",
+   "category": "psu",
+   "category_name": "Nguồn",
+   "price": 1190000,
+   "highlights": [
+    "550 W",
+    "80 Plus Bronze"
+   ]
+  },
+  {
+   "slug": "msi-mag-a750gl-pcie5-750w",
+   "name": "MSI MAG A750GL PCIE5 750W",
+   "brand": "MSI",
+   "category": "psu",
+   "category_name": "Nguồn",
+   "price": 2290000,
+   "highlights": [
+    "750 W",
+    "80 Plus Gold"
+   ]
+  },
+  {
+   "slug": "seasonic-focus-gx-1000-1000w",
+   "name": "Seasonic FOCUS GX-1000 1000W",
+   "brand": "Seasonic",
+   "category": "psu",
+   "category_name": "Nguồn",
+   "price": 4690000,
+   "highlights": [
+    "1.000 W",
+    "80 Plus Gold"
+   ]
+  },
+  {
+   "slug": "cooler-master-masterbox-nr200p",
+   "name": "Cooler Master MasterBox NR200P",
+   "brand": "Cooler Master",
+   "category": "case",
+   "category_name": "Vỏ case",
+   "price": 2390000,
+   "highlights": [
+    "Mini-ITX"
+   ]
+  },
+  {
+   "slug": "deepcool-ch370",
+   "name": "Deepcool CH370",
+   "brand": "Deepcool",
+   "category": "case",
+   "category_name": "Vỏ case",
+   "price": 1290000,
+   "highlights": [
+    "Micro-ATX, Mini-ITX"
+   ]
+  },
+  {
+   "slug": "lian-li-o11-dynamic-evo",
+   "name": "Lian Li O11 Dynamic EVO",
+   "brand": "Lian Li",
+   "category": "case",
+   "category_name": "Vỏ case",
+   "price": 3990000,
+   "highlights": [
+    "ATX, Micro-ATX, Mini-ITX"
+   ]
+  },
+  {
+   "slug": "nzxt-h5-flow",
+   "name": "NZXT H5 Flow",
+   "brand": "NZXT",
+   "category": "case",
+   "category_name": "Vỏ case",
+   "price": 2290000,
+   "highlights": [
+    "ATX, Micro-ATX, Mini-ITX"
+   ]
+  },
+  {
+   "slug": "xigmatek-nyx-air-3f",
+   "name": "Xigmatek NYX Air 3F",
+   "brand": "Xigmatek",
+   "category": "case",
+   "category_name": "Vỏ case",
+   "price": 790000,
+   "highlights": [
+    "Micro-ATX, Mini-ITX"
+   ]
+  },
+  {
+   "slug": "corsair-icue-h150i-elite-360mm",
+   "name": "Corsair iCUE H150i ELITE 360mm",
+   "brand": "Corsair",
+   "category": "cooler",
+   "category_name": "Tản nhiệt CPU",
+   "price": 4490000,
+   "highlights": [
+    "Tản nước AIO",
+    "300 W"
+   ]
+  },
+  {
+   "slug": "deepcool-ak400",
+   "name": "Deepcool AK400",
+   "brand": "Deepcool",
+   "category": "cooler",
+   "category_name": "Tản nhiệt CPU",
+   "price": 790000,
+   "highlights": [
+    "Tản khí",
+    "220 W"
+   ]
+  },
+  {
+   "slug": "noctua-nh-d15",
+   "name": "Noctua NH-D15",
+   "brand": "Noctua",
+   "category": "cooler",
+   "category_name": "Tản nhiệt CPU",
+   "price": 2990000,
+   "highlights": [
+    "Tản khí",
+    "250 W"
+   ]
+  },
+  {
+   "slug": "noctua-nh-l9a-am5",
+   "name": "Noctua NH-L9a-AM5",
+   "brand": "Noctua",
+   "category": "cooler",
+   "category_name": "Tản nhiệt CPU",
+   "price": 1290000,
+   "highlights": [
+    "Tản khí",
+    "65 W"
+   ]
+  },
+  {
+   "slug": "nzxt-kraken-240",
+   "name": "NZXT Kraken 240",
+   "brand": "NZXT",
+   "category": "cooler",
+   "category_name": "Tản nhiệt CPU",
+   "price": 2990000,
+   "highlights": [
+    "Tản nước AIO",
+    "250 W"
+   ]
+  },
+  {
+   "slug": "thermalright-peerless-assassin-120-se",
+   "name": "Thermalright Peerless Assassin 120 SE",
+   "brand": "Thermalright",
+   "category": "cooler",
+   "category_name": "Tản nhiệt CPU",
+   "price": 990000,
+   "highlights": [
+    "Tản khí",
+    "245 W"
+   ]
+  }
+ ],
+ "builds": [
+  {
+   "slug": "mini-itx-nho-gon",
+   "name": "Mini-ITX nhỏ gọn",
+   "purpose": "Chơi game",
+   "total": 34720000,
+   "cpu": "AMD Ryzen 5 7600",
+   "gpu": "ASUS Dual GeForce RTX 4060 OC 8GB",
+   "ram": "G.Skill Trident Z5 RGB 32GB (2x16GB) DDR5 6000MHz"
+  },
+  {
+   "slug": "workstation-do-hoa-core-ultra",
+   "name": "Workstation đồ họa Core Ultra",
+   "purpose": "Đồ họa / Workstation",
+   "total": 55110000,
+   "cpu": "Intel Core Ultra 5 245K",
+   "gpu": "ASUS TUF Gaming GeForce RTX 4070 SUPER 12GB",
+   "ram": "Corsair Vengeance 64GB (2x32GB) DDR5 6000MHz"
+  },
+  {
+   "slug": "lap-trinh-intel-hai-o-cung",
+   "name": "Lập trình Intel hai ổ cứng",
+   "purpose": "Lập trình",
+   "total": 21330000,
+   "cpu": "Intel Core i5-13400",
+   "gpu": null,
+   "ram": "G.Skill Trident Z5 RGB 32GB (2x16GB) DDR5 6000MHz"
+  },
+  {
+   "slug": "lap-trinh-am5-khong-card-roi",
+   "name": "Lập trình AM5 không card rời",
+   "purpose": "Lập trình",
+   "total": 21940000,
+   "cpu": "AMD Ryzen 7 7700",
+   "gpu": null,
+   "ram": "G.Skill Trident Z5 RGB 32GB (2x16GB) DDR5 6000MHz"
+  },
+  {
+   "slug": "gaming-1440p-nguon-sat-gioi-han",
+   "name": "Gaming 1440p nguồn sát giới hạn",
+   "purpose": "Chơi game",
+   "total": 31630000,
+   "cpu": "AMD Ryzen 7 7700",
+   "gpu": "Sapphire PULSE Radeon RX 7700 XT 12GB",
+   "ram": "G.Skill Trident Z5 RGB 32GB (2x16GB) DDR5 6000MHz"
+  },
+  {
+   "slug": "gaming-4k-cao-cap",
+   "name": "Gaming 4K cao cấp",
+   "purpose": "Chơi game",
+   "total": 66610000,
+   "cpu": "Intel Core i7-14700K",
+   "gpu": "Gigabyte GeForce RTX 4080 SUPER GAMING OC 16G",
+   "ram": "G.Skill Trident Z5 RGB 32GB (2x16GB) DDR5 6000MHz"
+  },
+  {
+   "slug": "gaming-2k-ryzen-7-7800x3d",
+   "name": "Gaming 2K Ryzen 7 7800X3D",
+   "purpose": "Chơi game",
+   "total": 48720000,
+   "cpu": "AMD Ryzen 7 7800X3D",
+   "gpu": "ASUS TUF Gaming GeForce RTX 4070 SUPER 12GB",
+   "ram": "G.Skill Trident Z5 RGB 32GB (2x16GB) DDR5 6000MHz"
+  },
+  {
+   "slug": "gaming-1080p-am5",
+   "name": "Gaming 1080p AM5",
+   "purpose": "Chơi game",
+   "total": 26330000,
+   "cpu": "AMD Ryzen 5 7600",
+   "gpu": "ASUS Dual GeForce RTX 4060 OC 8GB",
+   "ram": "G.Skill Trident Z5 RGB 32GB (2x16GB) DDR5 6000MHz"
+  },
+  {
+   "slug": "gaming-pho-thong-am4",
+   "name": "Gaming phổ thông AM4",
+   "purpose": "Chơi game",
+   "total": 14830000,
+   "cpu": "AMD Ryzen 5 5600",
+   "gpu": "Gigabyte GeForce RTX 3050 WINDFORCE OC 6G",
+   "ram": "Kingston FURY Beast 16GB (2x8GB) DDR4 3200MHz"
+  },
+  {
+   "slug": "pc-van-phong-intel-tiet-kiem",
+   "name": "PC văn phòng Intel tiết kiệm",
+   "purpose": "Sử dụng chung",
+   "total": 12340000,
+   "cpu": "Intel Core i5-13400",
+   "gpu": null,
+   "ram": "Kingston FURY Beast 16GB (2x8GB) DDR4 3200MHz"
+  }
+ ]
+}
