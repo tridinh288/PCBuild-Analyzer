@@ -4,7 +4,7 @@
 ![PHP](https://img.shields.io/badge/PHP-8.3-777BB4?logo=php&logoColor=white)
 ![Laravel](https://img.shields.io/badge/Laravel-13-FF2D20?logo=laravel&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
-![Tests](https://img.shields.io/badge/tests-272%20backend%20%C2%B7%2037%20frontend-success)
+![Tests](https://img.shields.io/badge/tests-284%20backend%20%C2%B7%2037%20frontend-success)
 
 Ứng dụng web phân tích cấu hình PC: xem các cấu hình mẫu, tùy chỉnh lại hoặc tự build từ đầu, rồi
 nhận ngay kết quả **kiểm tra tương thích**, **ước tính công suất** kèm mức nguồn khuyến nghị,
@@ -156,9 +156,8 @@ API và MySQL chạy trong Docker; React chạy trên host (D-025).
 cp backend/.env.example backend/.env
 #    đặt DB_PASSWORD=pcbuild_local (khớp docker-compose.yml) và ADMIN_EMAIL / ADMIN_PASSWORD
 
-# 2. API + MySQL
+# 2. API + MySQL  (lần đầu container tự chạy composer install, khoảng 20 giây)
 docker compose up -d --build
-docker compose exec app composer install
 docker compose exec app php artisan key:generate
 docker compose exec app php artisan migrate --seed
 
@@ -174,13 +173,18 @@ npm run dev                 # http://localhost:5173
 
 MySQL mở ở cổng `3307` trên host (user `pcbuild`) để dùng với HeidiSQL hoặc client GUI khác.
 
+> `vendor/` nằm trong named volume chứ không phải bind mount, vì đọc một file PHP qua bind mount của
+> Windows mất **63 ms** so với **0,009 ms** trên ổ đĩa container — đủ để mỗi request tốn 3 giây (D-042).
+> Vì vậy luôn chạy Composer qua `docker compose exec app composer ...`; cài trên host sẽ không đổi
+> thứ container đang dùng.
+
 > `VITE_API_URL` **phải có đuôi `/api`**. Thiếu phần này thì mọi request rơi vào 404 và trình duyệt
 > báo "Không kết nối được máy chủ", vì CORS chỉ áp cho các đường dẫn `api/*`.
 
 ## Kiểm thử
 
-**272 test backend** (966 assertion) và **37 test frontend**, chạy tự động bằng GitHub Actions ở mỗi
-lần push. Độ phủ dòng của backend là **98,48 %** (1553/1577), method 95,65 %, class 85,59 % —
+**284 test backend** (1001 assertion) và **37 test frontend**, chạy tự động bằng GitHub Actions ở mỗi
+lần push. Độ phủ dòng của backend là **98,42 %** (1617/1643), method 95,49 %, class 84,82 % —
 đo bằng PCOV, xem [docs/TESTING.md](docs/TESTING.md).
 PHPUnit chạy trên database `pcbuild_test` riêng (tạo bởi `docker/mysql/init`); test **không bao giờ
 gọi dịch vụ bên ngoài**.

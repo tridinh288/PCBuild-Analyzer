@@ -7,19 +7,20 @@ Re-measured at Phase 9 (2026-09-23); first written at the end of Phase 7. Decisi
 
 | Suite | Tool | Tests | Result |
 |---|---|---|---|
-| Backend | PHPUnit 12 (Laravel 13) on MySQL 8.4 | 272 tests, 966 assertions | ✅ pass |
+| Backend | PHPUnit 12 (Laravel 13) on MySQL 8.4 | 284 tests, 1001 assertions | ✅ pass |
 | Frontend | Vitest 5 | 37 tests (10 files) | ✅ pass |
 | Lint | Pint (PSR-12 / Laravel), oxlint (warnings denied) | — | ✅ clean |
 | CI | GitHub Actions: backend + frontend jobs on every push | — | ✅ green |
 
-**Backend coverage (PCOV):** lines **98.48 %** (1553/1577), methods 95.65 % (418/437),
-classes 85.59 % (95/111).
+**Backend coverage (PCOV):** lines **98.42 %** (1617/1643), methods 95.49 % (423/443),
+classes 84.82 % (95/112).
 Uncovered lines are hardware getters the engine does not use yet (`Cpu::threads`, `Psu::efficiencyRating`…),
 defensive branches (unknown strategy profile) and a few `VerifyDatabaseCommand` failure messages.
 
-The two tests added in Phase 8 (`RateLimitAndCorsTest`, for the client IP behind Cloudflare — D-038)
-raised the count from 270 to 272 but left the covered lines unchanged at 1553/1577: they exercise
-middleware configuration that the existing tests already reached, not new branches.
+The count grew from 272 to 284 after Phase 9: `ImportImagesCommandTest` (10) covers the image
+upload command (D-041) and two more cover `CloudinaryImageStorage` parsing a credential that was
+pasted with its variable name. Total lines rose with the new command, so the percentage moved only
+slightly; class coverage dipped because the new command added one class to the denominator.
 
 ## What is tested
 
