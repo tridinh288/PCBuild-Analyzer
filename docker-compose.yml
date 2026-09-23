@@ -9,6 +9,11 @@ services:
       dockerfile: Dockerfile.dev
     volumes:
       - ./backend:/var/www/html
+      # vendor/ on the container's own filesystem, not the Windows bind mount. Reading a PHP
+      # file through the mount was measured at 63 ms against 0.009 ms here, and vendor is the
+      # bulk of what every request loads. The host copy stays on disk for the IDE; only the
+      # container sees this volume, so `composer` must run through `docker compose exec app`.
+      - vendor:/var/www/html/vendor
     ports:
       - "${APP_PORT:-8000}:8000"
     depends_on:
@@ -36,3 +41,4 @@ services:
 
 volumes:
   mysql-data:
+  vendor:

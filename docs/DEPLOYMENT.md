@@ -93,6 +93,10 @@ the Cloudinary API, both reachable from anywhere — nothing about it requires r
 ```bash
 # 1. Put the CLOUDINARY_URL from the Render dashboard into backend/.env.tidb (the key is
 #    already there, empty). That file is gitignored; leave ADMIN_PASSWORD empty as before.
+#    Paste only the cloudinary://... part. Both the Cloudinary and the Render pages show the
+#    whole `CLOUDINARY_URL=cloudinary://...` line, and pasting that after the `=` already in
+#    the file gives `CLOUDINARY_URL=CLOUDINARY_URL=cloudinary://...`, which parses as a value
+#    with no scheme — so the app reports the variable as unset while it looks present.
 # 2. Confirm the target is `pcbuild`, never `sys`:
 docker compose exec app php artisan db:show --env=tidb
 # 3. Match files to rows without uploading, then upload:
@@ -163,7 +167,7 @@ Optional database check against TiDB from your machine: § TiDB check below
 | API crashes at start: `SQLSTATE[HY000] [2002]` / TLS error | Wrong `DB_HOST`/port, or `MYSQL_ATTR_SSL_CA` missing (must be `/etc/ssl/certs/ca-certificates.crt`). |
 | `Access denied … for table 'migrations'` in `sys` | `DB_DATABASE` must be `pcbuild`, never `sys`. |
 | "No application encryption key" | `APP_KEY` missing or without the `base64:` prefix. |
-| Image upload: "Chưa cấu hình dịch vụ ảnh" | `CLOUDINARY_URL` not set on the API service. |
+| Image upload: "Chưa cấu hình dịch vụ ảnh" | `CLOUDINARY_URL` not set on the API service, or set to something that is not a `cloudinary://` URL. A variable name pasted in with the value is stripped automatically, so this now means the value is wrong in some other way. |
 | Images exist in the database but every `image` field is `null` | The API cannot parse `CLOUDINARY_URL`, so it has no cloud name to build a URL from. Check the value on the API service and redeploy. Nothing logs this — the rows look fine and the pictures simply never appear. |
 | Everyone gets 429 at once | Rate limits must see the real client IP; check `trustProxies` in `bootstrap/app.php` (private networks trusted, not `*`). |
 

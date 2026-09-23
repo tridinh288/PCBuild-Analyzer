@@ -67,7 +67,8 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
 - Migrate + seed: `docker compose exec app php artisan migrate --seed` (fresh: `migrate:fresh --seed`)
 - Code style: `docker compose exec app ./vendor/bin/pint`
 - DB checks: `docker compose exec app php artisan app:verify-database` (add `--env=tidb` for TiDB, see `docs/DEPLOYMENT.md`)
-- Composer: prefer `docker compose exec app composer ...` (host PATH may still resolve `php` to XAMPP 8.0)
+- Composer: always `docker compose exec app composer ...` — the container's `vendor/` is a named
+  volume, so installing on the host changes a copy nothing runs from
 - Frontend dev: `npm run dev` (in `frontend/`)
 
 ## Current status
@@ -107,4 +108,7 @@ analyze price, rule-based score, compare. Admin manages data. No user accounts.
 - Frontend commands: `npm run dev`, `npm test`, `npx oxlint`, `npm run build` (in `frontend/`).
 - Engine map: `app/Domain` (pure), `app/Services` (DB orchestration); notes in `docs/ARCHITECTURE.md` § 3.
 - TiDB: credentials in `backend/.env.tidb` (gitignored), database `pcbuild` — never `sys`.
-- Note: the full test suite takes about 2.5 minutes because the Windows bind mount is slow.
+- The full suite runs in about 20 s. `vendor/` lives in a named volume rather than the Windows
+  bind mount, which is what made it slow before (see `docs/TESTING.md`). The host copy of
+  `backend/vendor` stays for the IDE, but the container ignores it: run Composer with
+  `docker compose exec app composer ...` or the two drift apart.
