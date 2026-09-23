@@ -35,7 +35,7 @@ class CloudinaryImageStorage implements ImageStorage
      */
     public static function fromUrl(?string $url, array $presets): self
     {
-        $parts = $url ? parse_url($url) : [];
+        $parts = parse_url(self::normalize($url)) ?: [];
 
         return new self(
             $parts['host'] ?? null,
@@ -43,6 +43,21 @@ class CloudinaryImageStorage implements ImageStorage
             isset($parts['pass']) ? urldecode($parts['pass']) : null,
             $presets,
         );
+    }
+
+    /**
+     * Both the Cloudinary dashboard and the Render environment page show the credential as the
+     * whole assignment line, `CLOUDINARY_URL=cloudinary://...`, so pasting it into a field that
+     * already supplies the name yields `CLOUDINARY_URL=cloudinary://...` as the value. That has
+     * no scheme, so every image silently disappears: url() has no cloud name to build from and
+     * returns null, and nothing anywhere reports a problem. Stripping the prefix costs one line
+     * and removes a failure that is invisible from the outside.
+     */
+    private static function normalize(?string $url): string
+    {
+        $url = trim(trim((string) $url), '"\'');
+
+        return preg_replace('/^CLOUDINARY_URL\s*=\s*/i', '', $url) ?? $url;
     }
 
     public function upload(UploadedFile $file, string $folder): string

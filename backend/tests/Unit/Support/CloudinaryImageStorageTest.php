@@ -32,6 +32,35 @@ class CloudinaryImageStorageTest extends TestCase
         $this->assertNull($this->storage(null)->url('pcbuild/products/abc', 'thumb'));
     }
 
+    /**
+     * The Cloudinary dashboard and the Render environment page both show the credential as the
+     * whole `CLOUDINARY_URL=cloudinary://...` line. Pasted into a field that already supplies the
+     * name, the value keeps the prefix and has no scheme, so every image quietly vanishes: url()
+     * gets no cloud name and returns null, with nothing reported anywhere. This happened twice.
+     */
+    public function test_a_pasted_variable_name_or_stray_quotes_do_not_break_the_credential(): void
+    {
+        $expected = 'https://res.cloudinary.com/demo-cloud/image/upload/c_fill,w_400,h_300,f_auto,q_auto/pcbuild/products/abc';
+
+        foreach ([
+            'CLOUDINARY_URL=cloudinary://key123:secret456@demo-cloud',
+            'CLOUDINARY_URL = cloudinary://key123:secret456@demo-cloud',
+            'cloudinary_url=cloudinary://key123:secret456@demo-cloud',
+            '  cloudinary://key123:secret456@demo-cloud  ',
+            '"cloudinary://key123:secret456@demo-cloud"',
+        ] as $value) {
+            $this->assertSame($expected, $this->storage($value)->url('pcbuild/products/abc', 'thumb'), $value);
+        }
+    }
+
+    /** An absent credential must still be treated as absent, not as a half-usable one. */
+    public function test_an_empty_credential_is_still_unconfigured(): void
+    {
+        foreach ([null, '', '   ', 'CLOUDINARY_URL='] as $value) {
+            $this->assertNull($this->storage($value)->url('pcbuild/products/abc', 'thumb'), var_export($value, true));
+        }
+    }
+
     public function test_signature_follows_the_cloudinary_algorithm(): void
     {
         $signed = $this->storage()->signed(['timestamp' => 1_700_000_000, 'folder' => 'pcbuild/products']);
